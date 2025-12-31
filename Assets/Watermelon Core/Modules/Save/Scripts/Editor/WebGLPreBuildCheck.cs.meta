@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 02d5f883ca57ca144a9df7500ffa8120
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Save/Scripts/Editor/WebGLPreBuildCheck.cs
+  uploadId: 759177

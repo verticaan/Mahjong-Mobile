@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: adc0cab8a152f2540a9b3ca3f1e6b5d4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Lives System/LivesStatus.cs
+  uploadId: 759177

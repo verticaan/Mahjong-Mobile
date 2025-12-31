@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4000f0821f8e80d43a0bbe43d13b4a04
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Level Map/Example Chunk.prefab
+  uploadId: 759177

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: bf39b2441c61b0446a11909353285e2f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Scripts/Cached Components/Editor/CachedComponentPropertyDrawer.cs
+  uploadId: 759177

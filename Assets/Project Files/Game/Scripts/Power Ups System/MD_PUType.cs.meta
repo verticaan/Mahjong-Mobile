@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 16aa17638880fdc43917f4ebaeaa3bde
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Power Ups System/MD_PUType.cs
+  uploadId: 759177

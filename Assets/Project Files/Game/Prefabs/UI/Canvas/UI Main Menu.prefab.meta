@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b5f6cc9f0ef59d34b9f4a1e24115de70
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/UI/Canvas/UI Main Menu.prefab
+  uploadId: 759177

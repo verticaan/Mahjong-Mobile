@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 420ffe93daccacd4c8a21988f489b71c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Particles/Block Trail.prefab
+  uploadId: 759177

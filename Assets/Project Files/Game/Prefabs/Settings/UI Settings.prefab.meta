@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 673d1db80283c6f4c8fe449a9ec17d46
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Settings/UI Settings.prefab
+  uploadId: 759177

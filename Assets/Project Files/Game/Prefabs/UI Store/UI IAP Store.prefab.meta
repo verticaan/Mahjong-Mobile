@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a6a57bc430670554483b9c3ee65a7f34
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/UI Store/UI IAP Store.prefab
+  uploadId: 759177

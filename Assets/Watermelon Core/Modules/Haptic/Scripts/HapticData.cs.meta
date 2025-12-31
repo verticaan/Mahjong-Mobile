@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e8e45fe0a6ca15b4d89bd2f2427d92ae
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Haptic/Scripts/HapticData.cs
+  uploadId: 759177

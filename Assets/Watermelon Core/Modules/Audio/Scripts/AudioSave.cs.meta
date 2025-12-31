@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7a4fe9219d34e6942bb56427578d936a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Audio/Scripts/AudioSave.cs
+  uploadId: 759177

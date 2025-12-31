@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f498ec5c4d8606d44b8576c76181fe5a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/UI/Canvas/UI Game.prefab
+  uploadId: 759177

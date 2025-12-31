@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 725e21ae62bca0b499e7d6cb46eb5afd
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Level/Editor/TabHandler.cs
+  uploadId: 759177

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 83d8031e3d518cb4199d07f7a597a3ce
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Scripts/Floating Text/FloatingTextBaseBehavior.cs
+  uploadId: 759177

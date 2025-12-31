@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a2bba0b85a97f474cbd63678b7994e9f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Data/Level System/Animations/Shuffle Spawn Animation.asset
+  uploadId: 759177

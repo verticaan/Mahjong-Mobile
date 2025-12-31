@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 320a7f1e3dd30bf4dbb1ac85ea51c249
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Inspector/Runtime/Core.Inspector.asmdef
+  uploadId: 759177

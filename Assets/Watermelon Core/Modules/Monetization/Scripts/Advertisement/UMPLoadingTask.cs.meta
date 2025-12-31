@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: f63497b4cc6e0e849acfd655aeb7852b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Monetization/Scripts/Advertisement/UMPLoadingTask.cs
+  uploadId: 759177

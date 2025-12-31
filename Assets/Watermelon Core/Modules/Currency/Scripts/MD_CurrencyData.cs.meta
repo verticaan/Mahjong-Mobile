@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d35cd5e12dce2f640a81e7ed8eeeac1d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Currency/Scripts/MD_CurrencyData.cs
+  uploadId: 759177

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: b4d72ad7dda1faa419a3e7f667bf6ccb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Settings/Buttons/SettingsTermsButton.cs
+  uploadId: 759177

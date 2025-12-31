@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ea1b4967f541e2149829560510e83d57
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Level/Editor/CellTypesHandler.cs
+  uploadId: 759177

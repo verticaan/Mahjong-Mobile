@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bee5cdaf1d16d3d44a99413e5781ab65
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Tiles/Effects/Crate Effect.prefab
+  uploadId: 759177

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fb52ba1566937344da1cad1c45a81277
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Dock/Dock.prefab
+  uploadId: 759177

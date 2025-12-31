@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7e93b873b2fb7e34a896d1db651ecb6a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Level/Level Data/PreloadedLevelData.cs
+  uploadId: 759177

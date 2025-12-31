@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2ab22eb522d0b5f4393c590b4cd5ef2b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Monetization/Scripts/Advertisement/Providers/Dummy/AdDummyContainer.cs
+  uploadId: 759177

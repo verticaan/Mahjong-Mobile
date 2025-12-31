@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d791d29a05c622d449b1e31ed51ae217
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Materials/Particles/Spark Custom.mat
+  uploadId: 759177

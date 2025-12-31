@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 16d0fd8a83a6dae458fe5d11b609722d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Tutorial/BaseTutorial.cs
+  uploadId: 759177

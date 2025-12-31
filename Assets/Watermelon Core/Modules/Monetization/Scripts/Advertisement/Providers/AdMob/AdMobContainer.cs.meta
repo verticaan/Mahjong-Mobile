@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3f62d82d93edc5f4b870772ed59ad5fb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Monetization/Scripts/Advertisement/Providers/AdMob/AdMobContainer.cs
+  uploadId: 759177

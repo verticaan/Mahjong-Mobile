@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 22bd34bcb19184a4db3a613196e6572b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/UI/UINoAdsPopUp.cs
+  uploadId: 759177

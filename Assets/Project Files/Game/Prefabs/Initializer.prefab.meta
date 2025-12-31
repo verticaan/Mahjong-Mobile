@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d10ab2178ab6ad54c9c243f98e858184
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Initializer.prefab
+  uploadId: 759177

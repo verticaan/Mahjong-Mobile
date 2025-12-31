@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 3e1eeb2fb531f6c47b00fda338083df6
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Haptic/Scripts/Wrapper/EditorHapticWrapper.cs
+  uploadId: 759177

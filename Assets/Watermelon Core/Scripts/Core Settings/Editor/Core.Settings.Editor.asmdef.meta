@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 60e58814b7969e0459416e87b0b42a14
+AssemblyDefinitionImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Scripts/Core Settings/Editor/Core.Settings.Editor.asmdef
+  uploadId: 759177

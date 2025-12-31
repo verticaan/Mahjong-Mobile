@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 003dc5d36b5f9a1459dbb66b2f9d9049
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Settings/Buttons/SettingsPrivacyButton.cs
+  uploadId: 759177

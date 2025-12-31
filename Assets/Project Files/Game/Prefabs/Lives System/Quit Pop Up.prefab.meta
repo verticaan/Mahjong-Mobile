@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2379662180180e24cbfa6bc2d0143563
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Lives System/Quit Pop Up.prefab
+  uploadId: 759177

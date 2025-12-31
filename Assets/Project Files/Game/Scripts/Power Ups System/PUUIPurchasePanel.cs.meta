@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ba5953c24d23ce84f8da6284a38439b2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Power Ups System/PUUIPurchasePanel.cs
+  uploadId: 759177

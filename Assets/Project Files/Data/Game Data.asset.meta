@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4ea96bbf1eab4494d82bff22a36b7429
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Data/Game Data.asset
+  uploadId: 759177

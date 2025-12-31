@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 082f077817460cc48a2f532715193d95
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Inspector/Editor/Renderers/SerializedArrayGUIRenderer.cs
+  uploadId: 759177

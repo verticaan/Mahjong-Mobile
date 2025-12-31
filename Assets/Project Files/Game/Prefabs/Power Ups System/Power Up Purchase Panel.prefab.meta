@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 70b48147ff497a14eb2cc9018eb39555
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Power Ups System/Power Up Purchase
+    Panel.prefab
+  uploadId: 759177

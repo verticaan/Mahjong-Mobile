@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: eb7608b0158326f409aeacfae68dd19d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/UI/Sliced Filled Image/Editor/SlicedFilledImageEditor.cs
+  uploadId: 759177

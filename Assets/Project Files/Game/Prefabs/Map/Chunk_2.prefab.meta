@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b1ef9760574c4fe4e8cd5dc6ce60143a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/Map/Chunk_2.prefab
+  uploadId: 759177

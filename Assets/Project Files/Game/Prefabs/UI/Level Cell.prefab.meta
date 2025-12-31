@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: f0327ae0353408944b2c372c7962362a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Prefabs/UI/Level Cell.prefab
+  uploadId: 759177

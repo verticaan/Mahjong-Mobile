@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2f9c454619ba75d41843e7c9a16bd5c1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Monetization/Scripts/Editor/MonetizationSettingsEditor.cs
+  uploadId: 759177

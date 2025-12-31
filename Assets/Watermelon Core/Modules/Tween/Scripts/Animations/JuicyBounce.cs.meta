@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4266d033f2d654642a214218b5e4d6ed
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Modules/Tween/Scripts/Animations/JuicyBounce.cs
+  uploadId: 759177

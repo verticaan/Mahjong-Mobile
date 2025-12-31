@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6b134b4f6305ae34ea888db06870de45
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Animations/Pointer/Idle.anim
+  uploadId: 759177

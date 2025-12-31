@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0178fcb869bafef4690d177d31d17db8
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile-2-Pass.shader
+  uploadId: 759177

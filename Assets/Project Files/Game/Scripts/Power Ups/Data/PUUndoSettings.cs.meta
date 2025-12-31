@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 1554c988edbac41438f3903e05f5a021
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Project Files/Game/Scripts/Power Ups/Data/PUUndoSettings.cs
+  uploadId: 759177

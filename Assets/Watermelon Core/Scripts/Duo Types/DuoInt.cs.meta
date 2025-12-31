@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 2031e9eb19b9c6b49bfd180a6a32e477
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 1.2.6
+  assetPath: Assets/Watermelon Core/Scripts/Duo Types/DuoInt.cs
+  uploadId: 759177
