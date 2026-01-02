@@ -5,10 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Project Files/Game/Scenes/Init.unity
     guid: cc0b80ce7479f924fa29c695693d8ae8
-  - enabled: 0
+  - enabled: 1
     path: Assets/Project Files/Game/Scenes/Game.unity
     guid: 361eea68332b709408fe8391773229a1
   - enabled: 0
@@ -17,8 +17,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Watermelon Core/Examples/Example 05 - IAP/Scenes/IAP Example Scene.unity
     guid: 1fa0af1cfa177214190feceacdb69e68
-  - enabled: 1
-    path: Assets/Resources/Feel/FeelDemos/CardsUI/FeelCardsUI.unity
+  - enabled: 0
+    path: Assets/New Assets/Feel/FeelDemos/CardsUI/FeelCardsUI.unity
     guid: 4d9ebc3c269979642b98ff088e9fda0f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: de1821ecad3716047bbfc5a595a0f9b9,

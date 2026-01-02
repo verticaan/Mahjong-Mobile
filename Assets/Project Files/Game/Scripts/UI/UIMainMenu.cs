@@ -259,6 +259,12 @@ namespace Watermelon
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
         }
 
+        public void PlayMaxReachedLevel() // Open max level via a method call
+        {
+            AudioController.PlaySound(AudioController.AudioClips.buttonSound);
+            OnPlayTriggered(LevelController.MaxReachedLevelIndex);
+        }
+
         #endregion
     }
 
