@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
+  m_Name: CardUndo
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: 21300000, guid: 2ed0f924f4b5cd943b85a87245462d49, type: 3}
+  typeIconImage: {fileID: 0}
+  backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
+  frameImage: {fileID: 21300000, guid: e15f73246d215fb418ab73bf265c21b1, type: 3}
+  titleText: undo
+  descriptionText: 
+  qualityValue: 6
+  cardAttributes: []
+  behavior: {fileID: 5128256889421883114, guid: 77bb8ca262981074bb32f73a982a7cdc,
+    type: 3}

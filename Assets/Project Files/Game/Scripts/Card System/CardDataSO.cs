@@ -4,28 +4,43 @@ using UnityEngine.UI;
 
 namespace Watermelon
 {
+    [CreateAssetMenu(fileName = "Card", menuName = "Content/Cards/Card")]
     public class CardDataSO : ScriptableObject
     {
+        [LineSpacer("Sprites")]
         [Group("Refs")] [SerializeField]
-        Image frameImage;
-
-        [Group("Refs")] [SerializeField]
-        Image iconImage;
+        Sprite iconImage;
+        public Sprite IconImage => iconImage;
         
         [Group("Refs")] [SerializeField]
-        TextMeshProUGUI descriptionText;
-        public TextMeshProUGUI DescriptionText => descriptionText;
+        Sprite typeIconImage;
+        public Sprite TypeIconImage => typeIconImage;
         
+        [Group("Refs")] [SerializeField]
+        Sprite backgroundImage;
+        public Sprite BackgroundImage => backgroundImage;
+        
+        [Group("Refs")] [SerializeField]
+        Sprite frameImage;
+        public Sprite FrameImage => frameImage;
+        
+        [LineSpacer("Text")]
+        [Group("Refs")] [SerializeField]
+        string titleText;
+        public string TitleText => titleText;
+        
+        [Group("Refs")] [SerializeField]
+        string descriptionText;
+        public string DescriptionText => descriptionText;
+        
+        [LineSpacer("Gameplay")]
+        [Group("Gameplay")] [SerializeField]
+        int qualityValue;
+        public int QualityValue => qualityValue;
         
         [Group("Gameplay")] [SerializeField]
-        CardSettingBase cardSetting;
-        public CardSettingBase CardSetting => cardSetting;
-        
-        
-        
-        [Group("Gameplay")] [SerializeField]
-        TextMeshProUGUI qualityValue;
-        public int QualityValue => int.Parse(qualityValue.text);
+        CardAttributeBase[] cardAttributes;
+        public CardAttributeBase[] CardAttributes => cardAttributes;
         
         [Group("Gameplay")] [SerializeField]
         CardBehaviorBase behavior;

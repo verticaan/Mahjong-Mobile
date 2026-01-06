@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Watermelon
 {
-    public class CardSettingBase : MonoBehaviour
+    public class CardAttributeBase : MonoBehaviour
     {
         
     }

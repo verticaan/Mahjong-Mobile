@@ -4,8 +4,8 @@ namespace Watermelon
 {
     public abstract class CardBehaviorBase : MonoBehaviour
     {
-        protected CardSettingBase settings;
-        public CardSettingBase Settings => settings;
+        protected CardAttributeBase[] attributes;
+        public CardAttributeBase[] Attributes => attributes;
 
         private bool isBusy;
         public bool IsBusy 
@@ -21,9 +21,10 @@ namespace Watermelon
         protected bool isDirty = true;
         public bool IsDirty => isDirty;
 
-        public void InitialiseSettings(CardSettingBase settings)
+        public void InitialiseSettings(CardAttributeBase[] attributes)
         {
-            this.settings = settings;
+            
+            this.attributes = attributes;
         }
 
         public abstract void Init();
