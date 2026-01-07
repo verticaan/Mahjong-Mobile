@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: CardShuffle
   m_EditorClassIdentifier: 
   iconImage: {fileID: 21300000, guid: 707f4a8cd16084649b85184ef96d4c21, type: 3}
-  typeIconImage: {fileID: 0}
+  typeIconImage: {fileID: 21300000, guid: bc05c9e359644804ea39b33fdcf4cbb3, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: d2adf4be30da08641a986dc1a035cbfe, type: 3}
   titleText: Shuffle
-  descriptionText: 
-  qualityValue: 2
+  descriptionText: Desc - Shuffle
+  qualityValue: 20
   cardAttributes: []
   behavior: {fileID: 5221038105173484168, guid: cb08ed2f89c91094e9c82ce0c764b0d1,
     type: 3}

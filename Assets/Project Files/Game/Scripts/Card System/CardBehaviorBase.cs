@@ -21,9 +21,8 @@ namespace Watermelon
         protected bool isDirty = true;
         public bool IsDirty => isDirty;
 
-        public void InitialiseSettings(CardAttributeBase[] attributes)
+        public void InitialiseAttributes(CardAttributeBase[] attributes)
         {
-            
             this.attributes = attributes;
         }
 

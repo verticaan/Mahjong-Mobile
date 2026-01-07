@@ -30,13 +30,24 @@ namespace Watermelon
         
         private Button button;
         
+        private CardSlot slot;
+        public CardSlot Slot => slot;
+        
         private CardDataSO cardData;
         public CardDataSO CardData => cardData;
-        
-        private CardBehaviorBase behavior;
+
+        private CardUIController cardUIController;
         
         private bool isSelected = false;
         public bool IsSelected => isSelected;
+        
+        private Transform spawnPos;
+        private Transform selectPos;
+        
+        [SerializeField] private Vector3 startScale = Vector3.one;
+        [SerializeField] private Vector3 endScale = new(1.5f, 1.5f, 1.5f);
+        [SerializeField] private float tweenDuration = 0.5f;
+        [SerializeField] private Ease.Type tweenEase = Ease.Type.BounceOut;
         
         private void Awake()
         {
@@ -44,11 +55,12 @@ namespace Watermelon
             button.onClick.AddListener(() => OnButtonClicked());
         }
 
-        public void Init(CardDataSO cardDataIn)
+        public void Init(CardDataSO cardDataIn, CardUIController cardUIControllerIn, Transform spawnPos, Transform selectPos)
         {
+            this.spawnPos = spawnPos;
+            this.selectPos = selectPos;
             cardData = cardDataIn;
-            behavior = cardData.Behavior;
-            
+            cardUIController = cardUIControllerIn;
             ApplyVisuals();
             
             gameObject.SetActive(false);
@@ -65,34 +77,32 @@ namespace Watermelon
             titleText.text = cardData.TitleText;
             descriptionText.text = cardData.DescriptionText;
         }
-
-        protected virtual void SetSelected(bool selected)
+        
+        public void SetSelected(bool selected)
         {
-            //TODO: Add tweens for select and unselect
-            if (selected)
-            {
-                BecomeSelectedVisual();
-            }
-            else
-            {
-                BecomeUnselectedVisual();
-            }
+            isSelected = selected;
+
+            if (isSelected) BecomeSelected();
+            else BecomeUnselected();
         }
-
-        private void BecomeSelectedVisual()
+        
+        
+        // TODO: play selectSound, animate to leftCardSelectPosition/rightCardSelectPosition, etc.
+        private void BecomeSelected()
         {
+            transform.position = selectPos.position;
+            
             Debug.Log("Selected");
         }
 
-        private void BecomeUnselectedVisual()
+        private void BecomeUnselected()
         {
+            transform.position = spawnPos.position;
             Debug.Log("Not Selected");
         }
         private void OnButtonClicked()
         {
-            //Add busy check later
-            isSelected = !isSelected;
-            SetSelected(isSelected);
+            cardUIController?.OnCardClicked(this);
         }
         
     }
