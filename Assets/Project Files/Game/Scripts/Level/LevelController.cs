@@ -11,7 +11,7 @@ namespace Watermelon
 
         [SerializeField] LevelDatabase database;
         [SerializeField] LevelSpawnAnimation levelSpawnAnimation;
-
+        
         [Space]
         [SerializeField] LevelScaler levelScaler;
         [SerializeField] GameObject levelObject;
@@ -24,6 +24,8 @@ namespace Watermelon
         private static LevelData level;
         public static LevelData Level => level;
 
+        private static CardLogicController cardLogicController;
+        
         private static LevelSave levelSave;
 
         public static LevelDatabase Database => instance.database;
@@ -45,6 +47,7 @@ namespace Watermelon
         public static bool IsEvenLayerBigger => EvenLayerSize.x > OddLayerSize.x;
 
         public static int CurrentReward => GetCurrentLevelReward();
+        
         public static DockBehavior Dock => instance.dock;
 
         public static BackgroundBehavior Background { get; private set; }
@@ -78,7 +81,7 @@ namespace Watermelon
             dock.Init(this);
 
             levelSave = SaveController.GetSaveObject<LevelSave>("level");
-
+            cardLogicController = gameObject.GetComponent<CardLogicController>();
             RaycastController raycastController = gameObject.AddComponent<RaycastController>();
             raycastController.Init();
 
@@ -238,6 +241,8 @@ namespace Watermelon
 
             dock.PlayAppearAnimation();
 
+            cardLogicController.EnableSelectionLoop();
+            
             LoadBackground();
 
             Tween.NextFrame(() =>
@@ -290,9 +295,9 @@ namespace Watermelon
                 levelRepresentation.Clear();
                 levelRepresentation = null;
             }
-
+            
             instance.levelSpawnAnimation.Clear();
-
+            cardLogicController.DisableSelectionLoop(true);
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();
         }
