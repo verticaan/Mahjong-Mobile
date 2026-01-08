@@ -74,6 +74,12 @@ namespace Watermelon
         {
             SlotCase = slotCase;
 
+            // Disable background when docked
+            if (SlotCase?.Behavior is TileBehavior tile)
+            {
+                tile.SetDockedState(true);
+            }
+
             if (isTemp)
             {
                 SlotCase.SubmitMove(SlotablePos.position, Scale, Rotation, spriteSortOrder, instant);
@@ -137,9 +143,17 @@ namespace Watermelon
 
         public SlotCase RemoveSlot()
         {
+            
+
             var slotCase = SlotCase;
             SlotCase = null;
             return slotCase;
+
+            // Enable background when undocked
+            if (SlotCase?.Behavior is TileBehavior tile)
+            {
+                tile.SetDockedState(false);
+            }
         }
 
         public void ChangeColor(Color color)
