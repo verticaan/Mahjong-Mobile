@@ -11,25 +11,59 @@ namespace Watermelon
         [SerializeField] private PlayerQuality playerQuality;
         [SerializeField] private CardUIController cardUIController;
 
-        [Header("Periodic Selection")]
-        [SerializeField] private float selectionIntervalSeconds = 30f;
-        [SerializeField] private bool autoStart = true;
-
-        private bool isChoosing;
+        [Header("Periodic Selection")] [SerializeField]
+        private float selectionIntervalSeconds = 30f;
         
         [Header("Quality Selection Tuning")]
         [SerializeField, Min(0.01f)] float sigma = 10f;     // bell width
         [SerializeField, Min(0f)] float minWeight = 0.0001f; // prevents “0 chance” edge cases
-
         
-        private void Start()
+        private bool isChoosing;
+        private bool loopEnabled;
+        
+        private const string TryBeginSelectionMethodName = nameof(TryBeginSelection);
+        
+        //Call this externally from a level controller to begin selection
+        public void EnableSelectionLoop(bool beginImmediately = false)
         {
-            if (autoStart)
-                InvokeRepeating(nameof(TryBeginSelection), selectionIntervalSeconds, selectionIntervalSeconds);
+            if (loopEnabled) return;
+
+            loopEnabled = true;
+
+            // Ensure no duplicates if called multiple times (safety)
+            CancelInvoke(TryBeginSelectionMethodName);
+
+            float firstDelay = beginImmediately ? 0f : selectionIntervalSeconds;
+            InvokeRepeating(TryBeginSelectionMethodName, firstDelay, selectionIntervalSeconds);
+        }
+        
+        //Call this externally from a level controller to stop selection
+        public void DisableSelectionLoop(bool closeIfOpen = false)
+        {
+            if (!loopEnabled) return;
+
+            loopEnabled = false;
+            CancelInvoke(TryBeginSelectionMethodName);
+
+            if (closeIfOpen && isChoosing)
+            {
+                cardUIController.CloseAll();
+                isChoosing = false;
+            }
+        }
+        
+        //One off trigger, might be useful later
+        public void TriggerSelectionOnce()
+        {
+            if (!enabled) return;
+            if (isChoosing) return;
+            BeginSelection();
         }
 
+        
         private void TryBeginSelection()
         {
+            if (!loopEnabled) return;
             if (isChoosing) return;
 
             BeginSelection();
@@ -133,6 +167,14 @@ namespace Watermelon
             return Math.Exp(-(d * d) / denom);
         }
         
+        private void OnDisable()
+        {
+            // Stop invokes immediately when object/component is disabled
+            CancelInvoke(TryBeginSelectionMethodName);
+            cardUIController.CloseAll();
+            loopEnabled = false;
+            isChoosing = false;
+        }
         
     }
 }
