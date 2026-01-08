@@ -314,5 +314,17 @@ namespace Watermelon
             Debug.Log(LevelController.LevelRepresentation.IsTileUnconcealed(this));
         }
         #endregion
+
+        //Removes tile background temporarily if docked/in Slot
+
+        public void SetDockedState(bool isDocked)
+        {
+            if (backgroundSpriteRenderer != null)
+            {
+                //Fade out background when docked
+                float targetAlpha = isDocked ? 0f : 1f;
+                backgroundSpriteRenderer.DOFade(targetAlpha, 0.15f);
+            }
+        }
     }
 }
