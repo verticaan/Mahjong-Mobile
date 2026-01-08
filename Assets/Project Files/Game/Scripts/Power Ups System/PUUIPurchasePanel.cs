@@ -64,7 +64,7 @@ namespace Watermelon
         {
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
 
-            bool purchaseSuccessful = PUController.PurchasePowerUp(settings.Type);
+            bool purchaseSuccessful = PUController.PurchasePowerUp(settings);
 
             if (purchaseSuccessful)
                 ClosePurchasePUPanel();

@@ -67,33 +67,28 @@ namespace Watermelon
 #endif
         }
 
-        public static bool PurchasePowerUp(PUType powerUpType)
+        public static bool PurchasePowerUp(PUSettings powerUpSetting)
         {
-            if (powerUpsLink.ContainsKey(powerUpType))
+            if (powerUpSetting.HasEnoughCurrency())
             {
-                PUBehavior powerUpBehavior = powerUpsLink[powerUpType];
-                if(powerUpBehavior.Settings.HasEnoughCurrency())
+                CurrencyController.Substract(powerUpSetting.CurrencyType, powerUpSetting.Price);
+
+                if (powerUpsLink.TryGetValue(powerUpSetting.Type, out var value))
                 {
-                    CurrencyController.Substract(powerUpBehavior.Settings.CurrencyType, powerUpBehavior.Settings.Price);
-
-                    powerUpBehavior.Settings.Save.Amount += powerUpBehavior.Settings.PurchaseAmount;
-
-                    powerUpsUIController.RedrawPanels();
-
-                    return true;
+                    PUSettings mainSettings = value.Settings;
+                    mainSettings.Save.Amount += powerUpSetting.PurchaseAmount;
                 }
-                else
-                {
-                    UIController.ShowPage<UIStore>();
 
-                    return false;
-                }
+                powerUpsUIController.RedrawPanels();
+
+                return true;
             }
             else
             {
-                Debug.LogWarning(string.Format("[Power Ups]: Power up with type {0} isn't registered.", powerUpType));
-            }
+                UIController.ShowPage<UIStore>();
 
+                return false;
+            }
             return false;
         }
 

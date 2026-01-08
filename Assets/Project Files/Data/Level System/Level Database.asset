@@ -17,7 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eadef802e94aaf645ae5b0b45543154e, type: 2}
   - {fileID: 11400000, guid: 9c95d5e8f82939e4eb9745261d156403, type: 2}
   - {fileID: 11400000, guid: 448ed0d75f11935498b053aaae95a9ad, type: 2}
-  - {fileID: 11400000, guid: c3d9a0034e0dfa142b15e687d88e1d14, type: 2}
   - {fileID: 11400000, guid: dba88bccc41ab6f4c91eefaa5da2a566, type: 2}
   - {fileID: 11400000, guid: 36e966a48ee7a6d45b2c24ca017da7f8, type: 2}
   - {fileID: 11400000, guid: db473f976a883754098fb2b7428e6da8, type: 2}
@@ -214,6 +213,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 69264bf4f23d81a4e9fcd906850c9fe8, type: 2}
   - {fileID: 11400000, guid: bd34704932cd4d34d963076f30be97d4, type: 2}
   - {fileID: 11400000, guid: d6e2b642be1528b4d91472473ae694ad, type: 2}
+  - {fileID: 11400000, guid: c3d9a0034e0dfa142b15e687d88e1d14, type: 2}
   tiles:
   - prefab: {fileID: 2542306047163851403, guid: 17637f81f354b434d9448fb5623ff8ad,
       type: 3}
@@ -275,6 +275,10 @@ MonoBehaviour:
       type: 3}
     availableFromLevel: 0
     collectionID: 2
+  - prefab: {fileID: 2542306047163851403, guid: 4eda45d521d158a4ba4bceb88cd606e4,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
   tileEffects:
   - {fileID: 3729535350700347465, guid: 0c5538f95b0d01e45aad9171dca64717, type: 3}
   - {fileID: 632551435000746048, guid: bee5cdaf1d16d3d44a99413e5781ab65, type: 3}
