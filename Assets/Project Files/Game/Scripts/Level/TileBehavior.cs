@@ -186,7 +186,9 @@ namespace Watermelon
                     LevelController.SubmitElement(this);
                 }
 
-                AudioController.PlaySound(AudioController.AudioClips.tileClick, 1, Random.Range(0.8f, 1.2f));
+                AudioController.PlaySound(AudioController.AudioClips.tileClick);
+
+                //AudioController.PlaySound(AudioController.AudioClips.tileClick, 1, Random.Range(0.8f, 1.2f));
 
 #if MODULE_HAPTIC
                 Haptic.Play(Haptic.HAPTIC_LIGHT);

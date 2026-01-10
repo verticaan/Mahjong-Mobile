@@ -14,11 +14,11 @@ namespace Watermelon
         public AudioClip levelFailed;
 
         [BoxGroup("Gameplay", "Gameplay")]
-        public AudioClip tileClick;
+        public List<AudioClip> tileClick;
         [BoxGroup("Gameplay")]
         public AudioClip tileClickBlocked;
         [BoxGroup("Gameplay")]
-        public AudioClip mergeSound;
+        public List<AudioClip> mergeSound;
 
         [BoxGroup("Effects", "Effects")]
         public AudioClip iceCrackSound;
