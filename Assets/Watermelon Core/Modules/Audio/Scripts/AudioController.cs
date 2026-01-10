@@ -125,6 +125,35 @@ namespace Watermelon
             }
         }
 
+        //Added support for playing random clips from list
+        private static AudioClip GetRandomClip(List<AudioClip> clips)
+        {
+            if (clips == null || clips.Count == 0)
+            {
+                Debug.LogError("[AudioController]: Audio clips list is null or empty");
+                return null;
+            }
+
+            return clips[Random.Range(0, clips.Count)];
+        }
+
+        public static void PlaySound(List<AudioClip> clips, float volumePercentage = 1.0f, float pitch = 1.0f)
+        {
+            AudioClip clip = GetRandomClip(clips);
+            if (clip == null) return;
+
+            PlaySound(clip, volumePercentage, pitch);
+        }
+
+        public static void PlaySound(List<AudioClip> clips, Vector3 position, float volumePercentage = 1.0f, float pitch = 1.0f)
+        {
+            AudioClip clip = GetRandomClip(clips);
+            if (clip == null) return;
+
+            PlaySound(clip, position, volumePercentage, pitch);
+        }
+
+
         public static void PlaySound(AudioClip clip, float volumePercentage = 1.0f, float pitch = 1.0f, float minDelay = 0f)
         {
             if (clip == null)
