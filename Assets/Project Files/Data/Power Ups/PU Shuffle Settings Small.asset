@@ -9,21 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1554c988edbac41438f3903e05f5a021, type: 3}
-  m_Name: PU Undo Settings 1
+  m_Script: {fileID: 11500000, guid: 50df450a5e7c6e14a9b21fc7efe5d8b0, type: 3}
+  m_Name: PU Shuffle Settings Small
   m_EditorClassIdentifier: 
-  type: 0
-  icon: {fileID: 21300000, guid: a323e3679e7ff1145b4828972d86518d, type: 3}
-  behaviorPrefab: {fileID: 1263534553345675991, guid: ce69ece84a382034caa6bb0c26aaea5f,
+  type: 1
+  icon: {fileID: 21300000, guid: bc05c9e359644804ea39b33fdcf4cbb3, type: 3}
+  behaviorPrefab: {fileID: 7790535292472644827, guid: 8e778cfa513e3c1479c851dfaf32ea2c,
     type: 3}
   defaultAmount: 3
-  description: Return last move
+  description: Mix elements
   requiredLevel: 0
   visualiseActiveState: 0
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   currencyType: 0
   price: 50
   purchaseAmount: 3
-  floatingMessage: Undo
-  title: Undo
-  revertElementsCount: 1
+  floatingMessage: Shuffle
+  title: Shuffle
+  scaleTime: 0.5
+  scaleMinDelay: 0.05
+  scaleMaxDelay: 0.4
+  scaleEasingType: 26
