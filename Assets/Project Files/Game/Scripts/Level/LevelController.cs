@@ -17,6 +17,7 @@ namespace Watermelon
         [SerializeField] GameObject levelObject;
         [SerializeField] GameObject layersParentObject;
         [SerializeField] DockBehavior dock;
+        [SerializeField] ScoreDataModel scoreDataModel;
 
         private static bool isLevelLoaded;
         public static bool IsLevelLoaded => isLevelLoaded;
@@ -76,7 +77,7 @@ namespace Watermelon
 
             GameplayTimer = new GameplayTimer();
             GameplayTimer.OnTimerFinished += OnTimerFinished;
-
+            scoreDataModel.OnScoreTargetReached += OnScoreTargetReached;
             database.Init();
             dock.Init(this);
 
@@ -213,10 +214,16 @@ namespace Watermelon
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
 
             IntToggle timer = level.Timer;
+            IntToggle scoreTarget = level.ScoreTarget;
             if(timer.Enabled)
             {
                 GameplayTimer.SetMaxTime(timer.Value);
                 GameplayTimer.Start();
+            }
+            scoreDataModel.SetTargetScoreExists(scoreTarget.Enabled);
+            if (scoreTarget.Enabled)
+            {
+                scoreDataModel.SetTargetScore(scoreTarget.Value);
             }
 
             // Preparing objects to be placed on the level
@@ -348,6 +355,33 @@ namespace Watermelon
             GameController.OnLevelFailed();
 
             AudioController.PlaySound(AudioController.AudioClips.levelFailed);
+        }
+
+        private void OnScoreTargetReached()
+        {
+            if (!GameController.IsGameActive)
+                return;
+            
+            if (isCustomLevel) return;
+            
+            RaycastController.Disable();
+
+            levelSave.IsPlayingRandomLevel = false;
+
+            levelSave.DisplayLevelIndex++;
+
+            SaveController.MarkAsSaveIsRequired();
+
+            if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
+            {
+                levelSave.MaxReachedLevelIndex = levelSave.DisplayLevelIndex;
+                firstTimeCompletedLevel = true;
+            }
+
+            GameController.OnLevelCompleted();
+
+            AudioController.PlaySound(AudioController.AudioClips.levelComplete);
+            
         }
 
         private void Update()

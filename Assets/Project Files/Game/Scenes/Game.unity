@@ -1014,6 +1014,7 @@ MonoBehaviour:
   levelObject: {fileID: 774289891}
   layersParentObject: {fileID: 1006114699}
   dock: {fileID: 529591111}
+  scoreDataModel: {fileID: 7921812722490943926}
 --- !u!114 &1060784205
 MonoBehaviour:
   m_ObjectHideFlags: 0

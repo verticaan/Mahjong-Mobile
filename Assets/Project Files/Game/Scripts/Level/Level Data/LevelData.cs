@@ -30,6 +30,9 @@ namespace Watermelon
 
         [SerializeField] IntToggle timer = new IntToggle(false, 60);
         public IntToggle Timer => timer;
+        
+        [SerializeField] IntToggle scoreTarget = new IntToggle(false, 1000);
+        public IntToggle ScoreTarget => scoreTarget;
 
         public int SetsAmount => (GetAmountOfFilledCells() - (GetAmountOfFilledCells() % 3)) / 3;
         public float Difficulty => Mathf.Round(Mathf.Clamp(SetsAmount / (float)elementsPerLevel, 1, float.MaxValue) * 10.0f) * 0.1f;

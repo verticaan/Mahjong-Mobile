@@ -27,8 +27,9 @@ namespace Watermelon
 
         #region Public State
 
+        public event SimpleCallback OnScoreTargetReached;
+        public bool TargetScoreExists => targetScoreExists;
         public bool  IsTimerRunning => isTimerRunning;
-        public bool  IsWinnable     => isWinnable;
 
         public float RemainingTime => remainingTime;
         public float Duration      => roundDurationSeconds;
@@ -37,6 +38,7 @@ namespace Watermelon
         public int Multiplier      => scoreMultiplier;
         public int CurrentScore    => currentScore;
         public int PrevRoundScore  => prevRoundScore;
+        public int TargetScore    => targetScore;
 
         #endregion
 
@@ -47,8 +49,9 @@ namespace Watermelon
         private int startMultiplier;
         private int currentScore;
         private int prevRoundScore;
+        private int targetScore;
 
-        private bool isWinnable;
+        private bool targetScoreExists;
         private bool isTimerRunning;
 
         private float remainingTime;
@@ -112,16 +115,20 @@ namespace Watermelon
             RefreshUI();
         }
 
+        public void SetTargetScoreExists(bool exists)
+        {
+            SetUIVisible(exists);
+            targetScoreExists = exists;
+        }
+        
+        public void SetTargetScore(int target)
+        {
+            targetScore = target;
+            RefreshUI();
+        }
+
         public void ChangePerSlotValue(int value) => perSlotValue = value;
         public void ChangeMultiplierIncreaseAmount(int value) => multiplierIncreaseAmount = value;
-
-        public void SetWinnable(bool value)
-        {
-            if (isWinnable == value) return;
-
-            isWinnable = value;
-            ui?.ApplyWinnableState(value);
-        }
 
         #endregion
 
@@ -215,6 +222,10 @@ namespace Watermelon
         private void UpdateCurrentScore()
         {
             currentScore = prevRoundScore + rawScore * scoreMultiplier;
+            if (targetScoreExists && currentScore >= targetScore)
+            {
+                OnScoreTargetReached?.Invoke();
+            }
         }
 
         #endregion
@@ -226,6 +237,12 @@ namespace Watermelon
             if (ui == null) return;
             ui.RefreshText(this);
             ui.RefreshTimer(this);
+        }
+
+        private void SetUIVisible(bool visible)
+        {
+            if (ui == null) return;
+            ui.SetScoreSystemVisible(visible);
         }
 
         #endregion

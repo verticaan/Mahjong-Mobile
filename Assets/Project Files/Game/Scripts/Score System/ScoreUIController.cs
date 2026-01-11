@@ -11,9 +11,11 @@ namespace Watermelon
     public class ScoreUIController : MonoBehaviour
     {
         [Header("UI References")]
+        [SerializeField] private GameObject scoreUIParent;
         [SerializeField] private TextMeshProUGUI rawScoreText;
         [SerializeField] private TextMeshProUGUI scoreMultiplierText;
         [SerializeField] private TextMeshProUGUI currentScoreText;
+        [SerializeField] private TextMeshProUGUI targetScoreText;
         [SerializeField] private Image timerFillImage;
         //For testing, we can show that the game is winnable by changing text tint.
         //Some other UI thing can be added here
@@ -28,6 +30,7 @@ namespace Watermelon
             if (rawScoreText) rawScoreText.text = model.RawScore.ToString();
             if (scoreMultiplierText) scoreMultiplierText.text = model.Multiplier.ToString();
             if (currentScoreText) currentScoreText.text = model.CurrentScore.ToString();
+            if (targetScoreText) targetScoreText.text = model.TargetScore.ToString();
         }
 
         public void RefreshTimer(ScoreDataModel model)
@@ -37,6 +40,11 @@ namespace Watermelon
                 float normalized = (model.Duration <= 0f) ? 0f : (model.RemainingTime / model.Duration);
                 timerFillImage.fillAmount = normalized; // 1 -> full, 0 -> empty
             }
+        }
+
+        public void SetScoreSystemVisible(bool visible)
+        {
+            scoreUIParent.gameObject.SetActive(visible);
         }
 
         public void ApplyWinnableState(bool isWinnable)
