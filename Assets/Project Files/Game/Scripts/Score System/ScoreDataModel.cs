@@ -5,53 +5,65 @@ using UnityEngine;
 namespace Watermelon
 {
     /// <summary>
-    /// Logic/data + timer class with coroutine
-    /// Calls ScoreUI to refresh.
+    /// Handles score logic and round timer.
+    /// Drives ScoreUIController updates.
     /// </summary>
     public class ScoreDataModel : MonoBehaviour
     {
-        //This can be read from a file or something else later
-        [Header("Timer Durations (per reset)")]
-        [SerializeField] private List<float> resetDurationsSeconds = new List<float> {};
-        [SerializeField] private bool clampToLastDuration = true;
+        #region Inspector
 
-        [Header("UI")]
-        [SerializeField] private ScoreUIController ui;
+        [Header("Timer Durations (per reset)")]
+        [SerializeField] private List<float> resetDurationsSeconds = new();
+        [SerializeField] private bool clampToLastDuration = true;
 
         [Header("Gameplay")]
         [SerializeField] private int perSlotValue;
         [SerializeField] private int multiplierIncreaseAmount;
-        
-        public bool IsTimerRunning => isTimerRunning;
+
+        [Header("UI")]
+        [SerializeField] private ScoreUIController ui;
+
+        #endregion
+
+        #region Public State
+
+        public bool  IsTimerRunning => isTimerRunning;
+        public bool  IsWinnable     => isWinnable;
+
         public float RemainingTime => remainingTime;
-        public float Duration => roundDurationSeconds;
+        public float Duration      => roundDurationSeconds;
 
-        public int RawScore => rawScore;
-        public int Multiplier => scoreMultiplier;
-        public int CurrentScore => currentScore;
-        public int PrevRoundScore => prevRoundScore;
+        public int RawScore        => rawScore;
+        public int Multiplier      => scoreMultiplier;
+        public int CurrentScore    => currentScore;
+        public int PrevRoundScore  => prevRoundScore;
 
-        public bool IsWinnable => isWinnable;
+        #endregion
+
+        #region Private State
 
         private int rawScore;
-        private int scoreMultiplier = 0;
-        private int startMultiplier = 0; //Starts at 0, increases by 1 on first match
+        private int scoreMultiplier;
+        private int startMultiplier;
         private int currentScore;
         private int prevRoundScore;
 
         private bool isWinnable;
-
         private bool isTimerRunning;
+
         private float remainingTime;
         private float roundDurationSeconds;
 
-        private int resetCount; // 1st reset uses index 0, 2nd uses index 1...
+        private int resetCount;
         private Coroutine timerRoutine;
+
+        #endregion
+
+        #region Unity
 
         private void OnEnable()
         {
-            RefreshUItext();
-            RefreshUITimer();
+            RefreshUI();
         }
 
         private void OnDisable()
@@ -59,36 +71,22 @@ namespace Watermelon
             StopTimer();
         }
 
-        #region Public API (called from outside)
+        #endregion
 
-        /// <summary>
-        /// Resets timer duration using the next value in the list (0,1,2...) and starts it.
-        /// Optionally resets scores/multiplier for a new round.
-        /// </summary>
+        #region Public API
+
         public void StartTimerFromList(int startMultiplierIn = 0)
         {
-            roundDurationSeconds = GetNextResetDuration();
             startMultiplier = startMultiplierIn;
-            StartTimerWithCurrentDuration();
+            roundDurationSeconds = GetNextResetDuration();
+            StartTimer();
         }
 
-        public void ResetTimerIndex()
-        {
-            resetCount = 0;
-        }
-
-        public void StopTimer()
-        {
-            StopTimerInternal();
-            RefreshUItext();
-            RefreshUITimer();
-        }
+        public void ResetTimerIndex() => resetCount = 0;
 
         public void StopAll()
         {
-            ResetRawScore();
-            ResetCurrentScore();
-            ResetPrevRoundScore();
+            ResetScores();
             StopTimer();
         }
 
@@ -97,57 +95,49 @@ namespace Watermelon
             if (!isTimerRunning) return;
 
             rawScore += slotCount * perSlotValue;
-
             UpdateCurrentScore();
-            RefreshUItext();
+            RefreshUI();
         }
 
         public void IncreaseMultiplier(int times)
         {
             if (!isTimerRunning) return;
 
-            scoreMultiplier += times *  multiplierIncreaseAmount;
-            if (scoreMultiplier < 1) scoreMultiplier = 1;
+            scoreMultiplier = Mathf.Max(
+                1,
+                scoreMultiplier + times * multiplierIncreaseAmount
+            );
 
             UpdateCurrentScore();
-            RefreshUItext();
+            RefreshUI();
         }
 
-        public void ChangePerSlotValue(int slotValue)
-        {
-            perSlotValue = slotValue;
-        }
-
-        public void ChangeMultiplierIncreaseAmount(int newAmount)
-        {
-            multiplierIncreaseAmount = newAmount;
-        }
+        public void ChangePerSlotValue(int value) => perSlotValue = value;
+        public void ChangeMultiplierIncreaseAmount(int value) => multiplierIncreaseAmount = value;
 
         public void SetWinnable(bool value)
         {
             if (isWinnable == value) return;
 
             isWinnable = value;
-            UISetWinnable(value);
+            ui?.ApplyWinnableState(value);
         }
 
         #endregion
 
-        #region Timer Internals
+        #region Timer
 
-        private void StartTimerWithCurrentDuration()
+        private void StartTimer()
         {
             StopTimerInternal();
+
             roundDurationSeconds = Mathf.Max(0f, roundDurationSeconds);
             remainingTime = roundDurationSeconds;
-
             isTimerRunning = true;
-            
-            RefreshUITimer();
-            RefreshUItext();
 
-            // If duration is 0, immediately finish without starting coroutine.
-            if (roundDurationSeconds <= 0f)
+            RefreshUI();
+
+            if (remainingTime <= 0f)
             {
                 FinishTimer();
                 return;
@@ -160,13 +150,8 @@ namespace Watermelon
         {
             while (remainingTime > 0f)
             {
-                remainingTime -= Time.deltaTime;
-                if (remainingTime < 0f) remainingTime = 0f;
-
-                // UI Shows remaining time right now as a circle, but this can be changed later
-                // Refreshing each frame is fine for TMP right now
-                RefreshUITimer();
-
+                remainingTime = Mathf.Max(0f, remainingTime - Time.deltaTime);
+                ui?.RefreshTimer(this); //Refresh timer only in loop to save on GPU cycles
                 yield return null;
             }
 
@@ -176,27 +161,30 @@ namespace Watermelon
         private void FinishTimer()
         {
             ResetTimerIndex();
-            ResetRawScore();
-            SetPrevRoundScore(currentScore);
-            RefreshUItext();
-            RefreshUITimer();
+            rawScore = 0;
+            scoreMultiplier = startMultiplier;
+            prevRoundScore = currentScore;
+
+            isTimerRunning = false;
+            remainingTime = 0f;
+
+            RefreshUI();
         }
 
-        // sets isTimerRunning false + stops coroutine ref
+        public void StopTimer()
+        {
+            StopTimerInternal();
+            RefreshUI();
+        }
+
         private void StopTimerInternal()
         {
             isTimerRunning = false;
-            ResetRemainingTime();
-            if (timerRoutine != null)
-            {
-                StopCoroutine(timerRoutine);
-                timerRoutine = null;
-            }
-        }
-
-        private void ResetRemainingTime()
-        {
             remainingTime = 0f;
+
+            if (timerRoutine == null) return;
+            StopCoroutine(timerRoutine);
+            timerRoutine = null;
         }
 
         private float GetNextResetDuration()
@@ -209,63 +197,37 @@ namespace Watermelon
                 : resetCount % resetDurationsSeconds.Count;
 
             resetCount++;
-
             return Mathf.Max(0f, resetDurationsSeconds[index]);
         }
 
         #endregion
 
-        #region Scoring Internals
+        #region Scoring
 
-        private void ResetRound()
-        {
-            ResetRawScore();
-            RefreshUItext();
-        }
-
-        private void ResetRawScore()
+        private void ResetScores()
         {
             rawScore = 0;
-            scoreMultiplier = startMultiplier;
-        }
-
-        private void ResetCurrentScore()
-        {
             currentScore = 0;
-        }
-        
-        private void ResetPrevRoundScore()
-        {
             prevRoundScore = 0;
+            scoreMultiplier = startMultiplier;
         }
 
         private void UpdateCurrentScore()
         {
-            currentScore = prevRoundScore + (rawScore * scoreMultiplier);
+            currentScore = prevRoundScore + rawScore * scoreMultiplier;
         }
 
-        private void SetPrevRoundScore(int set)
-        {
-            prevRoundScore = set;
-        }
         #endregion
 
-        private void RefreshUItext()
+        #region UI
+
+        private void RefreshUI()
         {
             if (ui == null) return;
             ui.RefreshText(this);
-        }
-
-        private void RefreshUITimer()
-        {
-            if (ui == null) return;
             ui.RefreshTimer(this);
         }
 
-        private void UISetWinnable(bool winnable)
-        {
-            if (ui == null) return;
-            ui.ApplyWinnableState(winnable);
-        }
+        #endregion
     }
 }
