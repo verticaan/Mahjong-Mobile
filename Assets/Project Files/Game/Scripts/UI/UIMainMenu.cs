@@ -34,6 +34,15 @@ namespace Watermelon
         private TweenCase tapToPlayPingPong;
         private TweenCase showHideStoreAdButtonDelayTweenCase;
 
+        [SerializeField] TMP_Text levelNumberText;
+
+        //Set level number on start
+
+        private void Update()
+        {
+            levelNumberText.text = "LEVEL " + (LevelController.MaxReachedLevelIndex + 1);
+        }
+
         private void OnEnable()
         {
             IAPManager.PurchaseCompleted += OnAdPurchased;
