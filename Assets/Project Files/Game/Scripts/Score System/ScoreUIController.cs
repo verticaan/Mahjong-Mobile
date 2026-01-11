@@ -46,14 +46,5 @@ namespace Watermelon
         {
             scoreUIParent.gameObject.SetActive(visible);
         }
-
-        public void ApplyWinnableState(bool isWinnable)
-        {
-            var c = isWinnable ? winnableColor : normalColor;
-
-            if (rawScoreText) rawScoreText.color = c;
-            if (scoreMultiplierText) scoreMultiplierText.color = c;
-            if (currentScoreText) currentScoreText.color = c;
-        }
     }
 }

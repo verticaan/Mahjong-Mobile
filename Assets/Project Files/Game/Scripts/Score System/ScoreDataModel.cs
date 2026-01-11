@@ -6,6 +6,7 @@ namespace Watermelon
 {
     /// <summary>
     /// Handles score logic and round timer.
+    /// Completely inactive unless a target score exists.
     /// Drives ScoreUIController updates.
     /// </summary>
     public class ScoreDataModel : MonoBehaviour
@@ -28,16 +29,17 @@ namespace Watermelon
         #region Public State
 
         public event SimpleCallback OnScoreTargetReached;
+
         public bool TargetScoreExists => targetScoreExists;
-        public bool  IsTimerRunning => isTimerRunning;
+        public bool IsTimerRunning    => isTimerRunning;
 
         public float RemainingTime => remainingTime;
         public float Duration      => roundDurationSeconds;
 
-        public int RawScore        => rawScore;
-        public int Multiplier      => scoreMultiplier;
-        public int CurrentScore    => currentScore;
-        public int PrevRoundScore  => prevRoundScore;
+        public int RawScore       => rawScore;
+        public int Multiplier     => scoreMultiplier;
+        public int CurrentScore   => currentScore;
+        public int PrevRoundScore => prevRoundScore;
         public int TargetScore    => targetScore;
 
         #endregion
@@ -60,42 +62,78 @@ namespace Watermelon
         private int resetCount;
         private Coroutine timerRoutine;
 
+        private bool IsInactive => !targetScoreExists;
+
         #endregion
 
         #region Unity
 
         private void OnEnable()
         {
+            if (IsInactive) return;
             RefreshUI();
         }
 
         private void OnDisable()
         {
-            StopTimer();
+            if (IsInactive) return;
+            StopTimerInternal();
         }
 
         #endregion
 
         #region Public API
 
+        public void SetTargetScoreExists(bool exists)
+        {
+            targetScoreExists = exists;
+            SetUIVisible(exists);
+
+            if (!exists)
+            {
+                StopTimerInternal();
+                ResetScores();
+            }
+            else
+            {
+                RefreshUI();
+            }
+        }
+
+        public void SetTargetScore(int target)
+        {
+            if (IsInactive) return;
+
+            targetScore = target;
+            RefreshUI();
+        }
+
         public void StartTimerFromList(int startMultiplierIn = 0)
         {
+            if (IsInactive) return;
+
             startMultiplier = startMultiplierIn;
             roundDurationSeconds = GetNextResetDuration();
             StartTimer();
         }
 
-        public void ResetTimerIndex() => resetCount = 0;
+        public void ResetTimerIndex()
+        {
+            if (IsInactive) return;
+            resetCount = 0;
+        }
 
         public void StopAll()
         {
+            if (IsInactive) return;
+
             ResetScores();
             StopTimer();
         }
 
         public void AddRawScore(int slotCount)
         {
-            if (!isTimerRunning) return;
+            if (IsInactive || !isTimerRunning) return;
 
             rawScore += slotCount * perSlotValue;
             UpdateCurrentScore();
@@ -104,7 +142,7 @@ namespace Watermelon
 
         public void IncreaseMultiplier(int times)
         {
-            if (!isTimerRunning) return;
+            if (IsInactive || !isTimerRunning) return;
 
             scoreMultiplier = Mathf.Max(
                 1,
@@ -115,20 +153,17 @@ namespace Watermelon
             RefreshUI();
         }
 
-        public void SetTargetScoreExists(bool exists)
+        public void ChangePerSlotValue(int value)
         {
-            SetUIVisible(exists);
-            targetScoreExists = exists;
-        }
-        
-        public void SetTargetScore(int target)
-        {
-            targetScore = target;
-            RefreshUI();
+            if (IsInactive) return;
+            perSlotValue = value;
         }
 
-        public void ChangePerSlotValue(int value) => perSlotValue = value;
-        public void ChangeMultiplierIncreaseAmount(int value) => multiplierIncreaseAmount = value;
+        public void ChangeMultiplierIncreaseAmount(int value)
+        {
+            if (IsInactive) return;
+            multiplierIncreaseAmount = value;
+        }
 
         #endregion
 
@@ -136,6 +171,8 @@ namespace Watermelon
 
         private void StartTimer()
         {
+            if (IsInactive) return;
+
             StopTimerInternal();
 
             roundDurationSeconds = Mathf.Max(0f, roundDurationSeconds);
@@ -155,19 +192,23 @@ namespace Watermelon
 
         private IEnumerator TimerLoop()
         {
-            while (remainingTime > 0f)
+            while (remainingTime > 0f && !IsInactive)
             {
                 remainingTime = Mathf.Max(0f, remainingTime - Time.deltaTime);
-                ui?.RefreshTimer(this); //Refresh timer only in loop to save on GPU cycles
+                ui?.RefreshTimer(this);
                 yield return null;
             }
 
-            FinishTimer();
+            if (!IsInactive)
+                FinishTimer();
         }
 
         private void FinishTimer()
         {
+            if (IsInactive) return;
+
             ResetTimerIndex();
+
             rawScore = 0;
             scoreMultiplier = startMultiplier;
             prevRoundScore = currentScore;
@@ -180,6 +221,8 @@ namespace Watermelon
 
         public void StopTimer()
         {
+            if (IsInactive) return;
+
             StopTimerInternal();
             RefreshUI();
         }
@@ -189,9 +232,11 @@ namespace Watermelon
             isTimerRunning = false;
             remainingTime = 0f;
 
-            if (timerRoutine == null) return;
-            StopCoroutine(timerRoutine);
-            timerRoutine = null;
+            if (timerRoutine != null)
+            {
+                StopCoroutine(timerRoutine);
+                timerRoutine = null;
+            }
         }
 
         private float GetNextResetDuration()
@@ -221,11 +266,12 @@ namespace Watermelon
 
         private void UpdateCurrentScore()
         {
+            if (IsInactive) return;
+
             currentScore = prevRoundScore + rawScore * scoreMultiplier;
-            if (targetScoreExists && currentScore >= targetScore)
-            {
+
+            if (currentScore >= targetScore)
                 OnScoreTargetReached?.Invoke();
-            }
         }
 
         #endregion
@@ -234,7 +280,8 @@ namespace Watermelon
 
         private void RefreshUI()
         {
-            if (ui == null) return;
+            if (IsInactive || ui == null) return;
+
             ui.RefreshText(this);
             ui.RefreshTimer(this);
         }
