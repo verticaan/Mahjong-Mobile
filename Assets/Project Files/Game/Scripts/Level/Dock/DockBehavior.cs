@@ -16,7 +16,7 @@ namespace Watermelon
         [SerializeField] AnimationCurve positionYCurve;
         [SerializeField] GameObject slotPrefab;
 
-        [SerializeField] private TMPro.TMP_Text slotsValueText;
+        [SerializeField] private ScoreDataModel scoreDataModel;
 
 
         private static List<SlotBehavior> slots;
@@ -44,7 +44,7 @@ namespace Watermelon
             instance = this;
 
             this.levelController = levelController;
-
+            
             defaultContainerPosition = transform.position;
 
             lastPickedObject = null;
@@ -135,6 +135,8 @@ namespace Watermelon
                 Destroy(slot.gameObject);
             }
 
+            scoreDataModel.ResetAndStartTimerFromList(true, true);
+            scoreDataModel.StopAll();
             addedDepth = 0;
         }
 
@@ -158,7 +160,7 @@ namespace Watermelon
                     slotCase.IsBeingRemoved = true;
                 }
             }
-
+            
             for(int i = 0; i < slotsToRemove.Count; i++)
             {
                 var slotCase = slotsToRemove[i];
@@ -166,7 +168,7 @@ namespace Watermelon
             }
 
             AudioController.PlaySound(AudioController.AudioClips.mergeSound, 0.5f);
-
+            
             Tween.DelayedCall(0.4f, () =>
             {
                 for (int i = 0; i < slotsToRemove.Count; i++)
@@ -191,7 +193,7 @@ namespace Watermelon
                 }
 
                 ShiftAllLeft();
-
+                
                 if (addedDepth > 0)
                 {
                     addedDepth--;
@@ -205,6 +207,7 @@ namespace Watermelon
                     }
                 }
                 levelController.OnMatchCompleted();
+                
             });
         }
 
@@ -265,12 +268,10 @@ namespace Watermelon
 
                     if (counter == 3)
                     {
-                        UpdateSlotsValueUI();
-
                         if (remove)
                         {
                             RemoveMatch(list);
-
+                            UpdateScoresAfterMatch(); //Change placement to adjust when remaining slots are calculated
                             MatchCombined?.Invoke(list);
                         }
 
@@ -617,19 +618,14 @@ namespace Watermelon
 
             return counter;
         }
-//Creates a score by caluculating the number of slots by a random number
-        public int CalculateRandomSlotValue(int minRandom = 1, int maxRandom = 5)
-        {
-            int maxSlots = slots.Count; // or GetSlotsAvailable()
-            int randomMultiplier = Random.Range(minRandom, maxRandom + 1);
 
-            return maxSlots * randomMultiplier;
-        }
-
-        public void UpdateSlotsValueUI()
+        public void UpdateScoresAfterMatch()
         {
-            int value = CalculateRandomSlotValue();
-            slotsValueText.text = $"{value}";
+            scoreDataModel.ResetAndStartTimerFromList(false, false);
+            int emptySlots = GetSlotsAvailable();
+            scoreDataModel.AddRawScore(emptySlots);
+            scoreDataModel.IncreaseMultiplier(1);
+            
         }
 
     }
