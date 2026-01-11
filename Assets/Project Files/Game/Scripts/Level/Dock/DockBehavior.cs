@@ -135,7 +135,7 @@ namespace Watermelon
                 Destroy(slot.gameObject);
             }
 
-            scoreDataModel.ResetAndStartTimerFromList(true, true);
+            scoreDataModel.ResetTimerIndex();
             scoreDataModel.StopAll();
             addedDepth = 0;
         }
@@ -621,7 +621,7 @@ namespace Watermelon
 
         public void UpdateScoresAfterMatch()
         {
-            scoreDataModel.ResetAndStartTimerFromList(false, false);
+            scoreDataModel.StartTimerFromList();
             int emptySlots = GetSlotsAvailable();
             scoreDataModel.AddRawScore(emptySlots);
             scoreDataModel.IncreaseMultiplier(1);
