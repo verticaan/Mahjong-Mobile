@@ -16,7 +16,7 @@ namespace Watermelon
         [SerializeField] AnimationCurve positionYCurve;
         [SerializeField] GameObject slotPrefab;
 
-        [SerializeField] private TMPro.TMP_Text slotsValueText;
+        [SerializeField] private ScoreDataModel scoreDataModel;
 
 
         private static List<SlotBehavior> slots;
@@ -134,7 +134,7 @@ namespace Watermelon
                 slot.Clear();
                 Destroy(slot.gameObject);
             }
-
+            ResetScoreSystem();
             addedDepth = 0;
         }
 
@@ -265,12 +265,10 @@ namespace Watermelon
 
                     if (counter == 3)
                     {
-                        UpdateSlotsValueUI();
-
                         if (remove)
                         {
                             RemoveMatch(list);
-
+                            UpdateScoresAfterMatch();
                             MatchCombined?.Invoke(list);
                         }
 
@@ -617,19 +615,19 @@ namespace Watermelon
 
             return counter;
         }
-//Creates a score by caluculating the number of slots by a random number
-        public int CalculateRandomSlotValue(int minRandom = 1, int maxRandom = 5)
+        public void UpdateScoresAfterMatch()
         {
-            int maxSlots = slots.Count; // or GetSlotsAvailable()
-            int randomMultiplier = Random.Range(minRandom, maxRandom + 1);
-
-            return maxSlots * randomMultiplier;
+            scoreDataModel.StartTimerFromList();
+            int emptySlots = GetSlotsAvailable();
+            scoreDataModel.AddRawScore(emptySlots);
+            scoreDataModel.IncreaseMultiplier(1);
+            
         }
 
-        public void UpdateSlotsValueUI()
+        public void ResetScoreSystem()
         {
-            int value = CalculateRandomSlotValue();
-            slotsValueText.text = $"{value}";
+            scoreDataModel.ResetTimerIndex();
+            scoreDataModel.StopAll();
         }
 
     }
