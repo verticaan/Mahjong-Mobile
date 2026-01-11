@@ -337,6 +337,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7996842307208175195, guid: fb52ba1566937344da1cad1c45a81277,
         type: 3}
+      propertyPath: scoreDataModel
+      value: 
+      objectReference: {fileID: 7921812722490943924}
+    - target: {fileID: 7996842307208175195, guid: fb52ba1566937344da1cad1c45a81277,
+        type: 3}
       propertyPath: slotsValueText
       value: 
       objectReference: {fileID: 2073723638}
@@ -1292,7 +1297,6 @@ MonoBehaviour:
   playerQuality: {fileID: 1060784215}
   cardUIController: {fileID: 3451539243946123829}
   selectionIntervalSeconds: 10
-  autoStart: 1
   sigma: 10
   minWeight: 0.0001
 --- !u!1 &1134142352
@@ -2598,7 +2602,7 @@ PrefabInstance:
     - target: {fileID: 7069787924616044244, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -299.1201
+      value: -299.12012
       objectReference: {fileID: 0}
     - target: {fileID: 7294988378290871685, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
@@ -6119,6 +6123,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3451539243946123828}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7921812722490943924 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3451539243946123828}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a59705fa5a7104090bfd9c70158607, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8095943557840496073
 MonoBehaviour:
   m_ObjectHideFlags: 0
