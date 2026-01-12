@@ -16,10 +16,12 @@ MonoBehaviour:
   levelComplete: {fileID: 8300000, guid: 5ad54e4fe5d6de14ab12740dd7d4fe6f, type: 3}
   levelFailed: {fileID: 8300000, guid: a4e148d7284277e4c910bc146938eb6c, type: 3}
   tileClick:
-  - {fileID: 8300000, guid: 57cff1058f5757b45960fef0b09b8e94, type: 3}
-  - {fileID: 8300000, guid: 5f2409b5f76c9d44c82640847a8b75b4, type: 3}
-  - {fileID: 8300000, guid: 052a1ddaa5cde89418cc663713871270, type: 3}
-  - {fileID: 8300000, guid: 4ede2b3a9ded5ff43aa7b33d97a610d5, type: 3}
+  - {fileID: 8300000, guid: b5da79709256ee84db21627223b772ac, type: 3}
+  - {fileID: 8300000, guid: 5fb2545d25d42d94baef53c230c8f1cd, type: 3}
+  - {fileID: 8300000, guid: c870fa54505d5c546ad7e5a40e283e53, type: 3}
+  - {fileID: 8300000, guid: 5fd41246b1eeaa84cadd18b9eab6ab66, type: 3}
+  - {fileID: 8300000, guid: 9c630d1e629026943a0ecab41997e1c6, type: 3}
+  - {fileID: 8300000, guid: 59e49322674a7ee4ea111ef3fe8c2d62, type: 3}
   tileClickBlocked: {fileID: 8300000, guid: 3d4b98ebef03cd747a203c2ff1237573, type: 3}
   mergeSound:
   - {fileID: 8300000, guid: 53c772b3f811f5a499fa4eb7ef5921a1, type: 3}

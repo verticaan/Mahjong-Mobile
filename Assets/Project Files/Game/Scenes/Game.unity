@@ -406,7 +406,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548377986}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -5986,11 +5986,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5178066047858781992}
     m_Modifications:
-    - target: {fileID: 655719112430613438, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
-      objectReference: {fileID: 0}
     - target: {fileID: 710758179460107126, guid: 5f1de49413914ae44bd46127a62520e0,
         type: 3}
       propertyPath: m_Name
@@ -6025,11 +6020,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1582953490743447295, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 1949144298756392143, guid: 5f1de49413914ae44bd46127a62520e0,
         type: 3}
@@ -6201,11 +6191,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2881405943691056706, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
-      objectReference: {fileID: 0}
     - target: {fileID: 3674024209474131769, guid: 5f1de49413914ae44bd46127a62520e0,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -6255,16 +6240,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4520920107577687711, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
-      objectReference: {fileID: 0}
-    - target: {fileID: 5029797139745545734, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 5084570122230841801, guid: 5f1de49413914ae44bd46127a62520e0,
         type: 3}
@@ -6320,16 +6295,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8416150555223508935, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
-      objectReference: {fileID: 0}
-    - target: {fileID: 9116659916047886911, guid: 5f1de49413914ae44bd46127a62520e0,
-        type: 3}
-      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
-      value: 1801810542
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'PU TEXT '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c2ee9bf6e65695d48ba9d4b5a346538f, type: 2}
-  m_sharedMaterial: {fileID: -3707072339102680950, guid: c2ee9bf6e65695d48ba9d4b5a346538f,
+  m_fontAsset: {fileID: 11400000, guid: b91df3fa10883ee438ab8bcd8df6a807, type: 2}
+  m_sharedMaterial: {fileID: 9164231478677464726, guid: b91df3fa10883ee438ab8bcd8df6a807,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
