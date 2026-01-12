@@ -9835,7 +9835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a59705fa5a7104090bfd9c70158607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resetDurationsSeconds:
+  comboTimerDurationsSeconds:
   - 30
   - 25
   - 20

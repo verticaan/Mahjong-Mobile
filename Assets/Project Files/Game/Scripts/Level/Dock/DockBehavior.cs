@@ -626,7 +626,7 @@ namespace Watermelon
 
         public void ResetScoreSystem()
         {
-            scoreDataModel.ResetTimerIndex();
+            scoreDataModel.ResetComboTimerIndex();
             scoreDataModel.StopAll();
         }
 

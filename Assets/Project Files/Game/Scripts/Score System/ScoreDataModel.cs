@@ -14,7 +14,7 @@ namespace Watermelon
         #region Inspector
 
         [Header("Timer Durations (per reset)")]
-        [SerializeField] private List<float> resetDurationsSeconds = new();
+        [SerializeField] private List<float> comboTimerDurationsSeconds = new();
         [SerializeField] private bool clampToLastDuration = true;
 
         [Header("Gameplay")]
@@ -41,6 +41,7 @@ namespace Watermelon
         public int CurrentScore   => currentScore;
         public int PrevRoundScore => prevRoundScore;
         public int TargetScore    => targetScore;
+        public int ComboStage => comboStage;
 
         #endregion
 
@@ -59,7 +60,7 @@ namespace Watermelon
         private float remainingTime;
         private float roundDurationSeconds;
 
-        private int resetCount;
+        private int comboStage;
         private Coroutine timerRoutine;
 
         private bool IsInactive => !targetScoreExists;
@@ -113,14 +114,14 @@ namespace Watermelon
             if (IsInactive) return;
 
             startMultiplier = startMultiplierIn;
-            roundDurationSeconds = GetNextResetDuration();
+            roundDurationSeconds = GetNextComboDuration();
             StartTimer();
         }
 
-        public void ResetTimerIndex()
+        public void ResetComboTimerIndex()
         {
             if (IsInactive) return;
-            resetCount = 0;
+            comboStage = 0;
         }
 
         public void StopAll()
@@ -207,7 +208,7 @@ namespace Watermelon
         {
             if (IsInactive) return;
 
-            ResetTimerIndex();
+            ResetComboTimerIndex();
 
             rawScore = 0;
             scoreMultiplier = startMultiplier;
@@ -239,17 +240,17 @@ namespace Watermelon
             }
         }
 
-        private float GetNextResetDuration()
+        private float GetNextComboDuration()
         {
-            if (resetDurationsSeconds == null || resetDurationsSeconds.Count == 0)
+            if (comboTimerDurationsSeconds == null || comboTimerDurationsSeconds.Count == 0)
                 return 0f;
 
             int index = clampToLastDuration
-                ? Mathf.Min(resetCount, resetDurationsSeconds.Count - 1)
-                : resetCount % resetDurationsSeconds.Count;
+                ? Mathf.Min(comboStage, comboTimerDurationsSeconds.Count - 1)
+                : comboStage % comboTimerDurationsSeconds.Count;
 
-            resetCount++;
-            return Mathf.Max(0f, resetDurationsSeconds[index]);
+            comboStage++;
+            return Mathf.Max(0f, comboTimerDurationsSeconds[index]);
         }
 
         #endregion
