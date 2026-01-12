@@ -267,8 +267,8 @@ namespace Watermelon
                     {
                         if (remove)
                         {
-                            RemoveMatch(list);
                             UpdateScoresAfterMatch();
+                            RemoveMatch(list);
                             MatchCombined?.Invoke(list);
                         }
 
@@ -322,7 +322,7 @@ namespace Watermelon
             int counter = 0;
             for (int i = slots.Count - 1; i >= 0; i--)
             {
-                if (!slots[i].IsOccupied) counter++;
+                if (!slots[i].IsOccupied && !slots[i].IsTemp) counter++;
             }
 
             return counter;

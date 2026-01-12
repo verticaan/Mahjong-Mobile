@@ -24,7 +24,8 @@ namespace Watermelon
         public SlotCase SlotCase { get; private set; }
 
         public bool IsOccupied => SlotCase != null;
-
+        public bool IsTemp => isTemp;
+        
         private TweenCase colorCase;
 
         private int spriteSortOrder;
