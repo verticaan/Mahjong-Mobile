@@ -5714,8 +5714,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Skip
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0a7ec04ff2e0cb640a3babdc42141beb, type: 2}
-  m_sharedMaterial: {fileID: 9164231478677464726, guid: 0a7ec04ff2e0cb640a3babdc42141beb,
+  m_fontAsset: {fileID: 11400000, guid: e86699b11d1b009478862117e116b931, type: 2}
+  m_sharedMaterial: {fileID: 9164231478677464726, guid: e86699b11d1b009478862117e116b931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6340,8 +6340,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Welcome
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8d58e111dc602cb4388c219bb87f7964, type: 2}
-  m_sharedMaterial: {fileID: 9164231478677464726, guid: 8d58e111dc602cb4388c219bb87f7964,
+  m_fontAsset: {fileID: 11400000, guid: e86699b11d1b009478862117e116b931, type: 2}
+  m_sharedMaterial: {fileID: 9164231478677464726, guid: e86699b11d1b009478862117e116b931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6912,8 +6912,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Clear the game field
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0a7ec04ff2e0cb640a3babdc42141beb, type: 2}
-  m_sharedMaterial: {fileID: 9164231478677464726, guid: 0a7ec04ff2e0cb640a3babdc42141beb,
+  m_fontAsset: {fileID: 11400000, guid: e86699b11d1b009478862117e116b931, type: 2}
+  m_sharedMaterial: {fileID: 9164231478677464726, guid: e86699b11d1b009478862117e116b931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -13435,6 +13435,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Power Up Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7655875636118868019, guid: d833e437507c32e44bf509d910eb7684,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
