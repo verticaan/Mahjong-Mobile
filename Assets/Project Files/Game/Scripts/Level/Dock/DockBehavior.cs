@@ -267,8 +267,8 @@ namespace Watermelon
                     {
                         if (remove)
                         {
-                            RemoveMatch(list);
                             UpdateScoresAfterMatch();
+                            RemoveMatch(list);
                             MatchCombined?.Invoke(list);
                         }
 

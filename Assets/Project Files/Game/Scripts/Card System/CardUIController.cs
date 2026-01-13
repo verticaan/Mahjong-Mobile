@@ -43,8 +43,8 @@ namespace Watermelon
         {
             if (leftCardUI != null && rightCardUI != null) return;
 
-            leftCardUI = Instantiate(cardPrefab, transform);
-            rightCardUI = Instantiate(cardPrefab, transform);
+            leftCardUI = Instantiate(cardPrefab, leftCardSpawnPosition.transform);
+            rightCardUI = Instantiate(cardPrefab, leftCardSpawnPosition.transform);
 
             leftCardUI.gameObject.SetActive(false);
             rightCardUI.gameObject.SetActive(false);
