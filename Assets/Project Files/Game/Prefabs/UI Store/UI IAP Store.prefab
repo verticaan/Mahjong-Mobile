@@ -9538,7 +9538,6 @@ GameObject:
   - component: {fileID: 1897899476290945877}
   - component: {fileID: 4668299005843439499}
   - component: {fileID: 7164731183281862750}
-  - component: {fileID: 820967590914746476}
   m_Layer: 5
   m_Name: PU_Lives_Offer
   m_TagString: Untagged
@@ -9607,27 +9606,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1.9
---- !u!114 &820967590914746476
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7607073403418929324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a9237f270278384eb0b271a77d1a88a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  safeAreaTransform: {fileID: 3919177203744320786}
-  purchaseButton: {fileID: 5472864474396133305}
-  currencyPanel: {fileID: 285376994328016903}
-  powerUpIcon: {fileID: 7554096661063410148}
-  descriptionText: {fileID: 2037349753267658010}
-  amountText: {fileID: 8086117314955034312}
-  priceText: {fileID: 4035428365076754063}
-  currencyIcon: {fileID: 4913192389535765463}
-  settings: {fileID: 0}
 --- !u!1 &7625611214332629104
 GameObject:
   m_ObjectHideFlags: 0
@@ -10153,7 +10131,6 @@ GameObject:
   - component: {fileID: 4287131411919667058}
   - component: {fileID: 5834240791686884111}
   - component: {fileID: 1026632219682681418}
-  - component: {fileID: 7686552381942177699}
   m_Layer: 5
   m_Name: PU_Lives_Offer Small
   m_TagString: Untagged
@@ -10222,27 +10199,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1.9
---- !u!114 &7686552381942177699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7927982629665839143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a9237f270278384eb0b271a77d1a88a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  safeAreaTransform: {fileID: 3919177203744320786}
-  purchaseButton: {fileID: 1480501264867219685}
-  currencyPanel: {fileID: 285376994328016903}
-  powerUpIcon: {fileID: 3679306631570409832}
-  descriptionText: {fileID: 268978125362185549}
-  amountText: {fileID: 2516050373771286595}
-  priceText: {fileID: 1064491784018164502}
-  currencyIcon: {fileID: 5467978847499245959}
-  settings: {fileID: 0}
 --- !u!1 &8036869536455771316
 GameObject:
   m_ObjectHideFlags: 0
