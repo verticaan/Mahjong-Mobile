@@ -179,8 +179,5 @@ MonoBehaviour:
   coinsReward: 20
   editorNote: ' sets: 15'
   timer:
-    enabled: 1
-    value: 400
-  scoreTarget:
     enabled: 0
-    value: 1000
+    value: 60
