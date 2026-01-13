@@ -1297,7 +1297,7 @@ MonoBehaviour:
   cards: {fileID: 11400000, guid: 0db73b7d9a49a6d47a214411a1b2646b, type: 2}
   playerQuality: {fileID: 1060784215}
   cardUIController: {fileID: 3451539243946123829}
-  selectionIntervalSeconds: 10
+  selectionIntervalSeconds: 2
   sigma: 10
   minWeight: 0.0001
 --- !u!1 &1134142352
