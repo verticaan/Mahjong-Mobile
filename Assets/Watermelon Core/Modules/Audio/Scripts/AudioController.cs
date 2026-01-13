@@ -25,6 +25,16 @@ namespace Watermelon
 
         private static Dictionary<AudioType, float> volumeDictionary;
 
+        //Chord Category
+        private enum JazzChordFunction
+        {
+            Tonic,
+            Subdominant,
+            Dominant
+        }
+
+        private static JazzChordFunction lastFunction = JazzChordFunction.Tonic;
+
         public static void Init(AudioClips audioClips, int audioSourcesPoolSize)
         {
             if (audioClips == null)
@@ -124,6 +134,85 @@ namespace Watermelon
                 }
             }
         }
+
+        //Notes
+        private static AudioClip GetJazzClip(List<AudioClip> chordTones,List<AudioClip> colorTones,List<AudioClip> tensionTones)
+        {
+            float r = Random.value;
+
+            if (r < 0.6f)
+                return GetRandomClip(chordTones);
+            else if (r < 0.9f)
+                return GetRandomClip(colorTones);
+            else
+                return GetRandomClip(tensionTones);
+        }
+
+        public static void PlayJazzNote(float volume = 1f, float pitch = 1f)
+        {
+            if (audioClips == null)
+                return;
+
+            AudioClip clip = GetJazzClip(
+                audioClips.jazzChordTones,
+                audioClips.jazzColorTones,
+                audioClips.jazzTensionTones
+            );
+
+            if (clip != null)
+                PlaySound(clip, volume, pitch);
+        }
+
+        //Chords
+        private static JazzChordFunction GetNextJazzFunction()
+        {
+            float r = Random.value;
+
+            switch (lastFunction)
+            {
+                case JazzChordFunction.Tonic:
+                    return r < 0.6f ? JazzChordFunction.Subdominant : JazzChordFunction.Tonic;
+
+                case JazzChordFunction.Subdominant:
+                    return r < 0.7f ? JazzChordFunction.Dominant : JazzChordFunction.Tonic;
+
+                case JazzChordFunction.Dominant:
+                    return JazzChordFunction.Tonic;
+            }
+
+            return JazzChordFunction.Tonic;
+        }
+
+        public static void PlayJazzChord(float volume = 1f)
+        {
+            if (audioClips == null)
+                return;
+
+            JazzChordFunction next = GetNextJazzFunction();
+            lastFunction = next;
+
+            AudioClip clip = null;
+
+            switch (next)
+            {
+                case JazzChordFunction.Tonic:
+                    clip = GetRandomClip(audioClips.jazzTonicChords);
+                    break;
+
+                case JazzChordFunction.Subdominant:
+                    clip = GetRandomClip(audioClips.jazzSubdominantChords);
+                    break;
+
+                case JazzChordFunction.Dominant:
+                    clip = GetRandomClip(audioClips.jazzDominantChords);
+                    break;
+            }
+
+            if (clip != null)
+                PlaySound(clip, volume);
+        }
+
+
 
         //Added support for playing random clips from list
         private static AudioClip GetRandomClip(List<AudioClip> clips)

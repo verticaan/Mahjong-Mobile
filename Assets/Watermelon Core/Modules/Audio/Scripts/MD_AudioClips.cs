@@ -27,6 +27,24 @@ namespace Watermelon
         [BoxGroup("Effects")]
         public AudioClip rubberSound;
 
+        [BoxGroup("Jazz", "Jazz")]
+        public List<AudioClip> jazzChordTones;   // C, E, G
+
+        [BoxGroup("Jazz")]
+        public List<AudioClip> jazzColorTones;   // D, A
+
+        [BoxGroup("Jazz")]
+        public List<AudioClip> jazzTensionTones; // E♭
+
+        [BoxGroup("Jazz Chords", "Jazz Chords")]
+        public List<AudioClip> jazzTonicChords;      // C6, Cmaj7
+
+        [BoxGroup("Jazz Chords")]
+        public List<AudioClip> jazzSubdominantChords; // Dm7, F9
+
+        [BoxGroup("Jazz Chords")]
+        public List<AudioClip> jazzDominantChords;    // G7, G13
+
     }
 }
 

@@ -10842,11 +10842,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   comboTimerDurationsSeconds:
-  - 30
-  - 25
-  - 20
   - 15
+  - 12.5
   - 10
+  - 7.5
+  - 5
   clampToLastDuration: 1
   perSlotValue: 5
   multiplierIncreaseAmount: 1
@@ -14302,6 +14302,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingLayer
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 513660224215557875, guid: 60c902cb228fda343a82641f93474e0d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 513660224215557875, guid: 60c902cb228fda343a82641f93474e0d,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 513660224215557875, guid: 60c902cb228fda343a82641f93474e0d,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 530
       objectReference: {fileID: 0}
     - target: {fileID: 4581111610160608792, guid: 60c902cb228fda343a82641f93474e0d,
         type: 3}
