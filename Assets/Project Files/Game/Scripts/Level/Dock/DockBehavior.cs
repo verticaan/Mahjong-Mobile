@@ -165,7 +165,9 @@ namespace Watermelon
                 slotCase.Behavior.MatchAnimation(i * 0.05f);
             }
 
-            AudioController.PlaySound(AudioController.AudioClips.mergeSound);
+            AudioController.PlayJazzChord(0.7f);
+
+            //AudioController.PlaySound(AudioController.AudioClips.mergeSound);
 
             Tween.DelayedCall(0.4f, () =>
             {

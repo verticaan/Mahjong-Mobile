@@ -30,3 +30,21 @@ MonoBehaviour:
   iceCrackSound: {fileID: 8300000, guid: 52274d22290d0994ea08cdee4761cfbd, type: 3}
   crateCrackSound: {fileID: 8300000, guid: 61d643d5f28f3064585b8c1bed7034fd, type: 3}
   rubberSound: {fileID: 8300000, guid: 8ff5f03f02e45c347be66bbfaecd0323, type: 3}
+  jazzChordTones:
+  - {fileID: 8300000, guid: b5da79709256ee84db21627223b772ac, type: 3}
+  - {fileID: 8300000, guid: 5fd41246b1eeaa84cadd18b9eab6ab66, type: 3}
+  - {fileID: 8300000, guid: 9c630d1e629026943a0ecab41997e1c6, type: 3}
+  jazzColorTones:
+  - {fileID: 8300000, guid: 5fb2545d25d42d94baef53c230c8f1cd, type: 3}
+  - {fileID: 8300000, guid: 59e49322674a7ee4ea111ef3fe8c2d62, type: 3}
+  jazzTensionTones:
+  - {fileID: 8300000, guid: c870fa54505d5c546ad7e5a40e283e53, type: 3}
+  jazzTonicChords:
+  - {fileID: 8300000, guid: afb77464d1bc2104dad5bf3c1635e97f, type: 3}
+  - {fileID: 8300000, guid: fd22064be562a074ba736736a3d030b2, type: 3}
+  jazzSubdominantChords:
+  - {fileID: 8300000, guid: bf60e54996222a6409f3a87f5bbed1c1, type: 3}
+  - {fileID: 8300000, guid: 2caff3f53c5432a44b2213a1b12cb3ea, type: 3}
+  jazzDominantChords:
+  - {fileID: 8300000, guid: 1ab69044e249dc34ebcc769aca81280c, type: 3}
+  - {fileID: 8300000, guid: 1aeea9b0b074b2a439ee0f4f81343424, type: 3}
