@@ -412,7 +412,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548377986}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -530,13 +530,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreData: {fileID: 7921812722490943926}
-  comboStageIntervals:
-  - 1
-  - 0.8
-  - 0.7
-  - 0.6
-  - 0.5
-  clampToLastInterval: 1
+  audioSource: {fileID: 548377988}
+  comboStageClips:
+  - {fileID: 8300000, guid: 53c772b3f811f5a499fa4eb7ef5921a1, type: 3}
+  - {fileID: 8300000, guid: ca93e39ec7634c54b98170900fbc0b1a, type: 3}
+  - {fileID: 8300000, guid: 19eca7f53da25a449aac3ba04baf56d0, type: 3}
+  clampToLastClip: 1
+  volume: 1
 --- !u!1001 &623239137
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3338,6 +3338,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -94.17493
+      objectReference: {fileID: 0}
+    - target: {fileID: 5146898698973060731, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5146898698973060731, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5146898698973060731, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 530
       objectReference: {fileID: 0}
     - target: {fileID: 5430211014232733136, guid: f498ec5c4d8606d44b8576c76181fe5a,
         type: 3}

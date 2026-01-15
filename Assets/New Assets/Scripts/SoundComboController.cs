@@ -7,68 +7,63 @@ public class SoundComboController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private ScoreDataModel scoreData;
+    [SerializeField] private AudioSource audioSource;
 
-    [Header("Playback Interval Per Combo Stage")]
+    [Header("Sound Per Combo Stage")]
     [Tooltip("Index = ComboStage")]
-    [SerializeField] private List<float> comboStageIntervals = new();
-    [SerializeField] private bool clampToLastInterval = true;
+    [SerializeField] private List<AudioClip> comboStageClips = new();
 
-    private Coroutine soundRoutine;
+    [SerializeField] private bool clampToLastClip = true;
+    [Range(0f, 1f)]
+    [SerializeField] private float volume = 1f;
+
+    private int lastPlayedComboStage = -1;
+
+    private void Awake()
+    {
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+    }
 
     private void Update()
     {
-        if (scoreData == null)
+        if (scoreData == null || audioSource == null)
             return;
 
-        if (scoreData.IsTimerRunning)
+        if (!scoreData.IsTimerRunning)
         {
-            if (soundRoutine == null)
-            {
-                soundRoutine = StartCoroutine(SoundLoop());
-            }      
+            lastPlayedComboStage = -1;
+            return;
         }
-        else
-        {
-            StopSoundLoop();
-        }
+
+        TryPlayComboSound(scoreData.ComboStage);
     }
 
-    private IEnumerator SoundLoop()
+    private void TryPlayComboSound(int comboStage)
     {
-        while (scoreData.IsTimerRunning)
+        if (comboStage == lastPlayedComboStage)
+            return;
+
+        AudioClip clip = GetClipForComboStage(comboStage);
+        if (clip != null)
         {
-            PlayRandomComboClip();
-
-            yield return new WaitForSeconds(GetIntervalForComboStage(scoreData.ComboStage));
-        }
-
-        soundRoutine = null;
-    }
-
-    private void StopSoundLoop()
-    {
-        if (soundRoutine != null)
-        {
-            StopCoroutine(soundRoutine);
-            soundRoutine = null;
+            audioSource.PlayOneShot(clip, volume);
+            lastPlayedComboStage = comboStage;
         }
     }
 
-    private void PlayRandomComboClip()
+    private AudioClip GetClipForComboStage(int comboStage)
     {
-        //AudioController.PlayJazzNote(0.8f);
+        if (comboStageClips == null || comboStageClips.Count == 0)
+            return null;
 
-        AudioController.PlayJazzChord(0.7f);
+        int stageIndex = comboStage - 1;
+
+        if (stageIndex < 0)
+            return null;
+
+        int index = clampToLastClip ? Mathf.Min(stageIndex, comboStageClips.Count - 1) : stageIndex % comboStageClips.Count;
+
+        return comboStageClips[index];
     }
-
-    private float GetIntervalForComboStage(int comboStage)
-    {
-        if (comboStageIntervals == null || comboStageIntervals.Count == 0)
-            return 1f;
-
-        int index = clampToLastInterval? Mathf.Min(comboStage, comboStageIntervals.Count - 1) : comboStage % comboStageIntervals.Count;
-
-        return Mathf.Max(0.01f, comboStageIntervals[index]);
-    }
-
 }
