@@ -39,10 +39,6 @@ namespace Watermelon
         public int QualityValue => qualityValue;
         
         [Group("Gameplay")] [SerializeField]
-        CardAttributeBase[] cardAttributes;
-        public CardAttributeBase[] CardAttributes => cardAttributes;
-        
-        [Group("Gameplay")] [SerializeField]
         CardBehaviorBase behavior;
         public CardBehaviorBase Behavior => behavior;
     }

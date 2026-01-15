@@ -42,8 +42,7 @@ namespace Watermelon
                     {
                         return false;
                     }
-
-                    IsBusy = true;
+                    
 
                     LevelController.SetBusyState(true);
 
@@ -63,8 +62,6 @@ namespace Watermelon
 
                     disableTweenCase = Tween.DelayedCall(1.0f, () =>
                     {
-                        IsBusy = false;
-
                         LevelController.SetBusyState(false);
                     });
 
@@ -86,8 +83,6 @@ namespace Watermelon
             }
 
             disableTweenCase.KillActive();
-
-            IsBusy = false;
         }
     }
 }

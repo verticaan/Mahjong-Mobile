@@ -6,16 +6,19 @@ namespace Watermelon
     {
         public override void Init()
         {
-            // Nothing yet
+            throw new System.NotImplementedException();
         }
 
         public override bool Activate()
         {
-            IsBusy = true;
-
             LevelController.Dock.AddExtraSlot();
 
             return true;
+        }
+
+        public override void ResetBehavior()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

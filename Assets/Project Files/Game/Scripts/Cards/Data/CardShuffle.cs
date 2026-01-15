@@ -49,8 +49,6 @@ namespace Watermelon
 
                         if (allowedToShuffleTiles.Count > 1)
                         {
-                            IsBusy = true;
-
                             LevelController.SetBusyState(true);
 
                             RaycastController.Disable();
@@ -85,8 +83,6 @@ namespace Watermelon
                             {
                                 RaycastController.Enable();
 
-                                IsBusy = false;
-
                                 LevelController.SetBusyState(false);
                             });
 
@@ -103,7 +99,6 @@ namespace Watermelon
 
         public override void ResetBehavior()
         {
-            IsBusy = false;
 
             delayTweenCase.KillActive();
         }

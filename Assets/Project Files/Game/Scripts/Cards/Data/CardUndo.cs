@@ -17,16 +17,12 @@ namespace Watermelon
         {
             if(!LevelController.IsBusy)
             {
-                IsBusy = true;
-
                 RaycastController.Disable();
 
                 LevelController.SetBusyState(true);
 
                 return LevelController.ReturnTiles(RevertElementsCount, () =>
                 {
-                    IsBusy = false;
-
                     RaycastController.Enable();
 
                     LevelController.SetBusyState(false);
@@ -38,7 +34,7 @@ namespace Watermelon
 
         public override void ResetBehavior()
         {
-            IsBusy = false;
+            throw new System.NotImplementedException();
         }
     }
 }
