@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,9 +28,13 @@ namespace Watermelon
         private CardUI rightCardUI;
         
         private CardUI selectedCard;
-        
+
         private Action<CardDataSO> onConfirmed;
-        
+
+        //Animation after card has been spawned.
+        public MMF_Player LeftCardUIAnimation;
+        public MMF_Player RightCardUIAnimation;
+
         private void Awake()
         {
             if (confirmButton != null)
@@ -44,7 +49,7 @@ namespace Watermelon
             if (leftCardUI != null && rightCardUI != null) return;
 
             leftCardUI = Instantiate(cardPrefab, leftCardSpawnPosition.transform);
-            rightCardUI = Instantiate(cardPrefab, leftCardSpawnPosition.transform);
+            rightCardUI = Instantiate(cardPrefab, rightCardSpawnPosition.transform);
 
             leftCardUI.gameObject.SetActive(false);
             rightCardUI.gameObject.SetActive(false);
@@ -68,6 +73,12 @@ namespace Watermelon
             ClearSelection();
 
             // TODO: tween from spawn to idle if needed
+
+            // Restore Initial values then Play Animation before card is shown
+            LeftCardUIAnimation.RestoreInitialValues();
+            RightCardUIAnimation.RestoreInitialValues();
+            RightCardUIAnimation.PlayFeedbacks();
+            LeftCardUIAnimation.PlayFeedbacks();
         }
         
         private void Select(CardUI ui)
