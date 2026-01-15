@@ -384,6 +384,7 @@ GameObject:
   - component: {fileID: 548377989}
   - component: {fileID: 548377988}
   - component: {fileID: 548377987}
+  - component: {fileID: 548377990}
   m_Layer: 0
   m_Name: Music
   m_TagString: Untagged
@@ -411,7 +412,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548377986}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -516,6 +517,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &548377990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548377986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c9d3c27a05bca458cf377ef1acb710, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreData: {fileID: 7921812722490943926}
+  comboStageIntervals:
+  - 1
+  - 0.8
+  - 0.7
+  - 0.6
+  - 0.5
+  clampToLastInterval: 1
 --- !u!1001 &623239137
 PrefabInstance:
   m_ObjectHideFlags: 0
