@@ -13,7 +13,7 @@ namespace Watermelon
             throw new System.NotImplementedException();
         }
 
-        public override bool Activate()
+        public override void Activate()
         {
             if(!LevelController.IsBusy)
             {
@@ -40,10 +40,9 @@ namespace Watermelon
                 {
                     if (DockBehavior.GetSlotsAvailable() < requiredElementsCount)
                     {
-                        return false;
+                        return;
                     }
                     
-
                     LevelController.SetBusyState(true);
 
                     List<TileBehavior> targetTiles = new List<TileBehavior>(LevelController.GetTilesByType(tileData, requiredElementsCount));
@@ -65,11 +64,8 @@ namespace Watermelon
                         LevelController.SetBusyState(false);
                     });
 
-                    return true;
                 }
             }
-
-            return false;
         }
 
         public override void ResetBehavior()

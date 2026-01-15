@@ -13,7 +13,7 @@ namespace Watermelon
             throw new System.NotImplementedException();
         }
 
-        public override bool Activate()
+        public override void Activate()
         {
             if(!LevelController.IsBusy)
             {
@@ -21,15 +21,13 @@ namespace Watermelon
 
                 LevelController.SetBusyState(true);
 
-                return LevelController.ReturnTiles(RevertElementsCount, () =>
+                LevelController.ReturnTiles(RevertElementsCount, () =>
                 {
                     RaycastController.Enable();
 
                     LevelController.SetBusyState(false);
                 });
             }
-
-            return false;
         }
 
         public override void ResetBehavior()

@@ -1315,7 +1315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34b4d5cd9f752146a1408ef2bad3ce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cards: {fileID: 11400000, guid: 0db73b7d9a49a6d47a214411a1b2646b, type: 2}
+  cardDecks:
+  - {fileID: 11400000, guid: 0db73b7d9a49a6d47a214411a1b2646b, type: 2}
   playerQuality: {fileID: 1060784215}
   cardUIController: {fileID: 3451539243946123829}
   selectionIntervalSeconds: 2

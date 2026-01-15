@@ -6,7 +6,7 @@ namespace Watermelon
 {
     public class CardLogicController : MonoBehaviour
     {
-        [SerializeField] CardDeckSO cards;
+        [SerializeField] CardDeckSO[] cardDecks;
         
         [SerializeField] private PlayerQuality playerQuality;
         [SerializeField] private CardUIController cardUIController;
@@ -21,13 +21,35 @@ namespace Watermelon
         private bool isChoosing;
         private bool loopEnabled;
         
+        private List<CardDataSO> activeDeck;
+        
         private const string TryBeginSelectionMethodName = nameof(TryBeginSelection);
+
+        public void Init()
+        {
+            activeDeck = new List<CardDataSO>();
+            if (cardDecks == null || cardDecks.Length == 0) return;
+            if (cardDecks.Length > 1)
+            {
+                foreach (var d in cardDecks)
+                {
+                    foreach (var card in d.CardData)
+                    {
+                        activeDeck.Add(card);
+                    }
+                }
+            }
+            else
+            {
+                activeDeck = new List<CardDataSO>(cardDecks[0].CardData);
+            }
+        }
         
         //Call this externally from a level controller to begin selection
         public void EnableSelectionLoop(bool beginImmediately = false)
         {
             if (loopEnabled) return;
-
+            Init();
             loopEnabled = true;
 
             // Ensure no duplicates if called multiple times (safety)
@@ -85,7 +107,7 @@ namespace Watermelon
         /// </summary>
         public CardDataSO PickWeightedByQuality(int playerQuality, HashSet<CardDataSO> exclude = null)
         {
-            IReadOnlyList<CardDataSO> pool = cards.CardData;
+            IReadOnlyList<CardDataSO> pool = activeDeck;
 
             double total = 0.0;
 

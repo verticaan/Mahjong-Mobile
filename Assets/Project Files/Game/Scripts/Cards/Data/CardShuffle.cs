@@ -26,7 +26,7 @@ namespace Watermelon
             throw new System.NotImplementedException();
         }
 
-        public override bool Activate()
+        public override void Activate()
         {
             if (!LevelController.IsBusy)
             {
@@ -87,14 +87,11 @@ namespace Watermelon
                             });
 
                             optimisedShuffleTweenCase.StartTween();
-
-                            return true;
                         }
                     }
                 }
             }
 
-            return false;
         }
 
         public override void ResetBehavior()

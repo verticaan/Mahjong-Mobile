@@ -9,11 +9,9 @@ namespace Watermelon
             throw new System.NotImplementedException();
         }
 
-        public override bool Activate()
+        public override void Activate()
         {
             LevelController.Dock.AddExtraSlot();
-
-            return true;
         }
 
         public override void ResetBehavior()

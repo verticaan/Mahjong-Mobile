@@ -1,21 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
 {
     public abstract class CardBehaviorBase : MonoBehaviour
     {
-        private bool isBusy;
-        public bool IsBusy 
+        [SerializeField] List<CardEffectBase> effects;
+        public abstract void Init();
+
+        public virtual void Activate()
         {
-            get => isBusy;
-            protected set 
-            { 
-                isBusy = value; 
+            if (effects == null || effects.Count == 0) return;
+            foreach (var effect in effects)
+            {
+                effect.ApplyEffect();
             }
         }
-        
-        public abstract void Init();
-        public abstract bool Activate();
         public abstract void ResetBehavior();
     }
 }
