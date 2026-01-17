@@ -101,11 +101,25 @@ namespace Watermelon
             }
         }
 
-        public void SetTargetScore(int target)
+        public void SetTargetScore(int value)
         {
             if (IsInactive) return;
 
-            targetScore = target;
+            targetScore = Mathf.Max(
+                0, 
+                value
+            );
+            RefreshUI();
+        }
+
+        public void ChangeTargetScore(int by)
+        {
+            if (IsInactive) return;
+
+            targetScore = Mathf.Max(
+                0, 
+                targetScore + by
+            );
             RefreshUI();
         }
 
@@ -132,16 +146,43 @@ namespace Watermelon
             StopTimer();
         }
 
-        public void AddRawScore(int slotCount)
+        public void AddRawScorePerSlot(int slotCount)
         {
             if (IsInactive || !isTimerRunning) return;
 
-            rawScore += slotCount * perSlotValue;
+            rawScore = Mathf.Max(
+                0, 
+                rawScore + slotCount * perSlotValue
+            );
             UpdateCurrentScore();
             RefreshUI();
         }
 
-        public void IncreaseMultiplier(int times)
+        public void ChangeRawScoreDirect(int value)
+        {
+            if (IsInactive || !isTimerRunning) return;
+
+            rawScore = Mathf.Max(
+                0, 
+                rawScore + value
+                );
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+
+        public void SetRawScoreDirect(int value)
+        {
+            if (IsInactive || !isTimerRunning) return;
+
+            rawScore = Mathf.Max(
+                0, 
+                value
+            );
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+
+        public void IncreaseMultiplierPerMatch(int times)
         {
             if (IsInactive || !isTimerRunning) return;
 
@@ -154,13 +195,39 @@ namespace Watermelon
             RefreshUI();
         }
 
-        public void ChangePerSlotValue(int value)
+        public void ChangeMultiplierDirect(int value)
+        {
+            if (IsInactive || !isTimerRunning) return;
+            
+            scoreMultiplier = Mathf.Max(
+                1,
+                scoreMultiplier + value
+            );
+            
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+
+        public void SetMultiplierDirect(int value)
+        {
+            if (IsInactive || !isTimerRunning) return;
+            
+            scoreMultiplier = Mathf.Max(
+                1,
+                value
+            );
+            
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+
+        public void SetPerSlotValue(int value)
         {
             if (IsInactive) return;
             perSlotValue = value;
         }
 
-        public void ChangeMultiplierIncreaseAmount(int value)
+        public void SetPerMatchMultiplier(int value)
         {
             if (IsInactive) return;
             multiplierIncreaseAmount = value;

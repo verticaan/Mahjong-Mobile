@@ -174,8 +174,8 @@ namespace Watermelon
             // First shift quality away
             playerQuality.ApplyConfirmedCard(chosen);
 
-            // Then apply card effect
-            chosen.Behavior.Activate();
+            // Then apply card effects
+            chosen.ApplyEffects();
 
             // Close and clear UI and allow next interval
             cardUIController.CloseAll();

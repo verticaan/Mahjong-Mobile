@@ -621,8 +621,8 @@ namespace Watermelon
         {
             scoreDataModel.StartTimerFromList();
             int emptySlots = GetSlotsAvailable();
-            scoreDataModel.AddRawScore(emptySlots);
-            scoreDataModel.IncreaseMultiplier(1);
+            scoreDataModel.AddRawScorePerSlot(emptySlots);
+            scoreDataModel.IncreaseMultiplierPerMatch(1);
             
         }
 

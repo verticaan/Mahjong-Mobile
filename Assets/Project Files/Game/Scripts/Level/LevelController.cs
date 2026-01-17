@@ -27,6 +27,10 @@ namespace Watermelon
 
         private static CardLogicController cardLogicController;
         
+        public static CardLogicController CardLogicController => cardLogicController;
+        
+        public static ScoreDataModel ScoreDataModel => instance.scoreDataModel;
+
         private static LevelSave levelSave;
 
         public static LevelDatabase Database => instance.database;

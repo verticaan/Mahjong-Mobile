@@ -1,8 +1,8 @@
-using UnityEngine;
 
 namespace Watermelon
 {
-    public abstract class CardEffectBase : ScriptableObject
+    [System.Serializable]
+    public abstract class CardEffectBase
     {
         public abstract void ApplyEffect();
     }
