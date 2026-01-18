@@ -715,3 +715,6 @@ MonoBehaviour:
   timer:
     enabled: 0
     value: 60
+  scoreTarget:
+    enabled: 0
+    value: 1000

@@ -61,6 +61,10 @@ MonoBehaviour:
   frameImage: {fileID: 1314900445681726316}
   titleText: {fileID: 5788989921894160221}
   descriptionText: {fileID: 5365140122185136008}
+  startScale: {x: 1, y: 1, z: 1}
+  endScale: {x: 1.5, y: 1.5, z: 1.5}
+  tweenDuration: 0.5
+  tweenEase: 29
 --- !u!114 &3544551663549068968
 MonoBehaviour:
   m_ObjectHideFlags: 0

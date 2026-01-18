@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Audio Settings
   m_EditorClassIdentifier: 
   buttonSound: {fileID: 8300000, guid: 43778771ca132fe44baa768ab4be8bc2, type: 3}
-  levelComplete: {fileID: 8300000, guid: 5ad54e4fe5d6de14ab12740dd7d4fe6f, type: 3}
-  levelFailed: {fileID: 8300000, guid: a4e148d7284277e4c910bc146938eb6c, type: 3}
+  levelComplete: {fileID: 8300000, guid: 98680f5fbab235c4aa5742ec4cf93289, type: 3}
+  levelFailed: {fileID: 8300000, guid: 66ce7d5f57d269a469cf74549703b758, type: 3}
   tileClick:
   - {fileID: 8300000, guid: b5da79709256ee84db21627223b772ac, type: 3}
   - {fileID: 8300000, guid: 5fb2545d25d42d94baef53c230c8f1cd, type: 3}
