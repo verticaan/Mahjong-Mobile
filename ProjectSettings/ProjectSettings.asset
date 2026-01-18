@@ -788,7 +788,7 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   scriptingDefineSymbols:
-    Android: MODULE_INPUT_SYSTEM;MODULE_TMP;MODULE_MONETIZATION;MODULE_POWERUPS;MODULE_HAPTIC;UNITY_POST_PROCESSING_STACK_V2;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+    Android: MODULE_INPUT_SYSTEM;MODULE_TMP;MODULE_MONETIZATION;MODULE_POWERUPS;MODULE_HAPTIC;UNITY_POST_PROCESSING_STACK_V2;MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED;LEVELPLAY_DEPENDENCIES_INSTALLED;MODULE_IAP
     EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2
     GameCoreScarlett: UNITY_POST_PROCESSING_STACK_V2
     GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2
@@ -882,7 +882,8 @@ PlayerSettings:
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Purchasing: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -907,7 +908,7 @@ PlayerSettings:
   cloudProjectId: 7c4dcff5-46e3-4b47-8a8a-0fb1aee03905
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Mahjong 2
+  projectName: Jazz Hands
   organizationId: richiejaggs
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

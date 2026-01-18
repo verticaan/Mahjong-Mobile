@@ -213,7 +213,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 69264bf4f23d81a4e9fcd906850c9fe8, type: 2}
   - {fileID: 11400000, guid: bd34704932cd4d34d963076f30be97d4, type: 2}
   - {fileID: 11400000, guid: d6e2b642be1528b4d91472473ae694ad, type: 2}
-  - {fileID: 11400000, guid: c3d9a0034e0dfa142b15e687d88e1d14, type: 2}
   tiles:
   - prefab: {fileID: 2542306047163851403, guid: 17637f81f354b434d9448fb5623ff8ad,
       type: 3}
@@ -276,6 +275,38 @@ MonoBehaviour:
     availableFromLevel: 0
     collectionID: 2
   - prefab: {fileID: 2542306047163851403, guid: 4eda45d521d158a4ba4bceb88cd606e4,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: f9c9aef43c96c404e8e0e87f3d7137b8,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: e70bb43ef5fb6be48840cb6df04bee03,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: e333966b5c27f8748bbab1713f748371,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: 27306cb298e4397479a575901ff15de3,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: 113d656ee0970154887fd241759a36ab,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: 99868ffbbccad224e847541f94eaa03d,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: 83a404445b1768e4391851fa2e728d9a,
+      type: 3}
+    availableFromLevel: 0
+    collectionID: 3
+  - prefab: {fileID: 2542306047163851403, guid: d38984632a94d1141b0ea9895c962e36,
       type: 3}
     availableFromLevel: 0
     collectionID: 3

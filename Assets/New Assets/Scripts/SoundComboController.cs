@@ -63,7 +63,6 @@ public class SoundComboController : MonoBehaviour
             return null;
 
         int index = clampToLastClip ? Mathf.Min(stageIndex, comboStageClips.Count - 1) : stageIndex % comboStageClips.Count;
-
         return comboStageClips[index];
     }
 }
