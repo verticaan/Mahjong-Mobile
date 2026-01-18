@@ -15,7 +15,7 @@ MonoBehaviour:
   iapSettings: {fileID: 1569315140361065267}
   adsSettings: {fileID: 1338303973460554233}
   isModuleActive: 1
-  verboseLogging: 0
+  verboseLogging: 1
   debugMode: 0
   testDevices:
   - 91687A6357C9E0169C1471C98D0237EB
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f28faf74e3de2b4bb5f8724582e5ceb, type: 3}
   m_Name: IAP Settings
   m_EditorClassIdentifier: 
-  useFakeStore: 0
+  useFakeStore: 1
   fakeStoreMode: 0
   storeItems:
   - androidID: com.example.game.noads
