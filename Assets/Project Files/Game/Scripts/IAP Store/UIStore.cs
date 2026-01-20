@@ -20,6 +20,9 @@ namespace Watermelon.IAPStore
 
         [BoxGroup("Buttons", "Buttons")]
         [SerializeField] Button closeButton;
+
+        [SerializeField] GameObject barTab;
+        [SerializeField] GameObject jukeboxTab;
         
         private TweenCase[] appearTweenCases;
         private Transform[] offersTransforms;
@@ -100,6 +103,20 @@ namespace Watermelon.IAPStore
         public void SpawnCurrencyCloud(RectTransform spawnRectTransform, CurrencyType currencyType, int amount, SimpleCallback completeCallback = null)
         {
             FloatingCloud.SpawnCurrency(currencyType.ToString(), spawnRectTransform, coinsUI.RectTransform, amount, null, completeCallback);
+        }
+
+        
+        //Set Jukebox/Bar active
+        public void SetJukeBoxTabActive(bool isActive)
+        {
+            jukeboxTab.SetActive(isActive);
+            barTab.SetActive(!isActive);
+        }
+
+        public void SetBarTabActive(bool isActive)
+        {
+            jukeboxTab.SetActive(!isActive);
+            barTab.SetActive(isActive);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using MoreMountains.Tools;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,9 @@ namespace Watermelon
         [SerializeField] UILevelQuitPopUp exitPopUp;
         [SerializeField] Button exitButton;
         [SerializeField] UIFadeAnimation exitButtonFadeAnimation;
+        [SerializeField] GameObject optionButton;
+        [SerializeField] GameObject scoreHandler;
+        [SerializeField] GameObject healthBar;
 
         [SerializeField] GameObject devOverlay;
 
@@ -136,7 +140,11 @@ namespace Watermelon
         {
             tutorialPanelObject.SetActive(true);
 
-            exitButton.gameObject.SetActive(false);
+
+            healthBar.gameObject.SetActive(false);
+            scoreHandler.gameObject.SetActive(false);
+            optionButton.gameObject.SetActive(false);
+            //exitButton.gameObject.SetActive(false);
             levelNumberText.gameObject.SetActive(false);
 
             powerUpsUIController.HidePanels();
@@ -146,7 +154,9 @@ namespace Watermelon
         {
             tutorialPanelObject.SetActive(false);
 
-            exitButton.gameObject.SetActive(true);
+            healthBar.gameObject.SetActive(true);
+            optionButton.gameObject.SetActive(true);
+            //exitButton.gameObject.SetActive(true);
             levelNumberText.gameObject.SetActive(true);
         }
 

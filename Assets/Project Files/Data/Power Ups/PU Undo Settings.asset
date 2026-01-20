@@ -19,7 +19,7 @@ MonoBehaviour:
   defaultAmount: 3
   description: Return last move
   requiredLevel: 0
-  visualiseActiveState: 0
+  visualiseActiveState: 1
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   currencyType: 0
   price: 100
