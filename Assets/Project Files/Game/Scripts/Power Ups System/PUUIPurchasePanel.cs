@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Watermelon.IAPStore;
 
 namespace Watermelon
 {
@@ -67,7 +68,15 @@ namespace Watermelon
             bool purchaseSuccessful = PUController.PurchasePowerUp(settings);
 
             if (purchaseSuccessful)
+            {
                 ClosePurchasePUPanel();
+            }
+            else
+            {
+                UIStore store = UIController.GetPage<UIStore>();
+                store.SetJukeBoxTabActive(true);
+            }
+                
         }
 
         public void ClosePurchasePUPanel()

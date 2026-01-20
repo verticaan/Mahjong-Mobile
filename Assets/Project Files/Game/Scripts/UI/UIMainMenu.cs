@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -35,6 +36,8 @@ namespace Watermelon
         private TweenCase showHideStoreAdButtonDelayTweenCase;
 
         [SerializeField] TMP_Text levelNumberText;
+
+        [SerializeField] MMF_Player noAdsLightAnimation;
 
         //Set level number on start
 
@@ -168,6 +171,7 @@ namespace Watermelon
             if (AdsManager.IsForcedAdEnabled())
             {
                 noAdsButton.Show(immediately);
+                noAdsLightAnimation.PlayFeedbacks();
             }
             else
             {
@@ -185,6 +189,8 @@ namespace Watermelon
             if (productKeyType == ProductKeyType.NoAds)
             {
                 HideAdButton(immediately: true);
+
+                noAdsLightAnimation.StopFeedbacks();
             }
         }
 
@@ -235,6 +241,9 @@ namespace Watermelon
 
             UIController.HidePage<UIMainMenu>();
             UIController.ShowPage<UIStore>();
+
+            UIStore store = UIController.GetPage<UIStore>();
+            store.SetBarTabActive(true);
 
             // reopening main menu only after store page was opened throug main menu
             UIController.PageClosed += OnIapStoreClosed;

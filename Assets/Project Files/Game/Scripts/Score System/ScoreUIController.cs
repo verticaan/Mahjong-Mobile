@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using TMPro;
 using UnityEngine;
@@ -21,12 +22,11 @@ namespace Watermelon
         //For testing, we can show that the game is winnable by changing text tint.
         //Some other UI thing can be added here
         [SerializeField] private MMProgressBar timerProgressBar;
+        [SerializeField] private MMF_Player scoreStacking;
 
         [Header("Winnable Colors")]
         [SerializeField] private Color normalColor = Color.white;
         [SerializeField] private Color winnableColor = Color.cyan;
-
-        
 
         public void RefreshText(ScoreDataModel model)
         {
@@ -36,7 +36,19 @@ namespace Watermelon
             if (scoreMultiplierText) scoreMultiplierText.text = model.Multiplier.ToString();
             if (currentScoreText) currentScoreText.text = model.CurrentScore.ToString();
             if (targetScoreText) targetScoreText.text = model.TargetScore.ToString();
+
+            if (model.CurrentScore <= 0)
+                return;
+
+            if (scoreStacking.IsPlaying)
+                return;
+
+            MMF_FloatingText floatingText = scoreStacking.GetFeedbackOfType<MMF_FloatingText>();
+            floatingText.Value = model.CurrentScore.ToString();
+            scoreStacking.PlayFeedbacks();
         }
+
+
 
         public void RefreshTimer(ScoreDataModel model)
         {
@@ -54,7 +66,6 @@ namespace Watermelon
             //Prevents division by near-zero numbers fixes issue with Input localScale is { NaN, 1, 1 }
             if (model.Duration <= Mathf.Epsilon)
             {
-                // Either force empty or full — choose one
                 timerProgressBar.SetBar01(0f);
                 return;
             }

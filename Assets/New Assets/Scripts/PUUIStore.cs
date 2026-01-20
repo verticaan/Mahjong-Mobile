@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Watermelon.IAPStore;
 
 namespace Watermelon
 {
@@ -44,7 +45,21 @@ namespace Watermelon
         {
 
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
-            PUController.PurchasePowerUp(settings);
+
+            bool purchaseSuccessful = PUController.PurchasePowerUp(settings);
+
+            if (purchaseSuccessful)
+            {
+                Debug.Log("Power-Up purchased successfully!");
+            }
+            else
+            {
+                UIStore store = UIController.GetPage<UIStore>();
+                store.SetBarTabActive(true);
+
+                Debug.Log("Not enough currency to purchase the Power-Up.");
+            }
         }
+
     }
 }

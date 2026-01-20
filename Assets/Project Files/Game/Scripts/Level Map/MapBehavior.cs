@@ -14,8 +14,8 @@ namespace Watermelon.Map
 
         public List<MapChunkBehavior> loadedChunks;
 
-        public MapChunkBehavior LowestLoadedChunk => loadedChunks[0];
-        public MapChunkBehavior HighestLoadedChunk => loadedChunks[^1];
+        public MapChunkBehavior LowestLoadedChunk => loadedChunks.Count > 0 ? loadedChunks[0] : null;
+        public MapChunkBehavior HighestLoadedChunk => loadedChunks.Count > 0 ? loadedChunks[^1] : null;
 
         public float MapVisibleRectWidth { get; private set; }
         public float MapVisibleRectHeight { get; private set; }
