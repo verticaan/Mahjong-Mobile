@@ -15,7 +15,7 @@ MonoBehaviour:
   iconImage: {fileID: 21300000, guid: 2ed0f924f4b5cd943b85a87245462d49, type: 3}
   typeIconImage: {fileID: 21300000, guid: a323e3679e7ff1145b4828972d86518d, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: e15f73246d215fb418ab73bf265c21b1, type: 3}
+  frameImage: {fileID: 21300000, guid: d439c1e470a592f488628d4f91a0bdff, type: 3}
   titleText: Undo
   descriptionText: Desc - Undo
   qualityValue: 30

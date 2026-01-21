@@ -15,7 +15,7 @@ MonoBehaviour:
   iconImage: {fileID: 21300000, guid: 5c3f758ad7d676449bf987931f506c76, type: 3}
   typeIconImage: {fileID: 21300000, guid: 68b8001f1e3acf546bc35c8485bc0a1b, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 726a45d9a623cab449ee7e54527eb604, type: 3}
+  frameImage: {fileID: 21300000, guid: 16fe5283f3ea9194f8e6cf8c22286886, type: 3}
   titleText: Extra Slot
   descriptionText: Desc - Extra Slot
   qualityValue: 60
