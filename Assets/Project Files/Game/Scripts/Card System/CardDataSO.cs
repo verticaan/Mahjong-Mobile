@@ -41,13 +41,16 @@ namespace Watermelon
         [Group("Gameplay")] 
         [SerializeReference]
         [SR]
-        private List<CardEffectBase> effects;
+        private List<CardActiveEffectBase> activeEffects;
         
-        public List<CardEffectBase> Effects => effects;
+        public List<CardActiveEffectBase> ActiveEffects => activeEffects;
+        [Group("Gameplay")] 
+        [SerializeReference]
+        [SR]
+        private List<CardBuffEffectBase> buffEffects;
+        
+        public List<CardBuffEffectBase> BuffEffects => buffEffects;
 
-        public void ApplyEffects()
-        {
-            effects.ForEach(effect => effect.ApplyEffect());
-        }
+
     }
 }

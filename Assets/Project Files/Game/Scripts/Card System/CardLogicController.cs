@@ -20,6 +20,7 @@ namespace Watermelon
         
         private bool isChoosing;
         private bool loopEnabled;
+        private bool cardSystemActive;
         
         private List<CardDataSO> activeDeck;
         
@@ -171,11 +172,25 @@ namespace Watermelon
 
         private void OnCardConfirmed(CardDataSO chosen)
         {
+            if (chosen == null || chosen.ActiveEffects == null || chosen.BuffEffects == null) return;
             // First shift quality away
             playerQuality.ApplyConfirmedCard(chosen);
 
             // Then apply card effects
-            chosen.ApplyEffects();
+            foreach (var active in chosen.ActiveEffects)
+            {
+                active.Init();
+                active.ApplyActive();
+            }
+
+            foreach (var buff in chosen.BuffEffects)
+            {
+                //TODO: Register buff in buff service
+                buff.Init();
+                buff.ApplyBuff();
+            }
+
+            
 
             // Close and clear UI and allow next interval
             cardUIController.CloseAll();

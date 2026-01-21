@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
-  m_Name: ChangeScoreTest
+  m_Name: BuffScoreTest
   m_EditorClassIdentifier: 
   iconImage: {fileID: 0}
   typeIconImage: {fileID: 0}
@@ -19,21 +19,30 @@ MonoBehaviour:
   titleText: 
   descriptionText: 
   qualityValue: 0
-  activeEffects:
-  - rid: 1246551959957143617
-  buffEffects: []
+  activeEffects: []
+  buffEffects:
+  - rid: 1246551959957143616
   references:
     version: 2
     RefIds:
-    - rid: 1246551959957143617
-      type: {class: ManipulateScoreActive, ns: Watermelon, asm: Assembly-CSharp}
+    - rid: 1246551959957143616
+      type: {class: ManipulateScoreBuff, ns: Watermelon, asm: Assembly-CSharp}
       data:
-        ChangeRawScoreBy:
+        activeForTurns:
           enabled: 1
-          value: 60
-        ChangeScoreMultiplierBy:
+          value: 2
+        activeForTime:
           enabled: 0
           value: 0
-        ChangeTargetScoreBy:
+        SetPerSlotScore:
+          enabled: 0
+          value: 5
+        ChangePerSlotScoreBy:
+          enabled: 1
+          value: 5
+        SetPerMatchMultiplier:
+          enabled: 0
+          value: 0
+        ChangePerMatchMultiplierBy:
           enabled: 0
           value: 0

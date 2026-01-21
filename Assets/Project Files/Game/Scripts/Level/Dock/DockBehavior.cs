@@ -617,16 +617,22 @@ namespace Watermelon
 
             return counter;
         }
-        public void UpdateScoresAfterMatch()
+
+        private void UpdateBuffsAfterMatch()
         {
+            
+        }
+        
+        private void UpdateScoresAfterMatch()
+        {
+            if (!scoreDataModel.TargetScoreExists) return;
             scoreDataModel.StartTimerFromList();
             int emptySlots = GetSlotsAvailable();
             scoreDataModel.AddRawScorePerSlot(emptySlots);
             scoreDataModel.IncreaseMultiplierPerMatch(1);
-            
         }
 
-        public void ResetScoreSystem()
+        private void ResetScoreSystem()
         {
             scoreDataModel.ResetComboTimerIndex();
             scoreDataModel.StopAll();

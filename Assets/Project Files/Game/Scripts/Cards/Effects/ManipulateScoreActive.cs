@@ -1,20 +1,22 @@
 namespace Watermelon
 {
-    public class ManipulateScoreEffect : CardEffectBase
+    public class ManipulateScoreActive : CardActiveEffectBase
     {
         public IntToggle ChangeRawScoreBy;
         public IntToggle ChangeScoreMultiplierBy;
-        public IntToggle SetPerSlotScore;
-        public IntToggle SetPerMatchMultiplier;
         public IntToggle ChangeTargetScoreBy;
 
-        private ScoreDataModel score = LevelController.ScoreDataModel;
-        public override void ApplyEffect()
+        private ScoreDataModel score;
+
+        public override void Init()
+        {
+            score = LevelController.ScoreDataModel;
+        }
+
+        public override void ApplyActive()
         {
             if(ChangeRawScoreBy.Enabled) score.ChangeRawScoreDirect(ChangeRawScoreBy.Value);
             if(ChangeScoreMultiplierBy.Enabled) score.ChangeMultiplierDirect(ChangeScoreMultiplierBy.Value);
-            if(SetPerSlotScore.Enabled) score.SetPerSlotValue(SetPerSlotScore.Value);
-            if(SetPerMatchMultiplier.Enabled) score.SetPerMatchMultiplier(SetPerMatchMultiplier.Value);
             if(ChangeTargetScoreBy.Enabled) score.ChangeTargetScore(ChangeTargetScoreBy.Value);
         }
     }

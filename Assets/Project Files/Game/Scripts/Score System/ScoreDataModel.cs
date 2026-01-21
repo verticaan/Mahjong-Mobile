@@ -26,6 +26,124 @@ namespace Watermelon
 
         #endregion
 
+        #region Defaults Snapshot
+
+        [System.Serializable]
+        private struct GameplayDefaults
+        {
+            public int perSlotValue;
+            public int multiplierIncreaseAmount;
+
+            public bool clampToLastDuration;
+            public List<float> comboTimerDurationsSeconds;
+        }
+
+        [Header("Defaults")]
+        [Tooltip("If true, defaults are captured from the inspector on Awake (only once).")]
+        [SerializeField] private bool captureDefaultsOnAwake = true;
+
+        [Tooltip("If true, resets will also refresh UI (if active).")]
+        [SerializeField] private bool refreshUIAfterResets = true;
+
+        [SerializeField, HideInInspector] private bool defaultsCaptured;
+        [SerializeField, HideInInspector] private GameplayDefaults defaults;
+
+        //For now, we will keep default values to what they are on awake
+        private void Awake()
+        {
+            if (captureDefaultsOnAwake)
+                CaptureDefaultsIfNeeded();
+        }
+
+#if UNITY_EDITOR
+        // Helps keep defaults sane in editor when duplicating / adding component, without overwriting at runtime.
+        private void OnValidate()
+        {
+            // If we haven't captured defaults yet, keep a live snapshot so "Reset to Defaults" works in editor playtests too.
+            if (!Application.isPlaying && !defaultsCaptured)
+                CaptureDefaultsIfNeeded();
+        }
+#endif
+
+        private void CaptureDefaultsIfNeeded()
+        {
+            if (defaultsCaptured) return;
+
+            defaults = new GameplayDefaults
+            {
+                perSlotValue = perSlotValue,
+                multiplierIncreaseAmount = multiplierIncreaseAmount,
+                clampToLastDuration = clampToLastDuration,
+                comboTimerDurationsSeconds = comboTimerDurationsSeconds != null
+                    ? new List<float>(comboTimerDurationsSeconds)
+                    : new List<float>()
+            };
+
+            defaultsCaptured = true;
+        }
+
+        /// <summary>
+        /// Force recapture defaults from current inspector values.
+        /// Useful if you change tuning in editor and want that to become the new "default".
+        /// </summary>
+        public void RecaptureDefaultsFromCurrent()
+        {
+            defaults = new GameplayDefaults
+            {
+                perSlotValue = perSlotValue,
+                multiplierIncreaseAmount = multiplierIncreaseAmount,
+                clampToLastDuration = clampToLastDuration,
+                comboTimerDurationsSeconds = comboTimerDurationsSeconds != null
+                    ? new List<float>(comboTimerDurationsSeconds)
+                    : new List<float>()
+            };
+
+            defaultsCaptured = true;
+        }
+
+        /// <summary>
+        /// Reverts tunable gameplay values back to their captured defaults.
+        /// This does NOT touch runtime score state (rawScore/currentScore/etc.) unless you call ResetScores separately.
+        /// </summary>
+        public void ResetGameplayTuningToDefaults()
+        {
+            CaptureDefaultsIfNeeded();
+
+            perSlotValue = defaults.perSlotValue;
+            multiplierIncreaseAmount = defaults.multiplierIncreaseAmount;
+
+            clampToLastDuration = defaults.clampToLastDuration;
+
+            comboTimerDurationsSeconds = defaults.comboTimerDurationsSeconds != null
+                ? new List<float>(defaults.comboTimerDurationsSeconds)
+                : new List<float>();
+
+            if (refreshUIAfterResets)
+                RefreshUI();
+        }
+
+        //To be called after X amount of matches are done and card effects reset
+        public void ResetPerSlotValueToDefault()
+        {
+            CaptureDefaultsIfNeeded();
+            perSlotValue = defaults.perSlotValue;
+
+            if (refreshUIAfterResets)
+                RefreshUI();
+        }
+
+        public void ResetMultiplierIncreaseToDefault()
+        {
+            CaptureDefaultsIfNeeded();
+            multiplierIncreaseAmount = defaults.multiplierIncreaseAmount;
+
+            if (refreshUIAfterResets)
+                RefreshUI();
+        }
+
+        #endregion
+        
+        
         #region Public State
 
         public event SimpleCallback OnScoreTargetReached;
@@ -224,13 +342,37 @@ namespace Watermelon
         public void SetPerSlotValue(int value)
         {
             if (IsInactive) return;
-            perSlotValue = value;
+            perSlotValue = Mathf.Max(
+                0,
+                value
+            );
+        }
+
+        public void ChangePerSlotValue(int by)
+        {
+            if (IsInactive) return;
+            perSlotValue = Mathf.Max(
+                0,
+                perSlotValue + by
+            );
         }
 
         public void SetPerMatchMultiplier(int value)
         {
             if (IsInactive) return;
-            multiplierIncreaseAmount = value;
+            multiplierIncreaseAmount = Mathf.Max(
+                0,
+                value
+            );
+        }
+
+        public void ChangePerMatchMultiplier(int by)
+        {
+            if (IsInactive) return;
+            multiplierIncreaseAmount = Mathf.Max(
+                0,
+                multiplierIncreaseAmount + by
+            );
         }
 
         #endregion
