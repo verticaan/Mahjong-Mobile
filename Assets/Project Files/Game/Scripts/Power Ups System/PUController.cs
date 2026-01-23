@@ -153,6 +153,30 @@ namespace Watermelon
             return false;
         }
 
+        
+        //System power up to use up instead
+        public static bool UsePowerUpSystem(PUType powerUpType)
+        {
+            if (powerUpsLink.ContainsKey(powerUpType))
+            {
+                PUBehavior powerUpBehavior = powerUpsLink[powerUpType];
+                if (!powerUpBehavior.IsBusy)
+                {
+                    if (powerUpBehavior.Activate())
+                    {
+                        AudioController.PlaySound(instance.activateSound, 0.45f);
+
+                        powerUpsUIController.OnPowerUpUsed(powerUpBehavior);
+
+                        OnPowerUpUsed?.Invoke(powerUpType);
+
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public static void ResetPowerUp(PUType powerUpType)
         {
             if (powerUpsLink.ContainsKey(powerUpType))

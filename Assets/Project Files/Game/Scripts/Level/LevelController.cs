@@ -384,6 +384,12 @@ namespace Watermelon
             
         }
 
+        //helper method,to know when all matches are complete...
+        public static bool AreAllMatchesCompleted()
+        {
+            return LevelRepresentation != null && LevelRepresentation.Tiles.Count == 0 && Dock.IsEmpty;
+        }
+
         private void Update()
         {
             GameplayTimer.Update();
