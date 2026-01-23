@@ -183,4 +183,4 @@ MonoBehaviour:
     value: 60
   scoreTarget:
     enabled: 1
-    value: 3000
+    value: 500

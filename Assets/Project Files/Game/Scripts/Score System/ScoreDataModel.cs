@@ -272,7 +272,28 @@ namespace Watermelon
             currentScore = prevRoundScore + rawScore * scoreMultiplier;
 
             if (currentScore >= targetScore)
+            {
+                //Adjusted to check if all amtches are completed and if not run a hint coroutine
+                if (!LevelController.AreAllMatchesCompleted())
+                {
+                    StartCoroutine(CompleteCoroutine());
+                    return;
+                }
                 OnScoreTargetReached?.Invoke();
+            }
+        }
+
+
+        private IEnumerator CompleteCoroutine()
+        {
+            while (GameController.IsGameActive)
+            {
+                PUController.UsePowerUpSystem(PUType.Hint);
+
+                yield return new WaitForSeconds(0.3f);
+            }
+            //if (GameController.IsGameActive)
+                //OnScoreTargetReached?.Invoke();
         }
 
         #endregion
