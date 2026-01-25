@@ -6,7 +6,7 @@ namespace Watermelon
 {
     public class CardLogicController : MonoBehaviour
     {
-        [SerializeField] CardDeckSO[] cardDecks;
+        [SerializeField] CardDeckSO[] defaultCardDecks;
         
         [SerializeField] private PlayerQuality playerQuality;
         [SerializeField] private CardUIController cardUIController;
@@ -23,16 +23,18 @@ namespace Watermelon
         private bool cardSystemActive;
         
         private List<CardDataSO> activeDeck;
+        private CardBuffService buffService;
         
         private const string TryBeginSelectionMethodName = nameof(TryBeginSelection);
 
         public void Init()
         {
             activeDeck = new List<CardDataSO>();
-            if (cardDecks == null || cardDecks.Length == 0) return;
-            if (cardDecks.Length > 1)
+            buffService = LevelController.BuffService;
+            if (defaultCardDecks == null || defaultCardDecks.Length == 0) return;
+            if (defaultCardDecks.Length > 1)
             {
-                foreach (var d in cardDecks)
+                foreach (var d in defaultCardDecks)
                 {
                     foreach (var card in d.CardData)
                     {
@@ -42,8 +44,47 @@ namespace Watermelon
             }
             else
             {
-                activeDeck = new List<CardDataSO>(cardDecks[0].CardData);
+                activeDeck = new List<CardDataSO>(defaultCardDecks[0].CardData);
             }
+        }
+
+        public void ClearActiveDeck()
+        {
+            if (activeDeck == null)
+            {
+                activeDeck = new List<CardDataSO>();
+            }
+            else
+            {
+                activeDeck.Clear();
+            }
+        }
+
+        public void AddToActiveDeck(CardDeckSO[] newDecks)
+        {
+            if (newDecks == null || newDecks.Length == 0) return;
+            
+            if (newDecks.Length > 1)
+            {
+                foreach (var d in newDecks)
+                {
+                    foreach (var card in d.CardData)
+                    {
+                        activeDeck.Add(card);
+                    }
+                }
+            }
+            else
+            {
+                activeDeck = new List<CardDataSO>(newDecks[0].CardData);
+            }
+        }
+
+        public void OverrideActiveDeck(CardDeckSO[] newDecks)
+        {
+            if (newDecks == null || newDecks.Length == 0) return;
+            ClearActiveDeck();
+            AddToActiveDeck(newDecks);
         }
         
         //Call this externally from a level controller to begin selection
@@ -185,9 +226,9 @@ namespace Watermelon
 
             foreach (var buff in chosen.BuffEffects)
             {
-                //TODO: Register buff in buff service
-                buff.Init();
-                buff.ApplyBuff();
+                if (buffService == null) continue;
+                //Registering buff in buff service handles activation
+                LevelController.BuffService.RegisterBuff(buff);
             }
 
             

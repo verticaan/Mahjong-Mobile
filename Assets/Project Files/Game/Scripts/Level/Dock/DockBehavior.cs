@@ -273,7 +273,7 @@ namespace Watermelon
                             RemoveMatch(list);
                             MatchCombined?.Invoke(list);
                         }
-
+                        UpdateBuffsAfterMatch();
                         return true;
                     }
                 }
@@ -620,7 +620,7 @@ namespace Watermelon
 
         private void UpdateBuffsAfterMatch()
         {
-            
+            LevelController.BuffService.OnMatchResolved();
         }
         
         private void UpdateScoresAfterMatch()

@@ -10,30 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
-  m_Name: ChangeScoreTest
+  m_Name: ChangeTimerTest
   m_EditorClassIdentifier: 
   iconImage: {fileID: 0}
   typeIconImage: {fileID: 0}
   backgroundImage: {fileID: 0}
   frameImage: {fileID: 0}
-  titleText: Change Score Test
+  titleText: Change Timer Test
   descriptionText: Desc
-  qualityValue: 40
+  qualityValue: 20
   activeEffects:
-  - rid: 1246551959957143617
+  - rid: 1246552077077839944
   buffEffects: []
   references:
     version: 2
     RefIds:
-    - rid: 1246551959957143617
-      type: {class: ManipulateScoreActive, ns: Watermelon, asm: Assembly-CSharp}
+    - rid: 1246552077077839944
+      type: {class: ManipulateGameplayTimerActive, ns: Watermelon, asm: Assembly-CSharp}
       data:
-        ChangeRawScoreBy:
+        ChangeGameplayTimerTime:
           enabled: 1
-          value: 60
-        ChangeScoreMultiplierBy:
-          enabled: 0
-          value: 0
-        ChangeTargetScoreBy:
-          enabled: 0
-          value: 0
+          value: 10

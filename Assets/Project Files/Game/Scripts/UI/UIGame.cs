@@ -65,7 +65,7 @@ namespace Watermelon
 
             UILevelNumberText.Show();
 
-            IntToggle timer = LevelController.Level.Timer;
+            var timer = LevelController.Level.GameplayTimer;
             if (timer.Enabled)
             {
                 gameplayTimer.gameObject.SetActive(true);
@@ -86,7 +86,7 @@ namespace Watermelon
 
             UILevelNumberText.Hide();
 
-            IntToggle timer = LevelController.Level.Timer;
+            var timer = LevelController.Level.GameplayTimer;
             if (timer.Enabled)
             {
                 gameplayTimer.Hide();

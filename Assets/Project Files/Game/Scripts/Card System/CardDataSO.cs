@@ -44,6 +44,7 @@ namespace Watermelon
         private List<CardActiveEffectBase> activeEffects;
         
         public List<CardActiveEffectBase> ActiveEffects => activeEffects;
+        
         [Group("Gameplay")] 
         [SerializeReference]
         [SR]

@@ -2,17 +2,13 @@ namespace Watermelon
 {
     public class ManipulateDockBuff : CardBuffEffectBase
     {
+        private DockBehavior dockBehavior;
         public override void Init()
         {
-            throw new System.NotImplementedException();
+            dockBehavior = LevelController.Dock;
         }
 
-        public override void ApplyBuff()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void RemoveBuff()
+        protected override void OnApplyBuff()
         {
             throw new System.NotImplementedException();
         }

@@ -4,16 +4,16 @@ namespace Watermelon
     {
         public IntToggle ChangeGameplayTimerTime;
 
-        private GameplayTimer gameplayTimer = LevelController.GameplayTimer;
+        private GameplayTimer gameplayTimer;
 
         public override void Init()
         {
-            throw new System.NotImplementedException();
+            gameplayTimer = LevelController.GameplayTimer;
         }
 
         public override void ApplyActive()
         {
-            throw new System.NotImplementedException();
+            gameplayTimer.AddSeconds(ChangeGameplayTimerTime.Value);
         }
 
     }

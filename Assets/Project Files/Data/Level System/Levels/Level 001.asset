@@ -112,6 +112,14 @@ MonoBehaviour:
   elementsPerLevel: 6
   coinsReward: 20
   editorNote: ' sets: 9'
-  timer:
-    enabled: 0
+  UsesCards: 0
+  gameplayTimer:
+    enabled: 1
     value: 60
+    list: []
+    ensureNonNullListResult: 0
+  scoreTarget:
+    enabled: 0
+    value: 1000
+    list: []
+    ensureNonNullListResult: 0

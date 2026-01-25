@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 0649
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
@@ -28,12 +29,15 @@ namespace Watermelon
 
         [SerializeField, LevelEditorSetting] string editorNote; // used only in level editor
 
-        [SerializeField] IntToggle timer = new IntToggle(false, 60);
-        public IntToggle Timer => timer;
+        [SerializeField] public bool UsesCards = false;
         
-        [SerializeField] IntToggle scoreTarget = new IntToggle(false, 1000);
-        public IntToggle ScoreTarget => scoreTarget;
-
+        [SerializeField]
+        public CompositeToggle<int,CardDeckSO> gameplayTimer = new CompositeToggle<int,CardDeckSO>(false,60);
+        public CompositeToggle<int,CardDeckSO> GameplayTimer => gameplayTimer;
+        
+        [SerializeField] CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
+        public CompositeToggle<int,CardDeckSO> ScoreTarget => scoreTarget;
+        
         public int SetsAmount => (GetAmountOfFilledCells() - (GetAmountOfFilledCells() % 3)) / 3;
         public float Difficulty => Mathf.Round(Mathf.Clamp(SetsAmount / (float)elementsPerLevel, 1, float.MaxValue) * 10.0f) * 0.1f;
 

@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dbb2a4f2e520004ea33df0332d0c516, type: 3}
   m_Name: GameplayTimer Deck
   m_EditorClassIdentifier: 
-  cardData: []
+  cardData:
+  - {fileID: 11400000, guid: 2313011dc456eb64fb4b55470f732fb0, type: 2}
+  - {fileID: 11400000, guid: c412992a966cb014aba8369a3b46c7d2, type: 2}
