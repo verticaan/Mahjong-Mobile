@@ -23,7 +23,10 @@ namespace Watermelon
         [SerializeField] Transform rightCardSpawnPosition;
         [SerializeField] Transform leftCardSelectPosition;
         [SerializeField] Transform rightCardSelectPosition;
-        
+
+        [LineSpacer("BackgroundTint")]
+        [SerializeField] GameObject cardBackgroundTint; 
+
         private CardUI leftCardUI;
         private CardUI rightCardUI;
         
@@ -93,6 +96,10 @@ namespace Watermelon
             
 
             SetConfirmInteractable(true);
+
+            // disable tile selection
+            RaycastController.Disable();
+            cardBackgroundTint.SetActive(true);
         }
         
         private void ClearSelection()
@@ -104,6 +111,12 @@ namespace Watermelon
             selectedCard = null;
 
             SetConfirmInteractable(false);
+
+            // re-enable tile selection
+            RaycastController.Enable();
+
+            if (cardBackgroundTint != null)
+                cardBackgroundTint.SetActive(false);
         }
 
         

@@ -174,11 +174,18 @@ namespace Watermelon
 
         private void OnTutorialSkipButtonClicked()
         {
-            ITutorial tutorial = TutorialController.GetTutorial(TutorialID.FirstLevel);
-            if(tutorial != null)
+            ITutorial firstLevelTutorial = TutorialController.GetTutorial(TutorialID.FirstLevel);
+            if (firstLevelTutorial != null && !firstLevelTutorial.IsFinished)
             {
-                FirstLevelTutorial firstLevelTutorial = (FirstLevelTutorial)tutorial;
-                firstLevelTutorial.OnSkipButtonClicked();
+                ((FirstLevelTutorial)firstLevelTutorial).OnSkipButtonClicked();
+                return;
+            }
+
+            ITutorial cardLevelTutorial = TutorialController.GetTutorial(TutorialID.CardLevel);
+            if (cardLevelTutorial != null && !cardLevelTutorial.IsFinished)
+            {
+                ((CardlevelTutorial)cardLevelTutorial).OnSkipButtonClicked();
+                return;
             }
         }
         #endregion

@@ -98,7 +98,7 @@ namespace Watermelon
                 return;
             }
 
-            LivesSystem.EnableInfiniteMode(5);
+            LivesSystem.EnableInfiniteMode(50000000);
 
             Debug.Log("EnableInfiniteMode action performed");
         }

@@ -320,7 +320,7 @@ MonoBehaviour:
       type: 3}
     availableFromLevel: 0
     collectionId: 0
-  - backgroundPrefab: {fileID: 6236222446239046324, guid: 08298627415c7904f8d0f8d84998f60d,
+  - backgroundPrefab: {fileID: 6236222446239046324, guid: 956710d3fc7a880429b907d4cab15fe4,
       type: 3}
     availableFromLevel: 10
     collectionId: 0
