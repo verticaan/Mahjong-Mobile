@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Game Data
   m_EditorClassIdentifier: 
   showTutorial: 1
+  showCardTutorial: 1
   maxTileSize: 1.5
   tileSize: {x: 1, y: 1}
   infiniteLevels: 1

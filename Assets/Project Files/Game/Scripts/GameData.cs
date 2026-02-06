@@ -8,6 +8,9 @@ namespace Watermelon
         [SerializeField] bool showTutorial = true;
         public bool ShowTutorial => showTutorial;
 
+        [SerializeField] bool showCardTutorial = true;
+        public bool ShowCardTutorial => showCardTutorial;
+
         [SerializeField] float maxTileSize = 1.5f;
         public float MaxTileSize => maxTileSize;
 

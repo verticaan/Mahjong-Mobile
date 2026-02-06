@@ -93,6 +93,18 @@ namespace Watermelon
 
             gameController.mapBehavior.Hide();
 
+            int cardLevelIndex = 12;
+
+            if (gameController.data.ShowCardTutorial && index == cardLevelIndex)
+            {
+                ITutorial tutorial = TutorialController.GetTutorial(TutorialID.CardLevel);
+                if (!tutorial.IsFinished)
+                {
+                    tutorial.StartTutorial();
+                    return; // Optionally, return here to wait for tutorial completion before starting the level
+                }
+            }
+
             UIController.HidePage<UIMainMenu>(() =>
             {
                 AdsManager.EnableBanner();
