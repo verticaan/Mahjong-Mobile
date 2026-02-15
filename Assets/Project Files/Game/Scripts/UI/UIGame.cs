@@ -157,7 +157,9 @@ namespace Watermelon
             healthBar.gameObject.SetActive(true);
             optionButton.gameObject.SetActive(true);
             //exitButton.gameObject.SetActive(true);
-            levelNumberText.gameObject.SetActive(true);
+            if (levelNumberText.gameObject != null) 
+            { 
+            } levelNumberText.gameObject.SetActive(true);
         }
 
         public void SetTutorialText(string title, string description)
