@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: PU Shuffle Settings
   m_EditorClassIdentifier: 
   type: 1
-  icon: {fileID: 21300000, guid: bc05c9e359644804ea39b33fdcf4cbb3, type: 3}
+  icon: {fileID: 21300000, guid: 80077964494899a41a7a25dc2e52096e, type: 3}
   behaviorPrefab: {fileID: 7790535292472644827, guid: 8e778cfa513e3c1479c851dfaf32ea2c,
     type: 3}
   defaultAmount: 3
   description: Mix elements
   requiredLevel: 0
-  visualiseBusyState: 0
+  visualiseActiveState: 0
   backgroundColor: {r: 1, g: 1, b: 1, a: 1}
   currencyType: 0
   price: 100

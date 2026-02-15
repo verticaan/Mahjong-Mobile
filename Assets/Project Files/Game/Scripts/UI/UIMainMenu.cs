@@ -37,7 +37,7 @@ namespace Watermelon
 
         [SerializeField] TMP_Text levelNumberText;
 
-        [SerializeField] MMF_Player noAdsLightAnimation;
+        [SerializeField] MMF_Player shopLightAnimation;
 
         //Set level number on start
 
@@ -49,11 +49,14 @@ namespace Watermelon
         private void OnEnable()
         {
             IAPManager.PurchaseCompleted += OnAdPurchased;
+
+            
         }
 
         private void OnDisable()
         {
             IAPManager.PurchaseCompleted -= OnAdPurchased;
+            
         }
 
         public override void Init()
@@ -98,6 +101,8 @@ namespace Watermelon
             MapLevelAbstractBehavior.OnLevelClicked += OnLevelOnMapSelected;
 
             UIController.OnPageOpened(this);
+
+            shopLightAnimation.PlayFeedbacks();
         }
 
         public override void PlayHideAnimation()
@@ -115,6 +120,8 @@ namespace Watermelon
             MapLevelAbstractBehavior.OnLevelClicked -= OnLevelOnMapSelected;
 
             UIController.OnPageClosed(this);
+
+            shopLightAnimation.StopFeedbacks();
         }
 
         #endregion
@@ -171,7 +178,6 @@ namespace Watermelon
             if (AdsManager.IsForcedAdEnabled())
             {
                 noAdsButton.Show(immediately);
-                noAdsLightAnimation.PlayFeedbacks();
             }
             else
             {
@@ -189,8 +195,6 @@ namespace Watermelon
             if (productKeyType == ProductKeyType.NoAds)
             {
                 HideAdButton(immediately: true);
-
-                noAdsLightAnimation.StopFeedbacks();
             }
         }
 
