@@ -10,6 +10,14 @@ namespace Watermelon
     [System.Serializable]
     public class DockBehavior : MonoBehaviour
     {
+        [Header("Slots")]
+        [Min(1)]
+        [SerializeField] int defaultSlotCount = 6;
+        [Min(1)]
+        [SerializeField] int minSlotCount = 4;
+        [Min(1)]
+        [SerializeField] int maxSlotCount = 8;
+
         private static DockBehavior instance;
 
         [SerializeField] GameObject trailPrefab;
@@ -17,7 +25,6 @@ namespace Watermelon
         [SerializeField] GameObject slotPrefab;
 
         [SerializeField] private ScoreDataModel scoreDataModel;
-
 
         private static List<SlotBehavior> slots;
 
@@ -32,6 +39,20 @@ namespace Watermelon
 
         private TweenCase delayTweenCase;
         private int addedDepth = 0;
+
+        private int NonTempSlotCount
+        {
+            get
+            {
+                if (slots == null) return 0;
+                int counter = 0;
+                for (int i = 0; i < slots.Count; i++)
+                {
+                    if (!slots[i].IsTemp) counter++;
+                }
+                return counter;
+            }
+        }
 
         public static ISlotable LastPickedObject => instance.lastPickedObject;
         public static AnimationCurve PositionYCurve => instance.positionYCurve;
@@ -51,19 +72,64 @@ namespace Watermelon
 
             trailPool = new Pool(trailPrefab, $"Trail_{trailPrefab.name}");
 
+            minSlotCount = Mathf.Max(1, minSlotCount);
+            maxSlotCount = Mathf.Max(minSlotCount, maxSlotCount);
+            defaultSlotCount = Mathf.Clamp(defaultSlotCount, minSlotCount, maxSlotCount);
+
             slots = new List<SlotBehavior>();
             transform.GetComponentsInChildren(slots);
 
             slots.Sort((slot1, slot2) => (int)((slot2.Position.x - slot1.Position.x) * 100));
 
+            // Ensure the dock starts with the configured default number of slots.
+            // NOTE: This is intended for level-load initialization when the dock is empty.
+            if (slots.Count > defaultSlotCount)
+            {
+                for (int i = slots.Count - 1; i >= defaultSlotCount; i--)
+                {
+                    var slot = slots[i];
+                    slot.Clear();
+                    Destroy(slot.gameObject);
+                    slots.RemoveAt(i);
+                }
+            }
+            else if (slots.Count < defaultSlotCount)
+            {
+                int toAdd = defaultSlotCount - slots.Count;
+                Vector3 basePos = slots.Count > 0 ? slots[0].transform.position : transform.position;
+
+                for (int i = 0; i < toAdd; i++)
+                {
+                    var newSlot = Instantiate(slotPrefab).GetComponent<SlotBehavior>();
+                    newSlot.transform.position = basePos;
+                    slots.Add(newSlot);
+                }
+            }
+
             for (int i = 0; i < slots.Count; i++)
             {
                 var slot = slots[i];
 
-                var position = slot.transform.position.SetX(-LevelScaler.SlotSize.x * 7f / 2f + (i + 0.5f) * LevelScaler.SlotSize.x);
+                var position = slot.transform.position.SetX(GetSlotX(i, NonTempSlotCount));
                 var scale = Vector3.one * LevelScaler.SlotSize;
 
                 slot.Init(i, position, scale);
+            }
+        }
+
+        private float GetSlotX(int index, int count)
+        {
+            return -LevelScaler.SlotSize.x * count / 2f + (index + 0.5f) * LevelScaler.SlotSize.x;
+        }
+
+        private void RepositionNonTempSlots(int newCount)
+        {
+            for (int i = 0; i < slots.Count; i++)
+            {
+                var slot = slots[i];
+                if (slot.IsTemp) continue;
+
+                slot.ChangePosition(slot.transform.position.SetX(GetSlotX(i, newCount)));
             }
         }
 
@@ -94,22 +160,20 @@ namespace Watermelon
                 slots[i].transform.localScale = Vector3.zero;
             }
 
-            if(slots.Count > 7)
+            // Reverse back to default slot count when the dock is being hidden.
+            if (NonTempSlotCount > defaultSlotCount)
             {
-                var additionalSlot = slots[^1];
-
-                additionalSlot.Clear();
-                Destroy(additionalSlot.gameObject);
-
-                slots.RemoveAt(slots.Count - 1);
-
-                for(int i = 0; i < slots.Count; i++)
+                for (int i = slots.Count - 1; i >= 0 && NonTempSlotCount > defaultSlotCount; i--)
                 {
                     var slot = slots[i];
+                    if (slot.IsTemp) continue;
 
-                    var position = slot.transform.position.SetX(-LevelScaler.SlotSize.x * 7f / 2f + (i + 0.5f) * LevelScaler.SlotSize.x);
-                    slot.transform.position = position;
+                    slot.Clear();
+                    Destroy(slot.gameObject);
+                    slots.RemoveAt(i);
                 }
+
+                RepositionNonTempSlots(NonTempSlotCount);
             }
         }
 
@@ -159,7 +223,7 @@ namespace Watermelon
                 }
             }
 
-            for(int i = 0; i < slotsToRemove.Count; i++)
+            for (int i = 0; i < slotsToRemove.Count; i++)
             {
                 var slotCase = slotsToRemove[i];
                 slotCase.Behavior.MatchAnimation(i * 0.05f);
@@ -273,7 +337,6 @@ namespace Watermelon
                             RemoveMatch(list);
                             MatchCombined?.Invoke(list);
                         }
-
                         return true;
                     }
                 }
@@ -556,53 +619,222 @@ namespace Watermelon
 
         public void AddExtraSlot()
         {
+            // Backwards-compatible API: add a single slot (if possible).
+            TryAddSlots(1);
+        }
+
+        /// <summary>
+        /// Current number of permanent (non-temp) slots.
+        /// </summary>
+        public int CurrentSlotCount => NonTempSlotCount;
+
+        /// <summary>
+        /// Sets the default starting slot count used during Init().
+        /// </summary>
+        public int DefaultSlotCount => defaultSlotCount;
+
+        /// <summary>
+        /// Sets the permanent slot count directly at runtime (clamped between minSlotCount and maxSlotCount).
+        /// Intended to be called by an external controller on level load (before gameplay begins).
+        /// Returns false if the request could not be completed safely (e.g. temp slots exist or occupied slots would be removed).
+        /// </summary>
+        public bool SetSlotCount(int desiredCount, bool instant = true)
+        {
+            minSlotCount = Mathf.Max(1, minSlotCount);
+            maxSlotCount = Mathf.Max(minSlotCount, maxSlotCount);
+
+            desiredCount = Mathf.Clamp(desiredCount, minSlotCount, maxSlotCount);
+
+            // Do not allow structural changes while temp slots exist.
+            if (addedDepth != 0) return false;
+
+            int current = NonTempSlotCount;
+            if (desiredCount == current) return true;
+
+            if (desiredCount > current)
+            {
+                int toAdd = desiredCount - current;
+
+                if (instant)
+                {
+                    for (int i = 0; i < toAdd; i++)
+                    {
+                        SpawnExtraSlotImmediate();
+                    }
+
+                    LevelController.IsRaycastEnabled = true;
+                }
+                else
+                {
+                    TryAddSlots(toAdd);
+                }
+
+                return true;
+            }
+            else
+            {
+                int toRemove = current - desiredCount;
+
+                if (instant)
+                {
+                    for (int i = 0; i < toRemove; i++)
+                    {
+                        if (!TryRemoveLastExtraSlot())
+                            return false;
+                    }
+
+                    return true;
+                }
+
+                return TryRemoveSlots(toRemove) == toRemove;
+            }
+        }
+
+        /// <summary>
+        /// Applies the configured default slot count.
+        /// </summary>
+        public bool ApplyDefaultSlotCount(bool instant = true)
+        {
+            return SetSlotCount(defaultSlotCount, instant);
+        }
+
+        /// <summary>
+        /// Attempts to add a number of permanent (non-temp) slots, clamped between minSlotCount and maxSlotCount.
+        /// Returns the amount actually added.
+        /// </summary>
+        public int TryAddSlots(int amount)
+        {
+            if (amount <= 0) return 0;
+
+            minSlotCount = Mathf.Max(1, minSlotCount);
+            maxSlotCount = Mathf.Max(minSlotCount, maxSlotCount);
+
+            int canAdd = Mathf.Min(amount, maxSlotCount - NonTempSlotCount);
+            if (canAdd <= 0) return 0;
+
             LevelController.IsRaycastEnabled = false;
 
             if (addedDepth == 0)
             {
-                SpawnExtraSlot();
+                for (int i = 0; i < canAdd; i++)
+                {
+                    SpawnExtraSlot();
+                }
             }
             else
             {
-                StartCoroutine(WaitAndSpawnExtraSlotCoroutine());
+                StartCoroutine(WaitAndSpawnExtraSlotCoroutine(canAdd));
             }
+
+            return canAdd;
         }
 
-        private IEnumerator WaitAndSpawnExtraSlotCoroutine()
+        /// <summary>
+        /// Attempts to remove a number of permanent (non-temp) slots down to minSlotCount.
+        /// Only empty slots can be removed. Returns the amount actually removed.
+        /// </summary>
+        public int TryRemoveSlots(int amount)
+        {
+            if (amount <= 0) return 0;
+            if (addedDepth != 0) return 0;
+
+            minSlotCount = Mathf.Max(1, minSlotCount);
+            maxSlotCount = Mathf.Max(minSlotCount, maxSlotCount);
+
+            int removable = Mathf.Min(amount, NonTempSlotCount - minSlotCount);
+            if (removable <= 0) return 0;
+
+            int removed = 0;
+            for (int i = 0; i < removable; i++)
+            {
+                if (!TryRemoveLastExtraSlot()) break;
+                removed++;
+            }
+
+            return removed;
+        }
+
+        private IEnumerator WaitAndSpawnExtraSlotCoroutine(int amount)
         {
             while (addedDepth != 0) yield return null;
 
-            SpawnExtraSlot();
+            for (int i = 0; i < amount; i++)
+            {
+                SpawnExtraSlot();
+            }
         }
 
         private void SpawnExtraSlot()
         {
-            for (int i = 0; i < slots.Count; i++)
+            if (NonTempSlotCount >= maxSlotCount)
             {
-                var slot = slots[i];
-
-                slot.ChangePosition(slot.transform.position.SetX(-LevelScaler.SlotSize.x * 8f / 2f + (i + 0.5f) * LevelScaler.SlotSize.x));
+                LevelController.IsRaycastEnabled = true;
+                return;
             }
+
+            int newCount = NonTempSlotCount + 1;
+            RepositionNonTempSlots(newCount);
 
             var newSlot = Instantiate(slotPrefab).GetComponent<SlotBehavior>();
 
-            var position = slots[0].transform.position.SetX(-LevelScaler.SlotSize.x * 8f / 2f + (7 + 0.5f) * LevelScaler.SlotSize.x);
+            var position = slots[0].transform.position.SetX(GetSlotX(newCount - 1, newCount));
             var scale = Vector3.one * LevelScaler.SlotSize;
 
-            newSlot.Init(7, position, scale);
+            newSlot.Init(newCount - 1, position, scale);
 
             newSlot.transform.localScale = Vector3.zero;
-            newSlot.transform.DOScale(1, 0.1f, 0.025f);
+            newSlot.transform.DOScale(1f, 0.1f, 0.025f);
 
             slots.Add(newSlot);
 
             Tween.DelayedCall(0.1f, () => LevelController.IsRaycastEnabled = true);
         }
 
+        private void SpawnExtraSlotImmediate()
+        {
+            if (NonTempSlotCount >= maxSlotCount) return;
+
+            int newCount = NonTempSlotCount + 1;
+            RepositionNonTempSlots(newCount);
+
+            var newSlot = Instantiate(slotPrefab).GetComponent<SlotBehavior>();
+
+            var position = slots[0].transform.position.SetX(GetSlotX(newCount - 1, newCount));
+            var scale = Vector3.one * LevelScaler.SlotSize;
+
+            newSlot.Init(newCount - 1, position, scale);
+            newSlot.transform.localScale = Vector3.one;
+
+            slots.Add(newSlot);
+        }
+
+        private bool TryRemoveLastExtraSlot()
+        {
+            if (NonTempSlotCount <= minSlotCount) return false;
+
+            for (int i = slots.Count - 1; i >= 0; i--)
+            {
+                var slot = slots[i];
+                if (slot.IsTemp) continue;
+
+                // Only remove empty slots to avoid unexpectedly deleting gameplay elements.
+                if (slot.IsOccupied) return false;
+
+                slot.Clear();
+                Destroy(slot.gameObject);
+                slots.RemoveAt(i);
+
+                RepositionNonTempSlots(NonTempSlotCount);
+                return true;
+            }
+
+            return false;
+        }
+
         public int CountTiles(TileBehavior tile)
         {
             var counter = 0;
-            for(int i = 0; i < slots.Count; i++)
+            for (int i = 0; i < slots.Count; i++)
             {
                 var slot = slots[i];
 
@@ -617,16 +849,17 @@ namespace Watermelon
 
             return counter;
         }
-        public void UpdateScoresAfterMatch()
+        
+        private void UpdateScoresAfterMatch()
         {
+            if (!scoreDataModel.TargetScoreExists) return;
             scoreDataModel.StartTimerFromList();
             int emptySlots = GetSlotsAvailable();
-            scoreDataModel.AddRawScore(emptySlots);
-            scoreDataModel.IncreaseMultiplier(1);
-            
+            scoreDataModel.AddRawScorePerSlot(emptySlots);
+            scoreDataModel.IncreaseMultiplierPerMatch(1);
         }
 
-        public void ResetScoreSystem()
+        private void ResetScoreSystem()
         {
             scoreDataModel.ResetComboTimerIndex();
             scoreDataModel.StopAll();

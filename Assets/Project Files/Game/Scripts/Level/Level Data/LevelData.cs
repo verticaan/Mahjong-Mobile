@@ -1,5 +1,6 @@
 ﻿#pragma warning disable 0649
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
@@ -28,12 +29,29 @@ namespace Watermelon
 
         [SerializeField, LevelEditorSetting] string editorNote; // used only in level editor
 
-        [SerializeField] IntToggle timer = new IntToggle(false, 60);
-        public IntToggle Timer => timer;
+        [SerializeField]
+        private IntToggle nonDefaultStartingSlots;
+        public IntToggle NonDefaultStartingSlots => nonDefaultStartingSlots;
         
-        [SerializeField] IntToggle scoreTarget = new IntToggle(false, 1000);
-        public IntToggle ScoreTarget => scoreTarget;
-
+        [SerializeField]
+        private bool usesCards = false;
+        public bool UsesCards => usesCards;
+        
+        [SerializeField]
+        private bool overrideDefaultDeck = false;
+        public bool OverrideDefaultDeck => overrideDefaultDeck;
+        
+        
+        [SerializeField]
+        private CompositeToggle<int,CardDeckSO> gameplayTimer = new CompositeToggle<int,CardDeckSO>(false,60);
+        public CompositeToggle<int,CardDeckSO> GameplayTimer => gameplayTimer;
+        
+        [SerializeField] 
+        private CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
+        public CompositeToggle<int,CardDeckSO> ScoreTarget => scoreTarget;
+        
+        
+        
         public int SetsAmount => (GetAmountOfFilledCells() - (GetAmountOfFilledCells() % 3)) / 3;
         public float Difficulty => Mathf.Round(Mathf.Clamp(SetsAmount / (float)elementsPerLevel, 1, float.MaxValue) * 10.0f) * 0.1f;
 

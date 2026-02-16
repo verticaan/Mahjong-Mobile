@@ -1,48 +1,23 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
 {
     public abstract class CardBehaviorBase : MonoBehaviour
     {
-        protected CardAttributeBase[] attributes;
-        public CardAttributeBase[] Attributes => attributes;
-
-        private bool isBusy;
-        public bool IsBusy 
-        {
-            get => isBusy;
-            protected set 
-            { 
-                isBusy = value; 
-                isDirty = true;
-            }
-        }
-
-        protected bool isDirty = true;
-        public bool IsDirty => isDirty;
-
-        public void InitialiseAttributes(CardAttributeBase[] attributes)
-        {
-            this.attributes = attributes;
-        }
-
+        [SerializeField] List<CardActiveEffectBase> effects;
         public abstract void Init();
 
-        public abstract bool Activate();
-
-        public virtual void ResetBehavior()
+        public virtual void Activate()
         {
-
+            /*
+            if (effects == null || effects.Count == 0) return;
+            foreach (var effect in effects)
+            {
+                effect.ApplyEffect();
+            }
+            */
         }
-
-        public void SetDirty()
-        {
-            isDirty = true;
-        }
-
-        public void OnRedrawn()
-        {
-            isDirty = false;
-        }
+        public abstract void ResetBehavior();
     }
 }

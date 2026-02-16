@@ -1,6 +1,6 @@
-using TMPro;
+using System.Collections.Generic;
+using SerializeReferenceEditor;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Watermelon
 {
@@ -38,12 +38,20 @@ namespace Watermelon
         int qualityValue;
         public int QualityValue => qualityValue;
         
-        [Group("Gameplay")] [SerializeField]
-        CardAttributeBase[] cardAttributes;
-        public CardAttributeBase[] CardAttributes => cardAttributes;
+        [Group("Gameplay")] 
+        [SerializeReference]
+        [SR]
+        private List<CardActiveEffectBase> activeEffects;
         
-        [Group("Gameplay")] [SerializeField]
-        CardBehaviorBase behavior;
-        public CardBehaviorBase Behavior => behavior;
+        public List<CardActiveEffectBase> ActiveEffects => activeEffects;
+        
+        [Group("Gameplay")] 
+        [SerializeReference]
+        [SR]
+        private List<CardBuffEffectBase> buffEffects;
+        
+        public List<CardBuffEffectBase> BuffEffects => buffEffects;
+
+
     }
 }

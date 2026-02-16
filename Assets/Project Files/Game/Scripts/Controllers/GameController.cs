@@ -24,6 +24,7 @@ namespace Watermelon
         private static LevelController levelController;
         private static ParticlesController particlesController;
         private static FloatingTextController floatingTextController;
+        public static PUController PUController => powerUpController;
         private static PUController powerUpController;
         private static TutorialController tutorialController;
 

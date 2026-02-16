@@ -28,5 +28,10 @@ namespace Watermelon
 
             quality = Mathf.Clamp(Mathf.RoundToInt(next), minQuality, maxQuality);
         }
+
+        public void SetQuality(int q)
+        {
+            quality = Mathf.Clamp(q, minQuality, maxQuality);;
+        }
     }
 }

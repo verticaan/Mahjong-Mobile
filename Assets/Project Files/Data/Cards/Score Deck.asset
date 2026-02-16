@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dbb2a4f2e520004ea33df0332d0c516, type: 3}
+  m_Name: Score Deck
+  m_EditorClassIdentifier: 
+  cardData:
+  - {fileID: 11400000, guid: 9d7bab876ce8c2744bb5cdab29df0213, type: 2}
+  - {fileID: 11400000, guid: c357f6d117177e14fa58ac34199cf2d7, type: 2}
+  - {fileID: 11400000, guid: 87b63aebfe7565543b4ae809c851cdaa, type: 2}
+  - {fileID: 11400000, guid: 0c201201dc41b6f4185cd02957f4db7a, type: 2}
+  - {fileID: 11400000, guid: ee278b4b7c3ebee4aa2c1d0728d8f99c, type: 2}
+  - {fileID: 11400000, guid: 62ccdba39fdbc664bb01a88a48049ce0, type: 2}

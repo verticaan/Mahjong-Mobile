@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Watermelon
@@ -18,6 +19,8 @@ namespace Watermelon
         [SerializeField] GameObject layersParentObject;
         [SerializeField] DockBehavior dock;
         [SerializeField] ScoreDataModel scoreDataModel;
+        
+        
 
         private static bool isLevelLoaded;
         public static bool IsLevelLoaded => isLevelLoaded;
@@ -27,6 +30,13 @@ namespace Watermelon
 
         private static CardLogicController cardLogicController;
         
+        public static CardLogicController CardLogicController => cardLogicController;
+        
+        private static CardBuffService buffService;
+        public static CardBuffService BuffService => buffService;
+        
+        public static ScoreDataModel ScoreDataModel => instance.scoreDataModel;
+
         private static LevelSave levelSave;
 
         public static LevelDatabase Database => instance.database;
@@ -76,13 +86,14 @@ namespace Watermelon
             levelScaler.Init();
 
             GameplayTimer = new GameplayTimer();
+            buffService = new CardBuffService();
             GameplayTimer.OnTimerFinished += OnTimerFinished;
             scoreDataModel.OnScoreTargetReached += OnScoreTargetReached;
             database.Init();
             dock.Init(this);
-
             levelSave = SaveController.GetSaveObject<LevelSave>("level");
             cardLogicController = gameObject.GetComponent<CardLogicController>();
+            
             RaycastController raycastController = gameObject.AddComponent<RaycastController>();
             raycastController.Init();
 
@@ -109,6 +120,9 @@ namespace Watermelon
             dock.Unload();
             database.Unload();
 
+            buffService?.ClearAllBuffs();
+            buffService = null;
+            
             levelRepresentation = null;
             effectsLink = null;
 
@@ -213,17 +227,54 @@ namespace Watermelon
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
 
-            IntToggle timer = level.Timer;
-            IntToggle scoreTarget = level.ScoreTarget;
+            var timer = level.GameplayTimer;
+            var scoreTarget = level.ScoreTarget;
+            
+            if (level.UsesCards)
+            {
+                cardLogicController.EnableSelectionLoop();
+                buffService.SubscribeToMatchResolved();
+            }
+            
+            
+            
             if(timer.Enabled)
             {
                 GameplayTimer.SetMaxTime(timer.Value);
                 GameplayTimer.Start();
+                if (timer.List != null && timer.List.Count > 0)
+                {
+                    if (level.OverrideDefaultDeck)
+                    {
+                        cardLogicController.OverrideActiveDeck(timer.List.ToArray());
+                    }
+                    else
+                    {
+                        cardLogicController.AddToActiveDeck(timer.List.ToArray());
+                    }
+                    
+                }
             }
-            scoreDataModel.SetTargetScoreExists(scoreTarget.Enabled);
+            
             if (scoreTarget.Enabled)
             {
+                Debug.Log("Score enabled");
+                scoreDataModel.SetTargetScoreExists(scoreTarget.Enabled);
                 scoreDataModel.SetTargetScore(scoreTarget.Value);
+                if (scoreTarget.List != null &&  scoreTarget.List.Count > 0)
+                {
+                    Debug.Log("List exists");
+                    if (level.OverrideDefaultDeck)
+                    {
+                        Debug.Log("List override");
+                        cardLogicController.OverrideActiveDeck(scoreTarget.List.ToArray());
+                    }
+                    else
+                    {
+                        Debug.Log("List add");
+                        cardLogicController.AddToActiveDeck(scoreTarget.List.ToArray());
+                    }
+                }
             }
 
             // Preparing objects to be placed on the level
@@ -246,9 +297,15 @@ namespace Watermelon
                 onLevelLoaded?.Invoke();
             });
 
+            if (level.NonDefaultStartingSlots.Enabled)
+            {
+                dock.SetSlotCount(level.NonDefaultStartingSlots.Value);
+            }
+            else
+            {   //This is duplicate method call, but leaving here for insurance
+                dock.ApplyDefaultSlotCount();
+            }
             dock.PlayAppearAnimation();
-
-            cardLogicController.EnableSelectionLoop();
             
             LoadBackground();
 
@@ -305,6 +362,8 @@ namespace Watermelon
             
             instance.levelSpawnAnimation.Clear();
             cardLogicController.DisableSelectionLoop(true);
+            buffService?.ClearAllBuffs(); // keep instance alive
+            buffService?.UnsubscribeFromMatchResolved();
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();
         }
@@ -342,8 +401,10 @@ namespace Watermelon
             if (!GameController.IsGameActive)
                 return;
 
+            GameplayTimer.Pause();
+            
             GameController.OnLevelFailed();
-
+            
             AudioController.PlaySound(AudioController.AudioClips.levelFailed);
         }
 
@@ -392,7 +453,21 @@ namespace Watermelon
 
         private void Update()
         {
-            GameplayTimer.Update();
+            
+            // 1) Determine whether game-time should advance at all this frame
+            //    (this must mirror the same block rules used by timers).
+            float dt = Time.deltaTime;
+            // add other pause checks here if necessary have them
+            bool timeBlocked = UIController.IsPopupOpened || CardLogicController.IsChoosing; 
+
+            float authoritativeDt = timeBlocked ? 0f : dt;
+
+            // 2) Tick independent systems (they may choose to do nothing if not running)
+            GameplayTimer.Tick(authoritativeDt);      // only affects the gameplay/level timer
+            scoreDataModel.Tick(authoritativeDt);     // only affects combo timing inside score model
+
+            // 3) Tick buffs with the same authoritative dt
+            buffService?.Tick(authoritativeDt);
         }
 
         public static bool SubmitIsAllowed()
@@ -659,7 +734,7 @@ namespace Watermelon
 
             ReturnTiles(3, null);
 
-            GameplayTimer.Start();
+            GameplayTimer.Resume();
         }
     }
 }

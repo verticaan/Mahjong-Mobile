@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Watermelon
 {
-    [CreateAssetMenu(fileName = "Cards Database", menuName = "Content/Cards/Database")]
+    [CreateAssetMenu(fileName = "Cards Deck", menuName = "Content/Cards/Deck")]
     public class CardDeckSO : ScriptableObject
     {
         [SerializeField] CardDataSO[] cardData;
