@@ -230,23 +230,50 @@ namespace Watermelon
             var timer = level.GameplayTimer;
             var scoreTarget = level.ScoreTarget;
             
+            if (level.UsesCards)
+            {
+                cardLogicController.EnableSelectionLoop();
+                buffService.SubscribeToMatchResolved();
+            }
+            
+            
+            
             if(timer.Enabled)
             {
                 GameplayTimer.SetMaxTime(timer.Value);
                 GameplayTimer.Start();
                 if (timer.List != null && timer.List.Count > 0)
                 {
-                    cardLogicController.AddToActiveDeck(timer.List.ToArray());
+                    if (level.OverrideDefaultDeck)
+                    {
+                        cardLogicController.OverrideActiveDeck(timer.List.ToArray());
+                    }
+                    else
+                    {
+                        cardLogicController.AddToActiveDeck(timer.List.ToArray());
+                    }
+                    
                 }
             }
             
             if (scoreTarget.Enabled)
             {
+                Debug.Log("Score enabled");
                 scoreDataModel.SetTargetScoreExists(scoreTarget.Enabled);
                 scoreDataModel.SetTargetScore(scoreTarget.Value);
                 if (scoreTarget.List != null &&  scoreTarget.List.Count > 0)
                 {
-                    cardLogicController.AddToActiveDeck(scoreTarget.List.ToArray());
+                    Debug.Log("List exists");
+                    if (level.OverrideDefaultDeck)
+                    {
+                        Debug.Log("List override");
+                        cardLogicController.OverrideActiveDeck(scoreTarget.List.ToArray());
+                    }
+                    else
+                    {
+                        Debug.Log("List add");
+                        cardLogicController.AddToActiveDeck(scoreTarget.List.ToArray());
+                    }
                 }
             }
 
@@ -270,12 +297,15 @@ namespace Watermelon
                 onLevelLoaded?.Invoke();
             });
 
-            dock.PlayAppearAnimation();
-
-            if (level.UsesCards)
+            if (level.NonDefaultStartingSlots.Enabled)
             {
-                cardLogicController.EnableSelectionLoop();
+                dock.SetSlotCount(level.NonDefaultStartingSlots.Value);
             }
+            else
+            {   //This is duplicate method call, but leaving here for insurance
+                dock.ApplyDefaultSlotCount();
+            }
+            dock.PlayAppearAnimation();
             
             LoadBackground();
 
@@ -333,6 +363,7 @@ namespace Watermelon
             instance.levelSpawnAnimation.Clear();
             cardLogicController.DisableSelectionLoop(true);
             buffService?.ClearAllBuffs(); // keep instance alive
+            buffService?.UnsubscribeFromMatchResolved();
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();
         }
@@ -420,7 +451,8 @@ namespace Watermelon
             // 1) Determine whether game-time should advance at all this frame
             //    (this must mirror the same block rules used by timers).
             float dt = Time.deltaTime;
-            bool timeBlocked = UIController.IsPopupOpened; // add other pause checks here if necessary have them
+            // add other pause checks here if necessary have them
+            bool timeBlocked = UIController.IsPopupOpened || CardLogicController.IsChoosing; 
 
             float authoritativeDt = timeBlocked ? 0f : dt;
 

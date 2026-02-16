@@ -19,6 +19,15 @@ MonoBehaviour:
   titleText: Extra Slot
   descriptionText: Desc - Extra Slot
   qualityValue: 60
-  cardAttributes: []
-  behavior: {fileID: 1214006440447728877, guid: 9790b7356e36c184ca4bd20e0e8033a6,
-    type: 3}
+  activeEffects:
+  - rid: 4491945106977062979
+  buffEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4491945106977062979
+      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeSlotCount:
+          enabled: 1
+          value: 1

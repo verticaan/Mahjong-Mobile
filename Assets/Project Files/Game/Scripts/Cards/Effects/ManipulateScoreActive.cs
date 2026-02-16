@@ -4,6 +4,7 @@ namespace Watermelon
     {
         public IntToggle ChangeRawScoreBy;
         public IntToggle ChangeScoreMultiplierBy;
+        public IntToggle ChangeCurrentScoreBy;
         public IntToggle ChangeTargetScoreBy;
 
         private ScoreDataModel score;
@@ -17,6 +18,7 @@ namespace Watermelon
         {
             if(ChangeRawScoreBy.Enabled) score.ChangeRawScoreDirect(ChangeRawScoreBy.Value);
             if(ChangeScoreMultiplierBy.Enabled) score.ChangeMultiplierDirect(ChangeScoreMultiplierBy.Value);
+            if(ChangeCurrentScoreBy.Enabled) score.ChangeCurrentScoreDirect(ChangeCurrentScoreBy.Value);
             if(ChangeTargetScoreBy.Enabled) score.ChangeTargetScore(ChangeTargetScoreBy.Value);
         }
     }

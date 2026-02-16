@@ -13,7 +13,7 @@ namespace Watermelon
 
         public override void ApplyActive()
         {
-            gameplayTimer.AddSeconds(ChangeGameplayTimerTime.Value);
+            if (ChangeGameplayTimerTime.Enabled) gameplayTimer.AddSeconds(ChangeGameplayTimerTime.Value);
         }
 
     }

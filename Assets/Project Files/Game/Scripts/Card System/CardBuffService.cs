@@ -6,9 +6,11 @@ namespace Watermelon
 {
     /// <summary>
     /// Non-MonoBehaviour buff service.
-    /// External driver must call Tick(dt) and OnMatchResolved().
+    /// - External driver must call Tick(dt)
+    /// - Match resolution ticking can be driven automatically by subscribing to the same event
+    ///   used by card selection logic: DockBehavior.MatchCombined
     /// </summary>
-    public sealed class CardBuffService
+    public sealed class CardBuffService : IDisposable
     {
         private readonly HashSet<CardBuffEffectBase> active = new();
         private readonly List<CardBuffEffectBase> turnTick = new();
@@ -16,6 +18,74 @@ namespace Watermelon
 
         // Track how many times ApplyBuff has been called for each active buff.
         private readonly Dictionary<CardBuffEffectBase, int> effectStacks = new();
+
+        private bool subscribedToMatchEvent;
+
+        #region Subscription
+
+        /// <summary>
+        /// Subscribes to DockBehavior.MatchCombined so turn-based buffs tick automatically
+        /// on the same event as card selection logic.
+        /// Safe to call multiple times.
+        /// </summary>
+        public void SubscribeToMatchResolved()
+        {
+            if (subscribedToMatchEvent) return;
+
+            DockBehavior.MatchCombined += OnMatchCombined;
+            subscribedToMatchEvent = true;
+        }
+
+        /// <summary>
+        /// Unsubscribes from DockBehavior.MatchCombined.
+        /// Safe to call multiple times.
+        /// </summary>
+        public void UnsubscribeFromMatchResolved()
+        {
+            if (!subscribedToMatchEvent) return;
+
+            DockBehavior.MatchCombined -= OnMatchCombined;
+            subscribedToMatchEvent = false;
+        }
+
+        private void OnMatchCombined(List<ISlotable> _)
+        {
+            // Optional per-match callbacks (includes time-only & infinite buffs)
+
+            if (turnTick.Count == 0) return;
+
+            for (int i = turnTick.Count - 1; i >= 0; i--)
+            {
+                var buff = turnTick[i];
+                if (buff == null)
+                {
+                    turnTick.RemoveAt(i);
+                    continue;
+                }
+
+                var len = buff.Length;
+
+                if (!len.HasTurns || len.IsInfinite)
+                    continue;
+
+                len.TickTurn();
+
+                if (len.IsExpired())
+                    RemoveBuffInternal(buff);
+            }
+        }
+
+        /// <summary>
+        /// Convenience: same as UnsubscribeToMatchResolved(). Enables using "using" or manual Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            UnsubscribeFromMatchResolved();
+        }
+
+        #endregion
+
+        #region Buff Lifecycle
 
         public void RegisterBuff(CardBuffEffectBase buff)
         {
@@ -111,34 +181,7 @@ namespace Watermelon
                     RemoveBuffInternal(buff);
             }
         }
-
-        public void OnMatchResolved()
-        {
-            // Optional per-match callbacks (includes time-only & infinite buffs)
-
-
-            if (turnTick.Count == 0) return;
-
-            for (int i = turnTick.Count - 1; i >= 0; i--)
-            {
-                var buff = turnTick[i];
-                if (buff == null)
-                {
-                    turnTick.RemoveAt(i);
-                    continue;
-                }
-
-                var len = buff.Length;
-
-                if (!len.HasTurns || len.IsInfinite)
-                    continue;
-
-                len.TickTurn();
-
-                if (len.IsExpired())
-                    RemoveBuffInternal(buff);
-            }
-        }
+        
 
         public void ClearAllBuffs()
         {
@@ -186,7 +229,77 @@ namespace Watermelon
             }
         }
 
+        #endregion
+
+        #region Debug Info
+
+        public readonly struct BuffDebugInfo
+        {
+            public readonly string Name;
+            public readonly bool IsInfinite;
+            public readonly bool HasTime;
+            public readonly bool HasTurns;
+
+            public readonly int Stacks;
+
+            public readonly int RemainingTurns;
+            public readonly float RemainingTime;
+
+            public BuffDebugInfo(
+                string name,
+                bool isInfinite,
+                bool hasTime,
+                bool hasTurns,
+                int stacks,
+                int remainingTurns,
+                float remainingTime)
+            {
+                Name = name;
+                IsInfinite = isInfinite;
+                HasTime = hasTime;
+                HasTurns = hasTurns;
+                Stacks = stacks;
+                RemainingTurns = remainingTurns;
+                RemainingTime = remainingTime;
+            }
+        }
+
+        /// <summary>
+        /// Returns a snapshot of currently active buffs for debugging/UI.
+        /// Safe to call from UI.
+        /// </summary>
+        public void GetDebugSnapshot(List<BuffDebugInfo> results)
+        {
+            if (results == null) return;
+
+            results.Clear();
+
+            foreach (var buff in active)
+            {
+                if (buff == null) continue;
+
+                int stacks = 1;
+                if (effectStacks.TryGetValue(buff, out int s))
+                    stacks = Mathf.Max(1, s);
+
+                var len = buff.Length;
+
+                results.Add(new BuffDebugInfo(
+                    name: buff.GetType().Name,
+                    isInfinite: len.IsInfinite,
+                    hasTime: len.HasTime,
+                    hasTurns: len.HasTurns,
+                    stacks: stacks,
+                    remainingTurns: len.RemainingTurns,
+                    remainingTime: len.RemainingTime
+                ));
+            }
+        }
+
+        #endregion
+
         #region Minimal ListPool
+
         private static class ListPool<T>
         {
             private static readonly Stack<List<T>> pool = new();
@@ -210,6 +323,7 @@ namespace Watermelon
                 pool.Push(list);
             }
         }
+
         #endregion
     }
 }

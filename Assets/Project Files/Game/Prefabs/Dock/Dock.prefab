@@ -51,6 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f3ca423db94d34685a14f01d7417e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultSlotCount: 6
+  minSlotCount: 4
+  maxSlotCount: 8
   trailPrefab: {fileID: 8510732832270628493, guid: 420ffe93daccacd4c8a21988f489b71c,
     type: 3}
   positionYCurve:
@@ -87,7 +90,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   slotPrefab: {fileID: 0}
-  slotsValueText: {fileID: 0}
+  scoreDataModel: {fileID: 0}
 --- !u!1 &4237177476850887581
 GameObject:
   m_ObjectHideFlags: 0

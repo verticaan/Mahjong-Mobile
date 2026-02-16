@@ -19,6 +19,13 @@ MonoBehaviour:
   titleText: Undo
   descriptionText: Desc - Undo
   qualityValue: 30
-  cardAttributes: []
-  behavior: {fileID: 5128256889421883114, guid: 77bb8ca262981074bb32f73a982a7cdc,
-    type: 3}
+  activeEffects:
+  - rid: 4491945106977062981
+  buffEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4491945106977062981
+      type: {class: PowerupUndoActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RevertElementsCount: 1

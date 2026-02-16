@@ -524,7 +524,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548377986}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c9d3c27a05bca458cf377ef1acb710, type: 3}
   m_Name: 
@@ -1319,7 +1319,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0db73b7d9a49a6d47a214411a1b2646b, type: 2}
   playerQuality: {fileID: 1060784215}
   cardUIController: {fileID: 3451539243946123829}
+  triggerMode: 1
   selectionIntervalSeconds: 2
+  matchesPerSelection: 2
   sigma: 10
   minWeight: 0.0001
 --- !u!1 &1134142352
@@ -3553,6 +3555,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee982ca95194664489fcf16d7f256d1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3451539243946123830 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4850087405983489028, guid: f498ec5c4d8606d44b8576c76181fe5a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3451539243946123828}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &3896966791145870289 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3896966791538023619, guid: 1582c4aaa5a0e3541bd669f9af9b2f90,
@@ -3674,6 +3688,7 @@ GameObject:
   - component: {fileID: 5178066047858781994}
   - component: {fileID: 5178066047858781995}
   - component: {fileID: 8095943557840496073}
+  - component: {fileID: 8095943557840496074}
   m_Layer: 5
   m_Name: UI Main Canvas
   m_TagString: Untagged
@@ -6544,6 +6559,32 @@ MonoBehaviour:
     safePanels: []
     conformX: 0
     conformY: 1
+--- !u!114 &8095943557840496074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178066047858781997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c84e5bda30f108c4a91e272728e5df95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggleButton: {fileID: 3451539243946123830}
+  updateButtonLabel: 1
+  showLabel: Show Debug
+  hideLabel: Hide Debug
+  visible: 0
+  panelPos: {x: 10, y: 10}
+  panelSize: {x: 560, y: 420}
+  refreshRate: 0.1
+  autoResolveReferences: 1
+  highlightNearExpiry: 1
+  nearExpiryTurnsThreshold: 1
+  nearExpirySecondsThreshold: 1
+  fullscreenDimBackground: 1
+  uiScale: 2.2
 --- !u!224 &9148071814000728274 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5409101143848345227, guid: 8d03459103882dd4d97ac0242d87f2ab,

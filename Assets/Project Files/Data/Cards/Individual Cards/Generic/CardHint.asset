@@ -19,6 +19,12 @@ MonoBehaviour:
   titleText: Hint
   descriptionText: Desc - Hint
   qualityValue: 70
-  cardAttributes: []
-  behavior: {fileID: 1401735093665358437, guid: a8dd291941cf8fd41bf477a60775a264,
-    type: 3}
+  activeEffects:
+  - rid: 4491945106977062978
+  buffEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4491945106977062978
+      type: {class: PowerupHintActive, ns: Watermelon, asm: Assembly-CSharp}
+      data: 

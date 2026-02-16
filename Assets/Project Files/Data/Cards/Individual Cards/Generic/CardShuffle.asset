@@ -19,6 +19,16 @@ MonoBehaviour:
   titleText: Shuffle
   descriptionText: Desc - Shuffle
   qualityValue: 20
-  cardAttributes: []
-  behavior: {fileID: 5221038105173484168, guid: cb08ed2f89c91094e9c82ce0c764b0d1,
-    type: 3}
+  activeEffects:
+  - rid: 4491945106977062980
+  buffEffects: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 4491945106977062980
+      type: {class: PowerupShuffleActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ScaleTime: 0.5
+        ScaleMinDelay: 0.05
+        ScaleMaxDelay: 0.4
+        ScaleEasingType: 26

@@ -29,14 +29,28 @@ namespace Watermelon
 
         [SerializeField, LevelEditorSetting] string editorNote; // used only in level editor
 
-        [SerializeField] public bool UsesCards = false;
+        [SerializeField]
+        private IntToggle nonDefaultStartingSlots;
+        public IntToggle NonDefaultStartingSlots => nonDefaultStartingSlots;
         
         [SerializeField]
-        public CompositeToggle<int,CardDeckSO> gameplayTimer = new CompositeToggle<int,CardDeckSO>(false,60);
+        private bool usesCards = false;
+        public bool UsesCards => usesCards;
+        
+        [SerializeField]
+        private bool overrideDefaultDeck = false;
+        public bool OverrideDefaultDeck => overrideDefaultDeck;
+        
+        
+        [SerializeField]
+        private CompositeToggle<int,CardDeckSO> gameplayTimer = new CompositeToggle<int,CardDeckSO>(false,60);
         public CompositeToggle<int,CardDeckSO> GameplayTimer => gameplayTimer;
         
-        [SerializeField] CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
+        [SerializeField] 
+        private CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
         public CompositeToggle<int,CardDeckSO> ScoreTarget => scoreTarget;
+        
+        
         
         public int SetsAmount => (GetAmountOfFilledCells() - (GetAmountOfFilledCells() % 3)) / 3;
         public float Difficulty => Mathf.Round(Mathf.Clamp(SetsAmount / (float)elementsPerLevel, 1, float.MaxValue) * 10.0f) * 0.1f;
