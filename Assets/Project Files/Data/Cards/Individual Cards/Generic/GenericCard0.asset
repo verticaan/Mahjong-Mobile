@@ -15,9 +15,9 @@ MonoBehaviour:
   iconImage: {fileID: 21300000, guid: 5c3f758ad7d676449bf987931f506c76, type: 3}
   typeIconImage: {fileID: 21300000, guid: 5c3f758ad7d676449bf987931f506c76, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 726a45d9a623cab449ee7e54527eb604, type: 3}
+  frameImage: {fileID: 21300000, guid: b1e7282744ddd4c46839061d8904cedf, type: 3}
   titleText: G0
-  descriptionText: G0-Desc
+  descriptionText: Disables powerups, +1 slot to Stave
   qualityValue: 40
   activeEffects: []
   buffEffects:

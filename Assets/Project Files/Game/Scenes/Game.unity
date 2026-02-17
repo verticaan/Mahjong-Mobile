@@ -412,7 +412,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548377986}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -975,6 +975,7 @@ GameObject:
   - component: {fileID: 1060784212}
   - component: {fileID: 1060784213}
   - component: {fileID: 1060784214}
+  - component: {fileID: 1060784217}
   m_Layer: 0
   m_Name: Scripts Holder
   m_TagString: Untagged
@@ -1321,6 +1322,111 @@ MonoBehaviour:
   matchesPerSelection: 2
   sigma: 10
   minWeight: 0.0001
+--- !u!114 &1060784217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060784196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be2ff95f6f162ac41a529de87f6e1aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialId: 2
+  backgroundData:
+    backgroundPrefab: {fileID: 6236222446239046324, guid: 98c56daa67bd1744ba9e0782ca8c5318,
+      type: 3}
+    availableFromLevel: 0
+    collectionId: 0
+  cardLevelData: {fileID: 11400000, guid: a63711196a8298a48aa44ff55b20adba, type: 2}
+  firstPreloadedLevelData:
+    tiles:
+    - elementPosition:
+        x: 1
+        y: 1
+        layerId: 0
+      tileID: 0
+      effectType: 0
+    - elementPosition:
+        x: 0
+        y: 1
+        layerId: 1
+      tileID: 0
+      effectType: 0
+    - elementPosition:
+        x: 0
+        y: 0
+        layerId: 1
+      tileID: 1
+      effectType: 0
+    - elementPosition:
+        x: 1
+        y: 0
+        layerId: 1
+      tileID: 1
+      effectType: 0
+    - elementPosition:
+        x: 1
+        y: 1
+        layerId: 1
+      tileID: 1
+      effectType: 0
+    - elementPosition:
+        x: 0
+        y: 0
+        layerId: 2
+      tileID: 2
+      effectType: 0
+    - elementPosition:
+        x: 0
+        y: 1
+        layerId: 2
+      tileID: 2
+      effectType: 0
+    - elementPosition:
+        x: 0
+        y: 2
+        layerId: 2
+      tileID: 2
+      effectType: 0
+    - elementPosition:
+        x: 1
+        y: 0
+        layerId: 2
+      tileID: 1
+      effectType: 0
+    - elementPosition:
+        x: 1
+        y: 1
+        layerId: 2
+      tileID: 1
+      effectType: 0
+    - elementPosition:
+        x: 1
+        y: 2
+        layerId: 2
+      tileID: 1
+      effectType: 0
+    - elementPosition:
+        x: 2
+        y: 0
+        layerId: 2
+      tileID: 2
+      effectType: 0
+    - elementPosition:
+        x: 2
+        y: 1
+        layerId: 2
+      tileID: 2
+      effectType: 0
+    - elementPosition:
+        x: 2
+        y: 2
+        layerId: 2
+      tileID: 2
+      effectType: 0
 --- !u!1 &1134142352
 GameObject:
   m_ObjectHideFlags: 0
@@ -5825,7 +5931,7 @@ PrefabInstance:
     - target: {fileID: 4689051140222254834, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -77.599976
+      value: -77.6001
       objectReference: {fileID: 0}
     - target: {fileID: 4860215104517811747, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
         type: 3}
@@ -6418,6 +6524,11 @@ PrefabInstance:
     - target: {fileID: 3896966791314085355, guid: 1582c4aaa5a0e3541bd669f9af9b2f90,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3896966791538023616, guid: 1582c4aaa5a0e3541bd669f9af9b2f90,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3896966791538023619, guid: 1582c4aaa5a0e3541bd669f9af9b2f90,

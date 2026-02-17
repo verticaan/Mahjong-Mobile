@@ -21,7 +21,6 @@ namespace Watermelon
         [SerializeField] private Image timerFillImage;
         //For testing, we can show that the game is winnable by changing text tint.
         //Some other UI thing can be added here
-        [SerializeField] private MMProgressBar timerProgressBar;
         [SerializeField] private MMF_Player scoreStacking;
 
         [Header("Winnable Colors")]
@@ -60,18 +59,6 @@ namespace Watermelon
             {
                 timerFillImage.fillAmount = normalized;
             }
-
-            if (timerProgressBar == null) return;
-
-            //Prevents division by near-zero numbers fixes issue with Input localScale is { NaN, 1, 1 }
-            if (model.Duration <= Mathf.Epsilon)
-            {
-                timerProgressBar.SetBar01(0f);
-                return;
-            }
-
-            float current = Mathf.Clamp(model.RemainingTime, 0f, model.Duration);
-            timerProgressBar.UpdateBar(current, 0f, model.Duration);
         }
 
         public void SetScoreSystemVisible(bool visible)
