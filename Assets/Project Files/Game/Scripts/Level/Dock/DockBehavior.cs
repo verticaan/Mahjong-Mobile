@@ -59,6 +59,14 @@ namespace Watermelon
 
         public static event Action<ISlotable> ElementAdded;
         public static event Action<List<ISlotable>> MatchCombined;
+        
+        /// <summary>
+        /// Fired when three matching tiles are combined.
+        /// Payload = (matchedTiles, emptySlotCountAfterMatch).
+        /// The empty-slot count is captured BEFORE the matched tiles are physically removed,
+        /// so it reflects slots that were already free at the moment of the match.
+        /// </summary>
+        public static event Action<int> MatchCombinedWithEmptySlots;
 
         public void Init(LevelController levelController)
         {
@@ -198,7 +206,6 @@ namespace Watermelon
                 slot.Clear();
                 Destroy(slot.gameObject);
             }
-            ResetScoreSystem();
             addedDepth = 0;
         }
 
@@ -333,9 +340,13 @@ namespace Watermelon
                     {
                         if (remove)
                         {
-                            UpdateScoresAfterMatch();
+                            // Capture empty slot count BEFORE removal so listeners get an accurate snapshot.
+                            int emptySlots = GetSlotsAvailable();
+                            
                             RemoveMatch(list);
+
                             MatchCombined?.Invoke(list);
+                            MatchCombinedWithEmptySlots?.Invoke(emptySlots);
                         }
                         return true;
                     }
@@ -848,21 +859,6 @@ namespace Watermelon
             }
 
             return counter;
-        }
-        
-        private void UpdateScoresAfterMatch()
-        {
-            if (!scoreDataModel.TargetScoreExists) return;
-            scoreDataModel.StartTimerFromList();
-            int emptySlots = GetSlotsAvailable();
-            scoreDataModel.AddRawScorePerSlot(emptySlots);
-            scoreDataModel.IncreaseMultiplierPerMatch(1);
-        }
-
-        private void ResetScoreSystem()
-        {
-            scoreDataModel.ResetComboTimerIndex();
-            scoreDataModel.StopAll();
         }
 
     }

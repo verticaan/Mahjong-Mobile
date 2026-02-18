@@ -48,7 +48,7 @@ namespace Watermelon
         public int RawScore       => rawScore;
         public int Multiplier     => scoreMultiplier;
         public int CurrentScore   => currentScore;
-        public int PrevRoundScore => prevRoundScore;
+        public int BankedScore => bankedScore;
         public int TargetScore    => targetScore;
         public int ComboStage     => comboStage;
 
@@ -65,7 +65,7 @@ namespace Watermelon
         private int scoreMultiplier;
         private int startMultiplier;
         private int currentScore;
-        private int prevRoundScore;
+        private int bankedScore;
         private int targetScore;
         private int comboStage;
         private int perSlotValueAdditive;
@@ -115,7 +115,7 @@ namespace Watermelon
 
             comboTimer?.Tick(dt);
 
-            if (ui != null && IsTimerRunning && comboTimer.TickDeltaSeconds > 0f)
+            if (ui != null && IsTimerRunning && comboTimer is { TickDeltaSeconds: > 0f })
                 ui.RefreshTimer(this);
         }
 
@@ -128,12 +128,12 @@ namespace Watermelon
             targetScoreExists = exists;
             comboTimer = new ComboTimer();
             comboTimer.OnFinished += HandleComboTimerFinished;
+            DockBehavior.MatchCombinedWithEmptySlots += UpdateScoresAfterMatch; 
             SetUIVisible(exists);
 
             if (!exists)
             {
-                StopTimerInternal();
-                ResetScores();
+                StopAll();
             }
 
             RefreshUI();
@@ -180,6 +180,7 @@ namespace Watermelon
         {
             if (IsInactiveForScoring) return;
             ResetScores();
+            ResetComboTimerIndex();
             StopTimer();
         }
 
@@ -215,7 +216,7 @@ namespace Watermelon
             ResetComboTimerIndex();
             rawScore       = 0;
             scoreMultiplier = startMultiplier;
-            prevRoundScore  = currentScore;
+            bankedScore  = currentScore;
 
             RefreshUI();
             OnRoundTimerFinished?.Invoke();
@@ -267,7 +268,7 @@ namespace Watermelon
             latestSnapshot.rawScore       = rawScore;
             latestSnapshot.scoreMultiplier = scoreMultiplier;
             latestSnapshot.currentScore   = currentScore;
-            latestSnapshot.prevRoundScore = prevRoundScore;
+            latestSnapshot.bankedScore = bankedScore;
             latestSnapshot.remainingTime  = comboTimer != null ? comboTimer.CurrentTime : 0f;
             latestSnapshot.roundDuration  = roundDurationSeconds;
             latestSnapshot.isTimerActive  = IsTimerRunning;
@@ -285,7 +286,7 @@ namespace Watermelon
                 rawScore        = rawScore,
                 scoreMultiplier = scoreMultiplier,
                 currentScore    = currentScore,
-                prevRoundScore  = prevRoundScore,
+                bankedScore  = bankedScore,
                 remainingTime   = comboTimer != null ? comboTimer.CurrentTime : 0f,
                 roundDuration   = roundDurationSeconds,
                 isTimerActive   = IsTimerRunning
@@ -300,7 +301,7 @@ namespace Watermelon
             rawScore         = snapshot.rawScore;
             scoreMultiplier  = snapshot.scoreMultiplier;
             currentScore     = snapshot.currentScore;
-            prevRoundScore   = snapshot.prevRoundScore;
+            bankedScore   = snapshot.bankedScore;
             roundDurationSeconds = snapshot.roundDuration;
 
             if (comboTimer != null)
@@ -368,12 +369,11 @@ namespace Watermelon
             UpdateCurrentScore();
             RefreshUI();
         }
-
-        //PrevRoundScore acts as a "base score" here
+        
         public void ChangeCurrentScoreDirect(int value)
         {
             if (IsInactiveForScoring || !IsTimerRunning) return;
-            prevRoundScore = Mathf.Max(0, prevRoundScore + value);
+            bankedScore = Mathf.Max(0, bankedScore + value);
             UpdateCurrentScore();
             RefreshUI();
         }
@@ -458,7 +458,7 @@ namespace Watermelon
         {
             rawScore        = 0;
             currentScore    = 0;
-            prevRoundScore  = 0;
+            bankedScore  = 0;
             scoreMultiplier = startMultiplier;
         }
 
@@ -466,31 +466,33 @@ namespace Watermelon
         {
             if (IsInactiveForScoring) return;
 
-            currentScore = prevRoundScore + rawScore * scoreMultiplier;
-
+            currentScore = bankedScore + rawScore * scoreMultiplier;
+            Debug.Log($"Current Score: {currentScore}");
+            
             if (currentScore >= targetScore)
             {
-                //Adjusted to check if all amtches are completed and if not run a hint coroutine
-                if (!LevelController.AreAllMatchesCompleted())
-                {
-                    StartCoroutine(CompleteCoroutine());
-                    return;
-                }
-                OnScoreTargetReached?.Invoke();
+                StartCoroutine(CompleteCoroutine());
             }
         }
 
+        private void UpdateScoresAfterMatch(int emptySlots)
+        {
+            if (IsInactiveForScoring) return;
+            StartTimerFromList();
+            AddRawScorePerSlot(emptySlots);
+            IncreaseMultiplierPerMatch(1);
+        }
 
         private IEnumerator CompleteCoroutine()
         {
-            while (GameController.IsGameActive)
+            while (GameController.IsGameActive && !LevelController.AreAllMatchesCompleted())
             {
                 PUController.UsePowerUpSystem(PUType.Hint);
-
                 yield return new WaitForSeconds(0.3f);
             }
-            //if (GameController.IsGameActive)
-            //OnScoreTargetReached?.Invoke();
+
+            if (GameController.IsGameActive)
+                OnScoreTargetReached?.Invoke();
         }
 
         #endregion
@@ -646,7 +648,7 @@ namespace Watermelon
             public int   rawScore;
             public int   scoreMultiplier;
             public int   currentScore;
-            public int   prevRoundScore;
+            public int   bankedScore;
             public float remainingTime;
             public float roundDuration;
             public bool  isTimerActive;
@@ -659,7 +661,7 @@ namespace Watermelon
                 rawScore        = other.rawScore;
                 scoreMultiplier = other.scoreMultiplier;
                 currentScore    = other.currentScore;
-                prevRoundScore  = other.prevRoundScore;
+                bankedScore  = other.bankedScore;
                 remainingTime   = other.remainingTime;
                 roundDuration   = other.roundDuration;
                 isTimerActive   = other.isTimerActive;

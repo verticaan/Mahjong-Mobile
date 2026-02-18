@@ -155,6 +155,8 @@ namespace Watermelon
             levelRepresentation = new LevelRepresentation(level, layersParentObject);
             levelRepresentation.SpawnObjects(preloadedLevelData);
 
+            LoadLevelData(level);
+            
             RaycastController.Disable();
 
             levelSpawnAnimation.Play(levelRepresentation, () =>
@@ -226,7 +228,58 @@ namespace Watermelon
 
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
+            
+            LoadLevelData(level);
 
+            // Preparing objects to be placed on the level
+            TileData[] availableObjects = database.AvailableForLevel(level);
+
+            // Initing level representation
+            levelRepresentation = new LevelRepresentation(level, layersParentObject);
+            levelRepresentation.SpawnObjects(availableObjects);
+
+            RaycastController.Disable();
+
+            levelSpawnAnimation.Play(levelRepresentation, () =>
+            {
+                isLevelLoaded = true;
+
+                RaycastController.Enable();
+
+                isBusy = false;
+
+                onLevelLoaded?.Invoke();
+            });
+
+            
+            dock.PlayAppearAnimation();
+            
+            LoadBackground();
+
+            Tween.NextFrame(() =>
+            {
+                SavePresets.CreateSave("Level " + (levelIndex + 1).ToString("0000"), "Levels");
+            });
+        }
+
+        private void LoadBackground(BackgroundData backgroundData = null)
+        {
+            if (Background != null)
+                Destroy(Background.gameObject);
+
+            if(backgroundData == null)
+                backgroundData = database.GetLastAvailableBackgroundData();
+
+            if (backgroundData != null)
+            {
+                Background = Instantiate(backgroundData.BackgroundPrefab).GetComponent<BackgroundBehavior>();
+            }
+        }
+        
+        //Section for data driven level type control
+        private void LoadLevelData(LevelData levelData)
+        {
+            
             var timer = level.GameplayTimer;
             var scoreTarget = level.ScoreTarget;
             
@@ -235,8 +288,6 @@ namespace Watermelon
                 cardLogicController.EnableSelectionLoop();
                 buffService.SubscribeToMatchResolved();
             }
-            
-            
             
             if(timer.Enabled)
             {
@@ -276,27 +327,7 @@ namespace Watermelon
                     }
                 }
             }
-
-            // Preparing objects to be placed on the level
-            TileData[] availableObjects = database.AvailableForLevel(level);
-
-            // Initing level representation
-            levelRepresentation = new LevelRepresentation(level, layersParentObject);
-            levelRepresentation.SpawnObjects(availableObjects);
-
-            RaycastController.Disable();
-
-            levelSpawnAnimation.Play(levelRepresentation, () =>
-            {
-                isLevelLoaded = true;
-
-                RaycastController.Enable();
-
-                isBusy = false;
-
-                onLevelLoaded?.Invoke();
-            });
-
+            
             if (level.NonDefaultStartingSlots.Enabled)
             {
                 dock.SetSlotCount(level.NonDefaultStartingSlots.Value);
@@ -304,28 +335,6 @@ namespace Watermelon
             else
             {   //This is duplicate method call, but leaving here for insurance
                 dock.ApplyDefaultSlotCount();
-            }
-            dock.PlayAppearAnimation();
-            
-            LoadBackground();
-
-            Tween.NextFrame(() =>
-            {
-                SavePresets.CreateSave("Level " + (levelIndex + 1).ToString("0000"), "Levels");
-            });
-        }
-
-        private void LoadBackground(BackgroundData backgroundData = null)
-        {
-            if (Background != null)
-                Destroy(Background.gameObject);
-
-            if(backgroundData == null)
-                backgroundData = database.GetLastAvailableBackgroundData();
-
-            if (backgroundData != null)
-            {
-                Background = Instantiate(backgroundData.BackgroundPrefab).GetComponent<BackgroundBehavior>();
             }
         }
 
@@ -362,75 +371,28 @@ namespace Watermelon
             
             instance.levelSpawnAnimation.Clear();
             cardLogicController.DisableSelectionLoop(true);
+            ScoreDataModel.SetTargetScoreExists(false);
             buffService?.ClearAllBuffs(); // keep instance alive
             buffService?.UnsubscribeFromMatchResolved();
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();
+            
         }
 
-        public void OnMatchCompleted()
+        /// <summary>
+        /// Unified method to complete the current level as a win.
+        /// Handles save progression, timer cleanup, and GameController notification.
+        /// </summary>
+        private void WinLevel()
         {
+            if (!GameController.IsGameActive) return;
             if (isCustomLevel) return;
 
-            if (levelRepresentation.Tiles.Count == 0 && dock.IsEmpty)
-            {
-                RaycastController.Disable();
-
-                GameplayTimer.Reset();
-
-                levelSave.IsPlayingRandomLevel = false;
-
-                levelSave.DisplayLevelIndex++;
-
-                SaveController.MarkAsSaveIsRequired();
-
-                if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
-                {
-                    levelSave.MaxReachedLevelIndex = levelSave.DisplayLevelIndex;
-                    firstTimeCompletedLevel = true;
-                }
-
-                GameController.OnLevelCompleted();
-
-                AudioController.PlaySound(AudioController.AudioClips.levelComplete);
-            }
-        }
-
-        public void OnSlotsFilled()
-        {
-            if (!GameController.IsGameActive)
-                return;
-
-            GameplayTimer.Pause();
-            
-            GameController.OnLevelFailed();
-            
-            AudioController.PlaySound(AudioController.AudioClips.levelFailed);
-        }
-
-        private void OnTimerFinished()
-        {
-            if (!GameController.IsGameActive)
-                return;
-
-            GameController.OnLevelFailed();
-
-            AudioController.PlaySound(AudioController.AudioClips.levelFailed);
-        }
-
-        private void OnScoreTargetReached()
-        {
-            if (!GameController.IsGameActive)
-                return;
-            
-            if (isCustomLevel) return;
-            
             RaycastController.Disable();
+            GameplayTimer.Reset();
 
             levelSave.IsPlayingRandomLevel = false;
-
             levelSave.DisplayLevelIndex++;
-
             SaveController.MarkAsSaveIsRequired();
 
             if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
@@ -440,9 +402,61 @@ namespace Watermelon
             }
 
             GameController.OnLevelCompleted();
-
             AudioController.PlaySound(AudioController.AudioClips.levelComplete);
-            
+        }
+
+        /// <summary>
+        /// Unified method to end the current level as a loss.
+        /// Handles timer cleanup and GameController notification.
+        /// </summary>
+        private void LoseLevel()
+        {
+            if (!GameController.IsGameActive) return;
+
+            GameplayTimer.Pause();
+            GameController.OnLevelFailed();
+            AudioController.PlaySound(AudioController.AudioClips.levelFailed);
+        }
+
+        public void OnMatchCompleted()
+        {
+            if (isCustomLevel) return;
+
+            if (levelRepresentation.Tiles.Count == 0 && dock.IsEmpty)
+            {
+                // If a score target exists, emptying the board does NOT automatically win —
+                // the score must be met. Winning via score is handled by OnScoreTargetReached.
+                if (level.ScoreTarget.Enabled)
+                {
+                    if (scoreDataModel.CurrentScore < level.ScoreTarget.Value)
+                    {
+                        LoseLevel();
+                    }
+                    // Score target not yet reached but board is empty: do nothing here —
+                    // OnScoreTargetReached will call WinLevel() if/when the target is met.
+                }
+                else
+                {
+                    // No score target — clearing the board wins the level.
+                    WinLevel();
+                }
+            }
+        }
+
+        public void OnSlotsFilled()
+        {
+            LoseLevel();
+        }
+
+        private void OnTimerFinished()
+        {
+            LoseLevel();
+        }
+
+        private void OnScoreTargetReached()
+        {
+            Debug.Log("OnScoreTargetReached");
+            WinLevel();
         }
 
         //helper method,to know when all matches are complete...

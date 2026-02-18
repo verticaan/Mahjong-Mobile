@@ -14,9 +14,11 @@ namespace Watermelon
         [LineSpacer("Sounds")]
         [SerializeField] AudioClip selectSound;
         [SerializeField] AudioClip confirmSound;
+        [SerializeField] AudioClip discardSound;
         
         [LineSpacer("UI Controls")]
         [SerializeField] private Button confirmButton;
+        [SerializeField] private Button discardButton;
         
         [LineSpacer("Transforms")]
         [SerializeField] Transform leftCardSpawnPosition;
@@ -34,6 +36,11 @@ namespace Watermelon
 
         private Action<CardDataSO> onConfirmed;
 
+        /// <summary>
+        /// Invoked when the player discards both cards without picking one.
+        /// </summary>
+        private Action onDiscarded;
+
         //Animation after card has been spawned.
         public MMF_Player LeftCardUIAnimation;
         public MMF_Player RightCardUIAnimation;
@@ -42,6 +49,9 @@ namespace Watermelon
         {
             if (confirmButton != null)
                 confirmButton.onClick.AddListener(ConfirmSelection);
+
+            if (discardButton != null)
+                discardButton.onClick.AddListener(DiscardHand);
 
             CreateCardInstances();
             CloseAll();
@@ -58,16 +68,19 @@ namespace Watermelon
             rightCardUI.gameObject.SetActive(false);
         }
         
-        public void ShowTwoCards(CardDataSO leftCard, CardDataSO rightCard, Action<CardDataSO> onConfirmedCallback)
+        public void ShowTwoCards(CardDataSO leftCard, CardDataSO rightCard,
+                                  Action<CardDataSO> onConfirmedCallback,
+                                  Action onDiscardedCallback = null)
         {
-            onConfirmed = onConfirmedCallback;
+            onConfirmed  = onConfirmedCallback;
+            onDiscarded  = onDiscardedCallback;
 
             // init visuals + controller wiring
-            leftCardUI.Init(leftCard, this, leftCardSpawnPosition,leftCardSelectPosition);
-            rightCardUI.Init(rightCard, this, rightCardSpawnPosition,rightCardSelectPosition);
+            leftCardUI.Init(leftCard, this, leftCardSpawnPosition, leftCardSelectPosition);
+            rightCardUI.Init(rightCard, this, rightCardSpawnPosition, rightCardSelectPosition);
 
             // position at spawn
-            leftCardUI.transform.position = leftCardSpawnPosition.position;
+            leftCardUI.transform.position  = leftCardSpawnPosition.position;
             rightCardUI.transform.position = rightCardSpawnPosition.position;
 
             leftCardUI.gameObject.SetActive(true);
@@ -75,7 +88,12 @@ namespace Watermelon
 
             ClearSelection();
 
-            // TODO: tween from spawn to idle if needed
+            // Block gameplay raycasts for the entire duration of the selection.
+            RaycastController.Disable();
+
+            // Show background tint for the full duration of card selection
+            if (cardBackgroundTint != null)
+                cardBackgroundTint.SetActive(true);
 
             // Restore Initial values then Play Animation before card is shown
             LeftCardUIAnimation.RestoreInitialValues();
@@ -93,13 +111,13 @@ namespace Watermelon
             selectedCard = ui;
             selectedCard.SetSelected(true);
 
-            
-
             SetConfirmInteractable(true);
 
-            // disable tile selection
-            RaycastController.Disable();
-            cardBackgroundTint.SetActive(true);
+            if (confirmButton != null)
+                confirmButton.gameObject.SetActive(true);
+
+            if (discardButton != null)
+                discardButton.gameObject.SetActive(true);
         }
         
         private void ClearSelection()
@@ -107,16 +125,16 @@ namespace Watermelon
             if (selectedCard != null)
                 selectedCard.SetSelected(false);
 
-            
             selectedCard = null;
 
             SetConfirmInteractable(false);
 
-            // re-enable tile selection
-            RaycastController.Enable();
+            // Hide both buttons when nothing is selected — tint stays until CloseAll
+            if (confirmButton != null)
+                confirmButton.gameObject.SetActive(false);
 
-            if (cardBackgroundTint != null)
-                cardBackgroundTint.SetActive(false);
+            if (discardButton != null)
+                discardButton.gameObject.SetActive(false);
         }
 
         
@@ -140,18 +158,41 @@ namespace Watermelon
 
             var chosen = selectedCard.CardData;
 
-            // lock UI if desired
             SetConfirmInteractable(false);
 
             onConfirmed?.Invoke(chosen);
         }
 
+        /// <summary>
+        /// Discards the current hand without picking either card.
+        /// Hides the cards and notifies the logic controller.
+        /// </summary>
+        private void DiscardHand()
+        {
+            // TODO: play discardSound
+
+            var callback = onDiscarded;
+
+            // Close UI first so the callback doesn't see stale state.
+            CloseAll();
+
+            callback?.Invoke();
+        }
+
         public void CloseAll()
         {
             onConfirmed = null;
+            onDiscarded = null;
             ClearSelection();
 
-            if (leftCardUI != null) leftCardUI.gameObject.SetActive(false);
+            // Selection is over — restore gameplay raycasts.
+            RaycastController.Enable();
+
+            // Hide the background tint now that selection is fully over
+            if (cardBackgroundTint != null)
+                cardBackgroundTint.SetActive(false);
+
+            if (leftCardUI  != null) leftCardUI.gameObject.SetActive(false);
             if (rightCardUI != null) rightCardUI.gameObject.SetActive(false);
         }
         
