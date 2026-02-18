@@ -26,7 +26,7 @@ namespace Watermelon
             float bottomBorder = (levelFieldOffset.bottom - 0.5f) * cameraHeight;
             float topBorder = (0.5f - levelFieldOffset.top) * cameraHeight;
 
-            LevelFieldCenter = new Vector2((leftBorder + rightBorder) / 2, (bottomBorder + topBorder) / 2);
+            LevelFieldCenter = new Vector2((leftBorder + rightBorder) / 8, (bottomBorder + topBorder) / 8);
             LevelFieldSize = new Vector2(rightBorder - leftBorder, topBorder - bottomBorder);
 
             var dataTileSize = GameController.Data.TileSize;
