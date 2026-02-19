@@ -89,6 +89,7 @@ namespace Watermelon
             buffService = new CardBuffService();
             GameplayTimer.OnTimerFinished += OnTimerFinished;
             scoreDataModel.OnScoreTargetReached += OnScoreTargetReached;
+            scoreDataModel.Init();
             database.Init();
             dock.Init(this);
             levelSave = SaveController.GetSaveObject<LevelSave>("level");
@@ -122,6 +123,8 @@ namespace Watermelon
 
             buffService?.ClearAllBuffs();
             buffService = null;
+
+            scoreDataModel.StopAll();
             
             levelRepresentation = null;
             effectsLink = null;
@@ -279,6 +282,9 @@ namespace Watermelon
         //Section for data driven level type control
         private void LoadLevelData(LevelData levelData)
         {
+            // Always reset score state first so no previous level's subscriptions or
+            // data carry over — even when this level does not use scoring.
+            scoreDataModel.ResetForLevel();
             
             var timer = level.GameplayTimer;
             var scoreTarget = level.ScoreTarget;
@@ -368,15 +374,20 @@ namespace Watermelon
                 levelRepresentation.Clear();
                 levelRepresentation = null;
             }
-            
+            DisableSubsystems();
             instance.levelSpawnAnimation.Clear();
-            cardLogicController.DisableSelectionLoop(true);
-            ScoreDataModel.SetTargetScoreExists(false);
-            buffService?.ClearAllBuffs(); // keep instance alive
-            buffService?.UnsubscribeFromMatchResolved();
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();
             
+        }
+
+        public static void DisableSubsystems()
+        {
+            cardLogicController.DisableSelectionLoop(true);
+            GameplayTimer.Reset();
+            buffService?.ClearAllBuffs();
+            buffService?.UnsubscribeFromMatchResolved();
+            instance.scoreDataModel.StopAll();
         }
 
         /// <summary>
@@ -389,8 +400,6 @@ namespace Watermelon
             if (isCustomLevel) return;
 
             RaycastController.Disable();
-            GameplayTimer.Reset();
-
             levelSave.IsPlayingRandomLevel = false;
             levelSave.DisplayLevelIndex++;
             SaveController.MarkAsSaveIsRequired();
@@ -413,7 +422,7 @@ namespace Watermelon
         {
             if (!GameController.IsGameActive) return;
 
-            GameplayTimer.Pause();
+            
             GameController.OnLevelFailed();
             AudioController.PlaySound(AudioController.AudioClips.levelFailed);
         }
@@ -424,6 +433,7 @@ namespace Watermelon
 
             if (levelRepresentation.Tiles.Count == 0 && dock.IsEmpty)
             {
+                DisableSubsystems();
                 // If a score target exists, emptying the board does NOT automatically win —
                 // the score must be met. Winning via score is handled by OnScoreTargetReached.
                 if (level.ScoreTarget.Enabled)
@@ -445,17 +455,20 @@ namespace Watermelon
 
         public void OnSlotsFilled()
         {
+            DisableSubsystems();
             LoseLevel();
         }
 
         private void OnTimerFinished()
         {
+            DisableSubsystems();
             LoseLevel();
         }
 
         private void OnScoreTargetReached()
         {
             Debug.Log("OnScoreTargetReached");
+            DisableSubsystems();
             WinLevel();
         }
 

@@ -23,7 +23,7 @@ namespace Watermelon
         [Header("Gameplay (Base Tuning)")]
         [SerializeField] private int perSlotValue;
         [SerializeField] private int multiplierIncreaseAmount;
-
+        [SerializeField] private int startMultiplier;
         [Header("UI")]
         [SerializeField] private ScoreUIController ui;
 
@@ -63,7 +63,6 @@ namespace Watermelon
 
         private int rawScore;
         private int scoreMultiplier;
-        private int startMultiplier;
         private int currentScore;
         private int bankedScore;
         private int targetScore;
@@ -96,7 +95,11 @@ namespace Watermelon
                 RefreshUI();
         }
 
-        private void OnDisable() => StopTimerInternal();
+        private void OnDisable()
+        {
+            DockBehavior.MatchCombinedWithEmptySlots -= UpdateScoresAfterMatch;
+            StopTimerInternal();
+        }
 
         #endregion
 
@@ -123,19 +126,48 @@ namespace Watermelon
 
         #region Public API - Score System On/Off
 
-        public void SetTargetScoreExists(bool exists)
+        public void Init()
         {
-            targetScoreExists = exists;
+            // Create the combo timer once; the internal OnFinished subscription is stable
+            // across level loads since comboTimer itself is replaced here.
             comboTimer = new ComboTimer();
             comboTimer.OnFinished += HandleComboTimerFinished;
-            DockBehavior.MatchCombinedWithEmptySlots += UpdateScoresAfterMatch; 
+        }
+
+        /// <summary>
+        /// Call at the start of every level load (before SetTargetScoreExists).
+        /// Tears down any live state from the previous level cleanly regardless of
+        /// whether the previous level had scoring enabled.
+        /// </summary>
+        public void ResetForLevel()
+        {
+            // Always unsubscribe first so we never double-subscribe or leak.
+            DockBehavior.MatchCombinedWithEmptySlots -= UpdateScoresAfterMatch;
+
+            targetScoreExists = false;
+            ResetScores();
+            ResetComboTimerIndex();
+            StopTimerInternal();
+            ClearAllRuntimeModifiers();
+
+            SetUIVisible(false);
+        }
+
+        public void SetTargetScoreExists(bool exists)
+        {
+            // Always unsubscribe first; re-subscribe below only if enabling.
+            DockBehavior.MatchCombinedWithEmptySlots -= UpdateScoresAfterMatch;
+
+            ResetScores();
+            ResetComboTimerIndex();
+            StopTimerInternal();
+
+            targetScoreExists = exists;
+
+            if (exists)
+                DockBehavior.MatchCombinedWithEmptySlots += UpdateScoresAfterMatch;
+
             SetUIVisible(exists);
-
-            if (!exists)
-            {
-                StopAll();
-            }
-
             RefreshUI();
         }
 
@@ -157,11 +189,10 @@ namespace Watermelon
 
         #region Public API - Combo Round Timer
 
-        public void StartTimerFromList(int startMultiplierIn = 0)
+        public void StartTimerFromList()
         {
             if (IsInactiveForScoring) return;
 
-            startMultiplier = startMultiplierIn;
             roundDurationSeconds = GetNextComboDuration();
 
             comboTimer.SetMaxTime(roundDurationSeconds);
@@ -178,7 +209,10 @@ namespace Watermelon
 
         public void StopAll()
         {
+            DockBehavior.MatchCombinedWithEmptySlots -= UpdateScoresAfterMatch;
+
             if (IsInactiveForScoring) return;
+
             ResetScores();
             ResetComboTimerIndex();
             StopTimer();
@@ -456,6 +490,7 @@ namespace Watermelon
 
         private void ResetScores()
         {
+            Debug.Log("Reset Scores");
             rawScore        = 0;
             currentScore    = 0;
             bankedScore  = 0;
@@ -467,11 +502,13 @@ namespace Watermelon
             if (IsInactiveForScoring) return;
 
             currentScore = bankedScore + rawScore * scoreMultiplier;
-            Debug.Log($"Current Score: {currentScore}");
+            Debug.Log($"bankedScore: {bankedScore}, rawScore: {rawScore}, scoreMultiplier: {scoreMultiplier}, currentScore: {currentScore}");
             
             if (currentScore >= targetScore)
             {
-                StartCoroutine(CompleteCoroutine());
+                Debug.Log("Start Complete events");
+                //StartCoroutine(CompleteCoroutine());
+                OnScoreTargetReached?.Invoke();
             }
         }
 
@@ -490,7 +527,7 @@ namespace Watermelon
                 PUController.UsePowerUpSystem(PUType.Hint);
                 yield return new WaitForSeconds(0.3f);
             }
-
+            
             if (GameController.IsGameActive)
                 OnScoreTargetReached?.Invoke();
         }

@@ -19,26 +19,20 @@ MonoBehaviour:
   titleText: S2
   descriptionText: S2-Desc
   qualityValue: 25
-  activeEffects:
-  - rid: 4491945106977062986
+  activeEffects: []
   buffEffects:
   - rid: 4491945106977062987
+  - rid: 4491945228975734858
   references:
     version: 2
     RefIds:
-    - rid: 4491945106977062986
-      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
-      data:
-        ChangeSlotCount:
-          enabled: 1
-          value: 1
     - rid: 4491945106977062987
       type: {class: ManipulateScoreBuff, ns: Watermelon, asm: Assembly-CSharp}
       data:
         Length:
           activeForTurns:
             enabled: 1
-            value: 8
+            value: 4
           activeForTime:
             enabled: 0
             value: 0
@@ -50,3 +44,18 @@ MonoBehaviour:
         PerMatchMultiplierModifier:
           enabled: 0
           value: 0
+    - rid: 4491945228975734858
+      type: {class: ManipulateDockBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 1
+            value: 4
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
+        ChangeSlotCount:
+          enabled: 1
+          value: 1

@@ -19,10 +19,10 @@ MonoBehaviour:
   titleText: CANON
   descriptionText: -2 from Stave and Pauses Timer While active
   qualityValue: 75
-  activeEffects:
-  - rid: 4491945106977062999
+  activeEffects: []
   buffEffects:
   - rid: 4491945106977062998
+  - rid: 4491945228975734857
   references:
     version: 2
     RefIds:
@@ -42,9 +42,18 @@ MonoBehaviour:
           enabled: 0
           value: 0
         PauseGamePlayTimer: 1
-    - rid: 4491945106977062999
-      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
+    - rid: 4491945228975734857
+      type: {class: ManipulateDockBuff, ns: Watermelon, asm: Assembly-CSharp}
       data:
+        Length:
+          activeForTurns:
+            enabled: 1
+            value: 5
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
         ChangeSlotCount:
           enabled: 1
           value: -2
