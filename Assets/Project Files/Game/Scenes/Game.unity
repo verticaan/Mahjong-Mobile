@@ -1297,8 +1297,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02aac1500b1b8414ca72238d54eacc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quality: 50
-  pushStrength: 0.15
+  startingQuality: 50
+  discardQualityGain: 5
+  matchQualityGainPerEmptySlot: 2
+  cardPickQualityLossMultiplier: 0.2
   minQuality: 0
   maxQuality: 100
 --- !u!114 &1060784216
@@ -1318,8 +1320,8 @@ MonoBehaviour:
   playerQuality: {fileID: 1060784215}
   cardUIController: {fileID: 2140849083}
   triggerMode: 1
-  selectionIntervalSeconds: 2
-  matchesPerSelection: 2
+  selectionIntervalSeconds: 3
+  matchesPerSelection: 3
   sigma: 10
   minWeight: 0.0001
 --- !u!114 &1060784217

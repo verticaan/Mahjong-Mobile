@@ -24,25 +24,25 @@ MonoBehaviour:
       - IsFilled: 1
         Effect: 0
       - IsFilled: 1
-        Effect: 1
-      - IsFilled: 1
-        Effect: 0
-    - cells:
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 1
         Effect: 0
       - IsFilled: 1
         Effect: 0
     - cells:
       - IsFilled: 1
         Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+    - cells:
+      - IsFilled: 1
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -55,7 +55,7 @@ MonoBehaviour:
         Effect: 0
     - cells:
       - IsFilled: 1
-        Effect: 1
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -154,7 +154,7 @@ MonoBehaviour:
       - IsFilled: 1
         Effect: 0
       - IsFilled: 1
-        Effect: 1
+        Effect: 0
     - cells:
       - IsFilled: 0
         Effect: 0
@@ -175,10 +175,19 @@ MonoBehaviour:
   useInRandomizer: 1
   elementsPerLevel: 13
   coinsReward: 20
-  editorNote: ' sets: 18,effects: unknown'
-  timer:
+  editorNote: ' sets: 18'
+  nonDefaultStartingSlots:
+    enabled: 0
+    value: 0
+  usesCards: 0
+  overrideDefaultDeck: 0
+  gameplayTimer:
     enabled: 0
     value: 60
+    list: []
+    ensureNonNullListResult: 0
   scoreTarget:
     enabled: 0
     value: 1000
+    list: []
+    ensureNonNullListResult: 0

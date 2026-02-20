@@ -5,7 +5,7 @@ namespace Watermelon
 {
     public class UILevelQuitPopUp : MonoBehaviour, IPopupWindow
     {
-        [SerializeField] Button closeSmallButton;
+        //[SerializeField] Button closeSmallButton;
         [SerializeField] Button closeBigButton;
         [SerializeField] Button confirmButton;
 
@@ -16,7 +16,7 @@ namespace Watermelon
 
         private void Awake()
         {
-            closeSmallButton.onClick.AddListener(ExitPopCloseButton);
+            //closeSmallButton.onClick.AddListener(ExitPopCloseButton);
             closeBigButton.onClick.AddListener(ExitPopCloseButton);
             confirmButton.onClick.AddListener(ExitPopUpConfirmExitButton);
         }
