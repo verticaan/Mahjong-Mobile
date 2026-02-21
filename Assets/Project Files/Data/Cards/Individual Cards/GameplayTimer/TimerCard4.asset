@@ -16,11 +16,13 @@ MonoBehaviour:
   typeIconImage: {fileID: 21300000, guid: 914a360ea92b94a47864ace71719243d, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: 5a3334e2be2dbda4189d3d6cf187e33d, type: 3}
-  titleText: T4
-  descriptionText: 
+  titleText: IV-VI
+  descriptionText: Reduces time, increase Timer speed X2, Disables power up but greatly
+    increase Pull Quality
   qualityValue: 45
   activeEffects:
   - rid: 2064241169189044224
+  - rid: 2064241211670790167
   buffEffects:
   - rid: 2064241169189044227
   - rid: 2064241169189044228
@@ -42,12 +44,12 @@ MonoBehaviour:
             value: 0
           activeForTime:
             enabled: 1
-            value: 10
-        CanStackDuration: 0
+            value: 20
+        CanStackDuration: 1
         CanStackEffect: 0
         AddTickSpeedMultiplier:
-          enabled: 0
-          value: 0
+          enabled: 1
+          value: 2
         PauseGamePlayTimer: 0
     - rid: 2064241169189044228
       type: {class: ManipulatePowerupsBuff, ns: Watermelon, asm: Assembly-CSharp}
@@ -57,8 +59,15 @@ MonoBehaviour:
             enabled: 0
             value: 0
           activeForTime:
-            enabled: 0
-            value: 0
+            enabled: 1
+            value: 15
         CanStackDuration: 1
-        CanStackEffect: 1
+        CanStackEffect: 0
         DisablePowerupUse: 1
+    - rid: 2064241211670790167
+      type: {class: ManipulateCardSystemActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RedrawHand: 0
+        ChangePlayerQualityBy:
+          enabled: 1
+          value: 30

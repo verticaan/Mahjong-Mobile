@@ -12,7 +12,8 @@ namespace Watermelon
         [SerializeField] Image backgroundImage;
 
         [SerializeField] Button button;
-        [SerializeField] Button closeButton;
+        //[SerializeField] Button closeButton;
+        [SerializeField] Button closeBigButton;
 
         [Space]
         [SerializeField] GameObject timerGameObject;
@@ -44,7 +45,10 @@ namespace Watermelon
             showPos = panel.anchoredPosition;
 
             button.onClick.AddListener(OnButtonClick);
-            closeButton.onClick.AddListener(OnCloseButtonClicked);
+
+            //closeButton.onClick.AddListener(OnCloseButtonClicked);
+
+            closeBigButton.onClick.AddListener(OnCloseButtonClicked);
 
             OnStatusChanged(LivesSystem.Status);
 

@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
+  m_Name: TimerCard6
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: 21300000, guid: 98bc26d14bf990b4cb1335695c04d864, type: 3}
+  typeIconImage: {fileID: 21300000, guid: 914a360ea92b94a47864ace71719243d, type: 3}
+  backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
+  frameImage: {fileID: 21300000, guid: 5d275642c41e25c48aa66df73795e2a8, type: 3}
+  titleText: ACCELERANDO
+  descriptionText: +2 to Stave, Redraw Hand, Undo last 2 Notes, Shuffle, Increase
+    Timer and Disable Power Ups
+  qualityValue: 35
+  activeEffects:
+  - rid: 2064241211670790163
+  - rid: 2064241211670790159
+  - rid: 2064241211670790164
+  - rid: 2064241211670790165
+  buffEffects:
+  - rid: 2064241211670790162
+  - rid: 2064241211670790166
+  references:
+    version: 2
+    RefIds:
+    - rid: 2064241211670790159
+      type: {class: ManipulateCardSystemActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RedrawHand: 1
+        ChangePlayerQualityBy:
+          enabled: 0
+          value: 0
+    - rid: 2064241211670790162
+      type: {class: ManipulateGameplayTimerBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 1
+            value: 3
+          activeForTime:
+            enabled: 0
+            value: 15
+        CanStackDuration: 0
+        CanStackEffect: 0
+        AddTickSpeedMultiplier:
+          enabled: 1
+          value: 1.75
+        PauseGamePlayTimer: 0
+    - rid: 2064241211670790163
+      type: {class: PowerupShuffleActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ScaleTime: 0.5
+        ScaleMinDelay: 0.05
+        ScaleMaxDelay: 0.4
+        ScaleEasingType: 11
+    - rid: 2064241211670790164
+      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeSlotCount:
+          enabled: 1
+          value: 2
+    - rid: 2064241211670790165
+      type: {class: PowerupUndoActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RevertElementsCount: 2
+    - rid: 2064241211670790166
+      type: {class: ManipulatePowerupsBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 1
+            value: 3
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
+        DisablePowerupUse: 1

@@ -74,3 +74,19 @@ MonoBehaviour:
   elementsPerLevel: 3
   coinsReward: 20
   editorNote: ' sets: 4'
+  nonDefaultStartingSlots:
+    enabled: 0
+    value: 0
+  usesCards: 1
+  overrideDefaultDeck: 0
+  gameplayTimer:
+    enabled: 0
+    value: 60
+    list: []
+    ensureNonNullListResult: 0
+  scoreTarget:
+    enabled: 1
+    value: 20
+    list:
+    - {fileID: 11400000, guid: f09ac799e7822e545a5fbac49162753d, type: 2}
+    ensureNonNullListResult: 0

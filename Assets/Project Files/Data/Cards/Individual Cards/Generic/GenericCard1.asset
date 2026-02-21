@@ -16,7 +16,7 @@ MonoBehaviour:
   typeIconImage: {fileID: 21300000, guid: 5c3f758ad7d676449bf987931f506c76, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: 7936eb0609f73c741a6bc54a48418d31, type: 3}
-  titleText: G1
+  titleText: VOLTI
   descriptionText: Redraws hand and affects Player Quality negatively
   qualityValue: 50
   activeEffects:

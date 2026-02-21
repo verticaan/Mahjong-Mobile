@@ -2158,7 +2158,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7566623469295722649}
-  - component: {fileID: 8141944955626990227}
   m_Layer: 5
   m_Name: TargetScore
   m_TagString: Untagged
@@ -2187,20 +2186,6 @@ RectTransform:
   m_AnchoredPosition: {x: -165.5, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8141944955626990227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2842390620111178271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 520c6f377f6852946aaaa8f7ecf617b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timerText: {fileID: 3527696297694057885}
-  fillImage: {fileID: 0}
 --- !u!1 &2864082956673994846
 GameObject:
   m_ObjectHideFlags: 0
@@ -2530,16 +2515,16 @@ MonoBehaviour:
       m_Calls: []
   m_text: 00000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 0fdc554870878ff45bc17b8b86665e69, type: 2}
-  m_sharedMaterial: {fileID: 9164231478677464726, guid: 0fdc554870878ff45bc17b8b86665e69,
+  m_fontAsset: {fileID: 11400000, guid: 70bc946abc13be74abc01a0745614a1f, type: 2}
+  m_sharedMaterial: {fileID: -748681187442878364, guid: 70bc946abc13be74abc01a0745614a1f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6881,8 +6866,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2ed0f924f4b5cd943b85a87245462d49, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: f06e680608220bc4682fb93e70333d92, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -9847,23 +9832,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7800435680887413884}
     m_Modifications:
-    - target: {fileID: 2987444676716486977, guid: ca9887c5d9463c4448decd5e0e382cc7,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 0fdc554870878ff45bc17b8b86665e69,
-        type: 2}
-    - target: {fileID: 2987444676716486977, guid: ca9887c5d9463c4448decd5e0e382cc7,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 9164231478677464726, guid: 0fdc554870878ff45bc17b8b86665e69,
-        type: 2}
-    - target: {fileID: 2987444676716486977, guid: ca9887c5d9463c4448decd5e0e382cc7,
-        type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4536073947958197955, guid: ca9887c5d9463c4448decd5e0e382cc7,
         type: 3}
       propertyPath: m_Name
@@ -10068,6 +10036,41 @@ PrefabInstance:
     - target: {fileID: 5518125693283516723, guid: 2379662180180e24cbfa6bc2d0143563,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2001765405894716985}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UnityEngine.GameObject, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 8343468585668810188, guid: 2379662180180e24cbfa6bc2d0143563,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 9115101894927412693, guid: 2379662180180e24cbfa6bc2d0143563,
@@ -10670,11 +10673,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Power Up Purchase Panel
-      objectReference: {fileID: 0}
-    - target: {fileID: 1957904963469469958, guid: 70b48147ff497a14eb2cc9018eb39555,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3588435455165959671, guid: 70b48147ff497a14eb2cc9018eb39555,
         type: 3}

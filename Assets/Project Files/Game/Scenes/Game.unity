@@ -1297,10 +1297,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02aac1500b1b8414ca72238d54eacc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingQuality: 50
-  discardQualityGain: 5
-  matchQualityGainPerEmptySlot: 2
-  cardPickQualityLossMultiplier: 0.2
+  startingQuality: 40
+  discardQualityGain: 8
+  matchQualityGainPerEmptySlot: 4
+  cardPickQualityLossMultiplier: 0.4
   minQuality: 0
   maxQuality: 100
 --- !u!114 &1060784216
@@ -1751,17 +1751,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8586885176961403096, guid: 8d03459103882dd4d97ac0242d87f2ab,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
-        type: 2}
-    - target: {fileID: 8586885176961403096, guid: 8d03459103882dd4d97ac0242d87f2ab,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3465,23 +3454,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -35.000008
       objectReference: {fileID: 0}
-    - target: {fileID: 3444691038749544304, guid: f498ec5c4d8606d44b8576c76181fe5a,
-        type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 0fdc554870878ff45bc17b8b86665e69,
-        type: 2}
-    - target: {fileID: 3444691038749544304, guid: f498ec5c4d8606d44b8576c76181fe5a,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 9164231478677464726, guid: 0fdc554870878ff45bc17b8b86665e69,
-        type: 2}
-    - target: {fileID: 3444691038749544304, guid: f498ec5c4d8606d44b8576c76181fe5a,
-        type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3600800649903458222, guid: f498ec5c4d8606d44b8576c76181fe5a,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -3611,6 +3583,36 @@ PrefabInstance:
         type: 3}
       propertyPath: managedReferences[1].DetermineScaleOnPlay
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: perSlotValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: 'comboTimerDurationsSeconds.Array.data[0]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: 'comboTimerDurationsSeconds.Array.data[1]'
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: 'comboTimerDurationsSeconds.Array.data[2]'
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: 'comboTimerDurationsSeconds.Array.data[3]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6197277990067117734, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: 'comboTimerDurationsSeconds.Array.data[4]'
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6404591446834656002, guid: f498ec5c4d8606d44b8576c76181fe5a,
         type: 3}

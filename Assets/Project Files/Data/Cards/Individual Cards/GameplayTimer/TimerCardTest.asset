@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
+  m_Name: TimerCardTest
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: 21300000, guid: 5c3f758ad7d676449bf987931f506c76, type: 3}
+  typeIconImage: {fileID: 21300000, guid: 914a360ea92b94a47864ace71719243d, type: 3}
+  backgroundImage: {fileID: -532504280, guid: 6085ad5e445e5704892cb144b2f55fe4, type: 3}
+  frameImage: {fileID: 21300000, guid: 8eb84762d00580348ad4e5586eef66f2, type: 3}
+  titleText: TimerTest
+  descriptionText: Lets see all the possible permutations
+  qualityValue: 65
+  activeEffects:
+  - rid: 2064241211670790146
+  - rid: 2064241211670790152
+  - rid: 2064241211670790153
+  - rid: 2064241211670790148
+  - rid: 2064241211670790147
+  - rid: 2064241211670790150
+  - rid: 2064241211670790151
+  buffEffects:
+  - rid: 2064241211670790155
+  - rid: 2064241211670790156
+  - rid: 2064241211670790157
+  references:
+    version: 2
+    RefIds:
+    - rid: 2064241211670790146
+      type: {class: PowerupHintActive, ns: Watermelon, asm: Assembly-CSharp}
+      data: 
+    - rid: 2064241211670790147
+      type: {class: ManipulateCardSystemActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RedrawHand: 0
+        ChangePlayerQualityBy:
+          enabled: 0
+          value: 0
+    - rid: 2064241211670790148
+      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeSlotCount:
+          enabled: 0
+          value: 0
+    - rid: 2064241211670790150
+      type: {class: ManipulatePowerupsActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        DisablePowerupUse: 0
+    - rid: 2064241211670790151
+      type: {class: ManipulateGameplayTimerActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeGameplayTimerTime:
+          enabled: 0
+          value: 0
+    - rid: 2064241211670790152
+      type: {class: PowerupShuffleActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ScaleTime: 0.5
+        ScaleMinDelay: 0.05
+        ScaleMaxDelay: 0.4
+        ScaleEasingType: 26
+    - rid: 2064241211670790153
+      type: {class: PowerupUndoActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RevertElementsCount: 1
+    - rid: 2064241211670790155
+      type: {class: ManipulateDockBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 0
+            value: 0
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
+        ChangeSlotCount:
+          enabled: 0
+          value: 0
+    - rid: 2064241211670790156
+      type: {class: ManipulateGameplayTimerBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 0
+            value: 0
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
+        AddTickSpeedMultiplier:
+          enabled: 0
+          value: 0
+        PauseGamePlayTimer: 0
+    - rid: 2064241211670790157
+      type: {class: ManipulatePowerupsBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 0
+            value: 0
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
+        DisablePowerupUse: 0
