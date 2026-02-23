@@ -18,7 +18,7 @@ namespace Watermelon
         [SerializeField] Image powerUpPurchaseIcon;
 
         [Space(5)]
-        [SerializeField] Button smallCloseButton;
+        //[SerializeField] Button smallCloseButton;
         [SerializeField] Button bigCloseButton;
         [SerializeField] Button purchaseButton;
 
@@ -32,7 +32,7 @@ namespace Watermelon
 
         private void Awake()
         {
-            smallCloseButton.onClick.AddListener(ClosePurchasePUPanel);
+            //smallCloseButton.onClick.AddListener(ClosePurchasePUPanel);
             bigCloseButton.onClick.AddListener(ClosePurchasePUPanel);
             purchaseButton.onClick.AddListener(PurchasePUButton);
         }

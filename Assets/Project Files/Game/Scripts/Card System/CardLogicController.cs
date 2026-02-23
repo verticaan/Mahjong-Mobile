@@ -46,6 +46,10 @@ namespace Watermelon
         private List<CardDataSO> activeDeck;
         private CardBuffService buffService;
 
+        public event Action<CardDataSO, CardDataSO> OnCardsShown;
+
+        public event Action<CardDataSO> OnCardSelected;
+
         private const string TryBeginSelectionMethodName = nameof(TryBeginSelection);
 
         #region Public API
@@ -180,6 +184,8 @@ namespace Watermelon
 
             int pq = playerQuality.Quality;
             var (left, right) = PickTwoWeightedByQuality(pq);
+
+            OnCardsShown?.Invoke(left, right);
 
             cardUIController.ShowTwoCards(left, right, OnCardConfirmed, OnHandDiscarded);
         }
@@ -366,6 +372,9 @@ namespace Watermelon
             }
 
             cardUIController.CloseAll();
+
+            OnCardSelected?.Invoke(chosen);
+
             EndSelectionAndConsumePending();
         }
 

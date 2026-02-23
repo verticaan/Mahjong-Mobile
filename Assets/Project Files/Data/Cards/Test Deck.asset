@@ -13,7 +13,5 @@ MonoBehaviour:
   m_Name: Test Deck
   m_EditorClassIdentifier: 
   cardData:
-  - {fileID: 11400000, guid: 3df8a1418b7407b49a65f066b8ccc961, type: 2}
-  - {fileID: 11400000, guid: 2313011dc456eb64fb4b55470f732fb0, type: 2}
-  - {fileID: 11400000, guid: c5331e4eaf47d9d4591d82c309b67ece, type: 2}
-  - {fileID: 11400000, guid: c412992a966cb014aba8369a3b46c7d2, type: 2}
+  - {fileID: 11400000, guid: b012d50436f409f4f959d79ef5d68dae, type: 2}
+  - {fileID: 11400000, guid: c7d21c20ecde8fa45a871aac4b55422b, type: 2}

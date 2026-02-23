@@ -357,7 +357,6 @@ MonoBehaviour:
   powerUpPurchaseDescriptionText: {fileID: 6345788937511006083}
   powerUpPurchasePriceText: {fileID: 170945526150405976}
   powerUpPurchaseIcon: {fileID: 5385127298659714174}
-  smallCloseButton: {fileID: 6170380954557281291}
   bigCloseButton: {fileID: 1324213714064585897}
   purchaseButton: {fileID: 2153098798022572714}
   currencyPanel: {fileID: 1167320557318804799}
@@ -840,7 +839,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6471787452232290584
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1102,8 +1101,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -146.7}
-  m_SizeDelta: {x: 600, y: 150}
+  m_AnchoredPosition: {x: -32, y: -160}
+  m_SizeDelta: {x: 725, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1356331082263909990
 CanvasRenderer:
@@ -1135,8 +1134,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: OUT OF POWER-UPS
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 1b5a5e19fe2588f46bb94a5e50448f80, type: 2}
-  m_sharedMaterial: {fileID: 9164231478677464726, guid: 1b5a5e19fe2588f46bb94a5e50448f80,
+  m_fontAsset: {fileID: 11400000, guid: 70bc946abc13be74abc01a0745614a1f, type: 2}
+  m_sharedMaterial: {fileID: -748681187442878364, guid: 70bc946abc13be74abc01a0745614a1f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1161,15 +1160,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
-  m_fontSizeBase: 70
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1

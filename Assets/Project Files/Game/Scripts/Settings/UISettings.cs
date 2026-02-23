@@ -14,14 +14,14 @@ namespace Watermelon
         [SerializeField] RectTransform contentRectTransform;
         public RectTransform ContentRectTransform => contentRectTransform;
 
-        [BoxGroup("Buttons", "Buttons")]
-        [SerializeField] Button closeButton;
+        //[BoxGroup("Buttons", "Buttons")]
+        //[SerializeField] Button closeButton;
 
         public bool IsOpened => isPageDisplayed;
 
         public override void Init()
         {
-            closeButton.onClick.AddListener(OnCloseButtonClicked);
+            //closeButton.onClick.AddListener(OnCloseButtonClicked);
             backgroundImage.AddEvent(EventTriggerType.PointerDown, OnBackgroundClicked);
         }
 
