@@ -65,6 +65,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoSaveDelay: 0
   cleanSaveStart: 0
+  webGLPrefix: gameName
 --- !u!114 &465105545023070882
 MonoBehaviour:
   m_ObjectHideFlags: 1

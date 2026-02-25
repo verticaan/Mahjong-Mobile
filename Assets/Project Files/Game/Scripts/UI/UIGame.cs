@@ -22,7 +22,7 @@ namespace Watermelon
         [SerializeField] UIFadeAnimation exitButtonFadeAnimation;
         [SerializeField] GameObject optionButton;
         [SerializeField] GameObject scoreHandler;
-        [SerializeField] GameObject healthBar;
+        //[SerializeField] GameObject healthBar;
 
         [SerializeField] GameObject devOverlay;
 
@@ -141,7 +141,7 @@ namespace Watermelon
             tutorialPanelObject.SetActive(true);
 
 
-            healthBar.gameObject.SetActive(false);
+            //healthBar.gameObject.SetActive(false);
             scoreHandler.gameObject.SetActive(false);
             optionButton.gameObject.SetActive(false);
             //exitButton.gameObject.SetActive(false);
@@ -154,7 +154,7 @@ namespace Watermelon
         {
             tutorialPanelObject.SetActive(false);
 
-            healthBar.gameObject.SetActive(true);
+            //healthBar.gameObject.SetActive(true);
             optionButton.gameObject.SetActive(true);
             //exitButton.gameObject.SetActive(true);
             if (levelNumberText.gameObject != null) 
