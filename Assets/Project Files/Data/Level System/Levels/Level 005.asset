@@ -270,7 +270,7 @@ MonoBehaviour:
   nonDefaultStartingSlots:
     enabled: 0
     value: 0
-  usesCards: 1
+  usesCards: 0
   overrideDefaultDeck: 0
   gameplayTimer:
     enabled: 0
@@ -280,6 +280,5 @@ MonoBehaviour:
   scoreTarget:
     enabled: 1
     value: 1000
-    list:
-    - {fileID: 11400000, guid: f09ac799e7822e545a5fbac49162753d, type: 2}
+    list: []
     ensureNonNullListResult: 0

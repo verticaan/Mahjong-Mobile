@@ -185,7 +185,7 @@ MonoBehaviour:
   overrideDefaultDeck: 0
   gameplayTimer:
     enabled: 1
-    value: 200
+    value: 120
     list:
     - {fileID: 11400000, guid: 6174eee4482e369479cee38090c096c6, type: 2}
     ensureNonNullListResult: 0

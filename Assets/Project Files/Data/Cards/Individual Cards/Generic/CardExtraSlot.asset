@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
   m_Name: CardExtraSlot
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 21300000, guid: 5c3f758ad7d676449bf987931f506c76, type: 3}
-  typeIconImage: {fileID: 21300000, guid: 68b8001f1e3acf546bc35c8485bc0a1b, type: 3}
+  iconImage: {fileID: 21300000, guid: f4f13b0726a06724986bbd862bed2a04, type: 3}
+  typeIconImage: {fileID: 21300000, guid: 3a5274479f64d5a4687f453282eafe40, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: 7936eb0609f73c741a6bc54a48418d31, type: 3}
-  titleText: COLL'OTTAVA
-  descriptionText: +1 to the Stave
+  titleText: Add to Stave
+  descriptionText: +1 slot to the Stave
   qualityValue: 60
   activeEffects:
   - rid: 4491945106977062979

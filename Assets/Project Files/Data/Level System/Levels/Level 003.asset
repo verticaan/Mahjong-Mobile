@@ -157,10 +157,10 @@ MonoBehaviour:
   nonDefaultStartingSlots:
     enabled: 0
     value: 0
-  usesCards: 1
+  usesCards: 0
   overrideDefaultDeck: 0
   gameplayTimer:
-    enabled: 1
+    enabled: 0
     value: 200
     list:
     - {fileID: 11400000, guid: 6174eee4482e369479cee38090c096c6, type: 2}

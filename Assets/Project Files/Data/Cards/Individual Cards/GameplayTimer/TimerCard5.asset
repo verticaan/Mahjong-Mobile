@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
   m_Name: TimerCard5
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 21300000, guid: 98bc26d14bf990b4cb1335695c04d864, type: 3}
-  typeIconImage: {fileID: 21300000, guid: 914a360ea92b94a47864ace71719243d, type: 3}
+  iconImage: {fileID: -690601803, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
+  typeIconImage: {fileID: -8918885832014658072, guid: 3da05e9f66c9f254c8875335e7e9179e,
+    type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
   titleText: VOLTI SUBITO
-  descriptionText: Redraw Hand Timer & 2X fasterfor 15 seconds
+  descriptionText: Redraw, Timer 2X faster for 15 seconds
   qualityValue: 65
   activeEffects:
   - rid: 2064241211670790159

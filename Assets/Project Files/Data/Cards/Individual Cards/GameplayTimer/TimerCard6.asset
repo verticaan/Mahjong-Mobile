@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
   m_Name: TimerCard6
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 21300000, guid: 98bc26d14bf990b4cb1335695c04d864, type: 3}
-  typeIconImage: {fileID: 21300000, guid: 914a360ea92b94a47864ace71719243d, type: 3}
+  iconImage: {fileID: -684606524, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
+  typeIconImage: {fileID: 7590535577056678407, guid: fe42c8b526e77e54ab91d0590272d9e8,
+    type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: 5d275642c41e25c48aa66df73795e2a8, type: 3}
   titleText: ACCELERANDO
-  descriptionText: +2 to Stave, Redraw Hand, Undo last 2 Notes, Shuffle, Increase
-    Timer and Disable Power Ups
+  descriptionText: +2 Stave, redraw, undo 2 notes, shuffle, increase timer
   qualityValue: 35
   activeEffects:
   - rid: 2064241211670790163

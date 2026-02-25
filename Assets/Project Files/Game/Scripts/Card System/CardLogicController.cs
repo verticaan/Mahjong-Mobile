@@ -50,6 +50,8 @@ namespace Watermelon
 
         public event Action<CardDataSO> OnCardSelected;
 
+        public event Action<CardDataSO> OnCardDiscarded;
+
         private const string TryBeginSelectionMethodName = nameof(TryBeginSelection);
 
         #region Public API
@@ -387,7 +389,8 @@ namespace Watermelon
             Debug.Log("Hand discarded — quality going up.");
             playerQuality.ApplyDiscard();
 
-            // The UI is already closed at this point (CardUIController.DiscardHand calls CloseAll first).
+            // The UI is already closed at this point (CardUIController.DiscardHand calls CloseAll first)
+            OnCardDiscarded?.Invoke(null);
             EndSelectionAndConsumePending();
         }
 

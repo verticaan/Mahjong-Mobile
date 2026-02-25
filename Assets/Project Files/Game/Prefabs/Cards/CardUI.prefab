@@ -251,8 +251,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Gives you 30+ score and takes 2 from your slot
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 561db3ac7cf9acb4e951a06df6ed445a, type: 2}
-  m_sharedMaterial: {fileID: -1340508170646362990, guid: 561db3ac7cf9acb4e951a06df6ed445a,
+  m_fontAsset: {fileID: 11400000, guid: e86699b11d1b009478862117e116b931, type: 2}
+  m_sharedMaterial: {fileID: 9164231478677464726, guid: e86699b11d1b009478862117e116b931,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -277,8 +277,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.4
-  m_fontSizeBase: 23.2
+  m_fontSize: 29.65
+  m_fontSizeBase: 25.4
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18

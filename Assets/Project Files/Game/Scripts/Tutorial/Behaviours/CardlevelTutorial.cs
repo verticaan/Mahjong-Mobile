@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.GPUSort;
 using Random = UnityEngine.Random;
 
 namespace Watermelon
@@ -58,6 +60,7 @@ namespace Watermelon
             
             cardLogicController.OnCardsShown += OnCardsShownTutorialStep;
             cardLogicController.OnCardSelected += OnCardSelectedTutorialStep;
+            cardLogicController.OnCardDiscarded += OnCardDiscardedTutorialStep;
 
             saveData = SaveController.GetSaveObject<TutorialBaseSave>(string.Format(ITutorial.SAVE_IDENTIFIER, TutorialID.ToString()));
 
@@ -80,6 +83,8 @@ namespace Watermelon
             UIController.HidePage<UIMainMenu>();
 
             gameUI.SetTutorialText(firstStepTitle, firstStepMessage);
+
+            StartCoroutine(ShowSecondTutorialStepAfterDelay(3f));
 
             DockBehavior.MatchCombined += OnMatchCombined;
 
@@ -113,6 +118,19 @@ namespace Watermelon
         {
         }
 
+        private IEnumerator ShowSecondTutorialStepAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            gameUI.SetTutorialText("Show cards", "Make 3 Correct matched to activate cards");
+        }
+
+        private IEnumerator FinishTutorialStepAfterDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            
+            gameUI.SetTutorialText("Great", "Complete the level to continue");
+        }
+
 
 
         private void OnCardsShownTutorialStep(CardDataSO left, CardDataSO right)
@@ -123,6 +141,14 @@ namespace Watermelon
         private void OnCardSelectedTutorialStep(CardDataSO selectedCard)
         {
             gameUI.SetTutorialText(thirdStepTitle, thirdStepMessage);
+            StartCoroutine(FinishTutorialStepAfterDelay(3f));
+        }
+
+        private void OnCardDiscardedTutorialStep(CardDataSO discardedCard)
+        {
+
+            gameUI.SetTutorialText("Cards Discarded", "Discarding cards affects the card quality");
+            StartCoroutine(FinishTutorialStepAfterDelay(3f));
         }
 
         public void CompleteTutorial()

@@ -468,15 +468,17 @@ MonoBehaviour:
   nonDefaultStartingSlots:
     enabled: 0
     value: 0
-  usesCards: 0
+  usesCards: 1
   overrideDefaultDeck: 0
   gameplayTimer:
-    enabled: 0
-    value: 60
-    list: []
+    enabled: 1
+    value: 140
+    list:
+    - {fileID: 11400000, guid: 6174eee4482e369479cee38090c096c6, type: 2}
     ensureNonNullListResult: 0
   scoreTarget:
-    enabled: 1
-    value: 3000
-    list: []
+    enabled: 0
+    value: 2000
+    list:
+    - {fileID: 11400000, guid: f09ac799e7822e545a5fbac49162753d, type: 2}
     ensureNonNullListResult: 0
