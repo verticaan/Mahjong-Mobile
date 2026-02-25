@@ -402,7 +402,7 @@ MonoBehaviour:
     ensureNonNullListResult: 0
   scoreTarget:
     enabled: 1
-    value: 2200
+    value: 1650
     list:
     - {fileID: 11400000, guid: f09ac799e7822e545a5fbac49162753d, type: 2}
     ensureNonNullListResult: 0

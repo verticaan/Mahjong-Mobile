@@ -18,7 +18,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
   titleText: GIUSTO
-  descriptionText: 'Gives 1 extra <i>Stave</i> but takes away Seconds '
+  descriptionText: 'Gives 1 extra <i>Stave</i> but takes 20 Seconds '
   qualityValue: 35
   activeEffects:
   - rid: 4491945106977062996

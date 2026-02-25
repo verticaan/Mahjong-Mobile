@@ -121,7 +121,7 @@ namespace Watermelon
         private IEnumerator ShowSecondTutorialStepAfterDelay(float delay)
         {
             yield return new WaitForSeconds(delay);
-            gameUI.SetTutorialText("Show cards", "Make 3 Correct matched to activate cards");
+            gameUI.SetTutorialText("Show cards", "Make 3 Correct matches to activate cards");
         }
 
         private IEnumerator FinishTutorialStepAfterDelay(float delay)
