@@ -1436,7 +1436,7 @@ MonoBehaviour:
       tileID: 2
       effectType: 0
   firstStepTitle: Hi Again
-  firstStepMessage: Cards have been inroduced for more fun
+  firstStepMessage: Cards have been introduced for more fun
   secondStepTitle: Your Move
   secondStepMessage: Pick a card then confirm or discard it
   thirdStepTitle: Impact!
@@ -1926,6 +1926,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 971438184913125009, guid: a6a57bc430670554483b9c3ee65a7f34,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000030517578
+      objectReference: {fileID: 0}
     - target: {fileID: 1773414223666936961, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1965,6 +1970,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2170754402608366834, guid: a6a57bc430670554483b9c3ee65a7f34,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.0002152386
       objectReference: {fileID: 0}
     - target: {fileID: 2780534568897683083, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
@@ -2040,6 +2050,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4601748939687738706, guid: a6a57bc430670554483b9c3ee65a7f34,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000030517578
       objectReference: {fileID: 0}
     - target: {fileID: 5381765107609156826, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
@@ -2237,6 +2252,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8355771855646865502, guid: a6a57bc430670554483b9c3ee65a7f34,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8408953871422638504, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
