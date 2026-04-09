@@ -50,8 +50,41 @@ namespace Watermelon
         private CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
         public CompositeToggle<int,CardDeckSO> ScoreTarget => scoreTarget;
         
-        
-        
+        /*
+        [Header("Music")]
+        [Tooltip("Determines which playlist the MusicManager will use for this level.")]
+        [SerializeField] private LevelPlaylistType playlistType = LevelPlaylistType.Regular;
+        public LevelPlaylistType PlaylistType => playlistType;
+    */
+        [Header("Music")]
+        [Tooltip("When enabled, uses the selected playlist type instead of the auto-detected one.")]
+        [SerializeField] private ToggleType<LevelPlaylistType> playlistOverride =
+            new ToggleType<LevelPlaylistType>(false, LevelPlaylistType.Regular);
+
+        /// <summary>
+        /// The playlist type that will be used by MusicManager for this level.
+        /// Returns the override value when the override is enabled, otherwise
+        /// derives the type automatically from the level's gameplay toggles.
+        /// </summary>
+        public LevelPlaylistType PlaylistType => playlistOverride.Enabled
+            ? playlistOverride.Value
+            : DetectPlaylistType();
+
+        private LevelPlaylistType DetectPlaylistType()
+        {
+            bool hasTimer = gameplayTimer.Enabled;
+            bool hasScore = scoreTarget.Enabled;
+            bool hasCards = usesCards;
+
+            if (hasTimer && hasCards) return LevelPlaylistType.TimerCards;
+            if (hasTimer) return LevelPlaylistType.Timer;
+            if (hasScore && hasCards) return LevelPlaylistType.ScoreCards;
+            if (hasScore) return LevelPlaylistType.Score;
+            if (hasCards) return LevelPlaylistType.RegularCards;
+
+            return LevelPlaylistType.Regular;
+        }
+
         public int SetsAmount => (GetAmountOfFilledCells() - (GetAmountOfFilledCells() % 3)) / 3;
         public float Difficulty => Mathf.Round(Mathf.Clamp(SetsAmount / (float)elementsPerLevel, 1, float.MaxValue) * 10.0f) * 0.1f;
 
