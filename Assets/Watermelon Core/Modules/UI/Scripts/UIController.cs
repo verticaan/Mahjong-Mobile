@@ -17,6 +17,8 @@ namespace Watermelon
 
         private static List<IPopupWindow> popupWindows;
         public static bool IsPopupOpened => !popupWindows.IsNullOrEmpty();
+        private static UIPage currentPage;
+        public static bool focusedOnGame => currentPage is UIGame;
 
         private static bool isTablet;
         public static bool IsTablet => isTablet;
@@ -109,6 +111,8 @@ namespace Watermelon
         {
             Type pageType = typeof(T);
             UIPage page = pagesLink[pageType];
+            currentPage = page;
+            Debug.Log("Current page: " + currentPage);
             if (!page.IsPageDisplayed)
             {
                 page.PlayShowAnimation();
@@ -119,6 +123,7 @@ namespace Watermelon
 
         public static void ShowPage(UIPage page)
         {
+            currentPage = page;
             if (!page.IsPageDisplayed)
             {
                 page.PlayShowAnimation();
@@ -247,11 +252,11 @@ namespace Watermelon
 
 // Changelog
 // v 1.2.1
-// • Added Editor script that automatically configure CanvasScaler
+// ï¿½ Added Editor script that automatically configure CanvasScaler
 // v 1.2
-// • Added global overlay
+// ï¿½ Added global overlay
 // v 1.1
-// • Added popup callbacks and methods to handle when a custom window is opened
-// • RectTransform can be added to NotchSaveArea using NotchSaveArea.RegisterRectTransform method
+// ï¿½ Added popup callbacks and methods to handle when a custom window is opened
+// ï¿½ RectTransform can be added to NotchSaveArea using NotchSaveArea.RegisterRectTransform method
 // v 1.0
-// • Basic logic
+// ï¿½ Basic logic

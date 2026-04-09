@@ -20,7 +20,6 @@ namespace Watermelon
         [SerializeField] DockBehavior dock;
         [SerializeField] ScoreDataModel scoreDataModel;
         
-        
 
         private static bool isLevelLoaded;
         public static bool IsLevelLoaded => isLevelLoaded;
@@ -133,6 +132,25 @@ namespace Watermelon
             isLevelLoaded = false;
 
             isBusy = false;
+        }
+        
+        private void Update()
+        {
+            
+            // 1) Determine whether game-time should advance at all this frame
+            //    (this must mirror the same block rules used by timers).
+            float dt = Time.deltaTime;
+            // add other pause checks here if necessary have them
+            bool timeBlocked = UIController.IsPopupOpened || !UIController.focusedOnGame|| CardLogicController.IsChoosing; 
+
+            float authoritativeDt = timeBlocked ? 0f : dt;
+
+            // 2) Tick independent systems (they may choose to do nothing if not running)
+            GameplayTimer.Tick(authoritativeDt);      // only affects the gameplay/level timer
+            scoreDataModel.Tick(authoritativeDt);     // only affects combo timing inside score model
+
+            // 3) Tick buffs with the same authoritative dt
+            buffService?.Tick(authoritativeDt);
         }
 
         public void LoadCustomLevel(LevelData levelData, PreloadedLevelData preloadedLevelData, BackgroundData backgroundData, bool animateDock, SimpleCallback onLevelLoaded = null)
@@ -258,6 +276,7 @@ namespace Watermelon
             dock.PlayAppearAnimation();
             
             LoadBackground();
+            
 
             Tween.NextFrame(() =>
             {
@@ -342,6 +361,8 @@ namespace Watermelon
             {   //This is duplicate method call, but leaving here for insurance
                 dock.ApplyDefaultSlotCount();
             }
+            
+            
         }
 
         public static void OnTileSubmitted(TileBehavior tileBehavior)
@@ -478,24 +499,7 @@ namespace Watermelon
             return LevelRepresentation != null && LevelRepresentation.Tiles.Count == 0 && Dock.IsEmpty;
         }
 
-        private void Update()
-        {
-            
-            // 1) Determine whether game-time should advance at all this frame
-            //    (this must mirror the same block rules used by timers).
-            float dt = Time.deltaTime;
-            // add other pause checks here if necessary have them
-            bool timeBlocked = UIController.IsPopupOpened || CardLogicController.IsChoosing; 
-
-            float authoritativeDt = timeBlocked ? 0f : dt;
-
-            // 2) Tick independent systems (they may choose to do nothing if not running)
-            GameplayTimer.Tick(authoritativeDt);      // only affects the gameplay/level timer
-            scoreDataModel.Tick(authoritativeDt);     // only affects combo timing inside score model
-
-            // 3) Tick buffs with the same authoritative dt
-            buffService?.Tick(authoritativeDt);
-        }
+        
 
         public static bool SubmitIsAllowed()
         {
@@ -760,8 +764,6 @@ namespace Watermelon
             RaycastController.Enable();
 
             ReturnTiles(3, null);
-
-            GameplayTimer.Resume();
         }
     }
 }

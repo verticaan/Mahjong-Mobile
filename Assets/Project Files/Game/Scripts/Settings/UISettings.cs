@@ -88,11 +88,13 @@ namespace Watermelon
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
 
             UIController.HidePage<UISettings>();
+            UIController.ShowPage<UIGame>();
         }
 
         private void OnBackgroundClicked(PointerEventData data)
         {
             UIController.HidePage<UISettings>();
+            UIController.ShowPage<UIGame>();
         }
     }
 }
