@@ -195,6 +195,7 @@ namespace Watermelon
                 dock.PlayAppearAnimation();
 
             LoadBackground(backgroundData);
+            MusicManager.Instance.PlayForLevel(level);
         }
 
         public static void CompleteCustomLevel()
@@ -277,6 +278,7 @@ namespace Watermelon
             
             LoadBackground();
             
+            MusicManager.Instance.PlayForLevel(level);
 
             Tween.NextFrame(() =>
             {
@@ -396,6 +398,7 @@ namespace Watermelon
                 levelRepresentation = null;
             }
             DisableSubsystems();
+            MusicManager.Instance.StopMusic();
             instance.levelSpawnAnimation.Clear();
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();

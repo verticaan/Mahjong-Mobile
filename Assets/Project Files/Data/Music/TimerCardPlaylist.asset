@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ab4df401a0a244ca775b6f832169a2, type: 3}
+  m_Name: TimerCardPlaylist
+  m_EditorClassIdentifier: 
+  fadeDuration: 0.3
+  tracks:
+  - clip: {fileID: 8300000, guid: 2883a5a90d4875b4b94f5606613e08be, type: 3}
+    fadeDurationOverride: 0
+  - clip: {fileID: 8300000, guid: b93bb00edcbaf044284283cd27cd1d2c, type: 3}
+    fadeDurationOverride: 0

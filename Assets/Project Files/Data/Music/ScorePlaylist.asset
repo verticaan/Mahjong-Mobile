@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ab4df401a0a244ca775b6f832169a2, type: 3}
+  m_Name: ScorePlaylist
+  m_EditorClassIdentifier: 
+  fadeDuration: 0.3
+  tracks:
+  - clip: {fileID: 8300000, guid: f296de2c53b101e488fadde954cb32c3, type: 3}
+    fadeDurationOverride: 0
+  - clip: {fileID: 8300000, guid: 41fc50d506f584c428b15fbf2ac7b080, type: 3}
+    fadeDurationOverride: 0

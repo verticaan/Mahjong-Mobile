@@ -50,7 +50,12 @@ namespace Watermelon
         private CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
         public CompositeToggle<int,CardDeckSO> ScoreTarget => scoreTarget;
         
-        
+        [Header("Music")]
+        [Tooltip("One or more playlists to play during this level. " +
+                 "If multiple are assigned, one is chosen at random on level start.")]
+        [SerializeField]
+        private MusicPlaylist[] musicPlaylists;
+        public MusicPlaylist[] MusicPlaylists => musicPlaylists;
         
         public int SetsAmount => (GetAmountOfFilledCells() - (GetAmountOfFilledCells() % 3)) / 3;
         public float Difficulty => Mathf.Round(Mathf.Clamp(SetsAmount / (float)elementsPerLevel, 1, float.MaxValue) * 10.0f) * 0.1f;
