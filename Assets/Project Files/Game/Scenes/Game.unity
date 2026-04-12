@@ -553,6 +553,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSource: {fileID: 548377987}
+  menuPlaylist:
+    playlistType: 0
+    fadeDuration: 0.3
+    tracks: []
   fallbackPlaylist:
     playlistType: 0
     fadeDuration: 0.3
@@ -1090,6 +1094,8 @@ MonoBehaviour:
   layersParentObject: {fileID: 1006114699}
   dock: {fileID: 529591111}
   scoreDataModel: {fileID: 7921812722490943926}
+  randomisedLevelConfig: {fileID: 11400000, guid: b9e4b7bb97da2c0468b317280c79e93f,
+    type: 2}
 --- !u!114 &1060784205
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Watermelon
 {
@@ -72,7 +73,33 @@ namespace Watermelon
         private static bool isBusy;
         public static bool IsBusy => isBusy;
 
+        // ── Endless / randomised mode ────────────────────────────────────────
+        [Header("Endless Mode")]
+        [Tooltip("Configuration asset that drives procedurally-generated levels " +
+                 "played after all hand-crafted levels are completed.")]
+        [SerializeField] private RandomisedLevelData randomisedLevelConfig;
+
+        /// <summary>True while the player is in endless randomised-level mode.</summary>
+        private static bool isEndlessMode;
+        public static bool IsEndlessMode => isEndlessMode;
+
+        /// <summary>
+        /// The result produced by the last call to
+        /// <see cref="RandomisedLevelData.Randomise"/>; used by
+        /// <see cref="LoadLevelData"/> to configure gameplay subsystems.
+        /// </summary>
+        private static RandomisedLevelResult activeRandomisedResult;
+
         public static GameplayTimer GameplayTimer { get; private set; }
+
+        // ── Endless mode helper ──────────────────────────────────────────────
+        /// <summary>
+        /// Returns true when <paramref name="levelIndex"/> is beyond the last
+        /// hand-crafted level and a <see cref="RandomisedLevelData"/> asset is assigned,
+        /// meaning we should generate a randomised level instead of loading from the DB.
+        /// </summary>
+        private bool ShouldUseEndlessMode(int levelIndex)
+            => levelIndex >= database.AmountOfLevels && randomisedLevelConfig != null;
 
         private void Awake()
         {
@@ -132,6 +159,9 @@ namespace Watermelon
             isLevelLoaded = false;
 
             isBusy = false;
+
+            isEndlessMode = false;
+            activeRandomisedResult = null;
         }
         
         private void Update()
@@ -215,6 +245,19 @@ namespace Watermelon
                 UnloadLevel();
             }
 
+            // ── Endless / randomised mode ────────────────────────────────────
+            // Once the player passes the last hand-crafted level, generate
+            // procedural levels indefinitely using RandomisedLevelData.
+            if (ShouldUseEndlessMode(levelIndex))
+            {
+                LoadRandomisedLevel(levelIndex, onLevelLoaded);
+                return;
+            }
+            // ────────────────────────────────────────────────────────────────
+
+            isEndlessMode = false;
+            activeRandomisedResult = null;
+
             int realLevelIndex;
             if (levelSave.IsPlayingRandomLevel && levelIndex == levelSave.DisplayLevelIndex && levelSave.RealLevelIndex != -1)
             {
@@ -285,6 +328,137 @@ namespace Watermelon
                 SavePresets.CreateSave("Level " + (levelIndex + 1).ToString("0000"), "Levels");
             });
         }
+
+        // ── Endless mode ─────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Loads a procedurally-configured level once the player has cleared all
+        /// hand-crafted levels.  A random <see cref="LevelData"/> from the database
+        /// is chosen as the board geometry; <see cref="RandomisedLevelData"/> then
+        /// randomises every other gameplay parameter.
+        /// </summary>
+        private void LoadRandomisedLevel(int displayLevelIndex, SimpleCallback onLevelLoaded = null)
+        {
+            isEndlessMode  = true;
+            isBusy         = true;
+            firstTimeCompletedLevel = false;
+            loadedLevelIndex = displayLevelIndex;
+
+            // Pick a random hand-crafted level to use as the board template
+            int sourceLevelIndex = Random.Range(0, database.AmountOfLevels);
+            LevelData sourceLevelData = database.GetLevel(sourceLevelIndex);
+
+            // Generate all randomised parameters
+            activeRandomisedResult = randomisedLevelConfig.Randomise(database, sourceLevelData);
+
+            // The static 'level' field is set to the source so that helpers that
+            // read LevelController.Level (e.g. EvenLayerSize, OddLayerSize) work.
+            level = sourceLevelData;
+
+            // Update save / UI
+            levelSave.DisplayLevelIndex  = displayLevelIndex;
+            levelSave.IsPlayingRandomLevel = false; // endless mode has its own flag
+            SaveController.MarkAsSaveIsRequired();
+
+            UIGame gameUI = UIController.GetPage<UIGame>();
+            gameUI.PowerUpsUIController.OnLevelStarted(displayLevelIndex);
+            gameUI.UpdateLevelNumber(displayLevelIndex + 1);
+
+            levelObject.SetActive(true);
+
+            levelScaler.Recalculate();
+            layersParentObject.transform.position = levelScaler.LevelFieldCenter;
+
+            // Configure gameplay subsystems using the randomised result
+            LoadRandomisedLevelData(activeRandomisedResult);
+
+            // Build tile selection from the randomised pool, respecting elementsPerLevel
+            TileData[] tilePool = activeRandomisedResult.TilePool;
+            int elementsCount   = Mathf.Clamp(activeRandomisedResult.ElementsPerLevel, 1, tilePool.Length);
+
+            // Shuffle and trim to the chosen element count
+            List<TileData> tileList = new List<TileData>(tilePool);
+            tileList.Shuffle();
+            if (tileList.Count > elementsCount)
+                tileList.RemoveRange(elementsCount, tileList.Count - elementsCount);
+
+            TileData[] availableObjects = tileList.ToArray();
+
+            // Spawn using the source level's geometry
+            levelRepresentation = new LevelRepresentation(sourceLevelData, layersParentObject);
+            levelRepresentation.SpawnObjects(availableObjects);
+
+            RaycastController.Disable();
+
+            levelSpawnAnimation.Play(levelRepresentation, () =>
+            {
+                isLevelLoaded = true;
+                RaycastController.Enable();
+                isBusy = false;
+                onLevelLoaded?.Invoke();
+            });
+
+            dock.PlayAppearAnimation();
+            LoadBackground();
+
+            // PlayForLevel reads level.PlaylistType internally.  For randomised levels
+            // the source LevelData's playlist type is used as a safe fallback; the
+            // randomised PlaylistType is available on activeRandomisedResult for any
+            // future MusicManager overload that accepts it explicitly.
+            MusicManager.Instance.PlayForLevel(level);
+        }
+
+        /// <summary>
+        /// Mirrors <see cref="LoadLevelData"/> but reads from a
+        /// <see cref="RandomisedLevelResult"/> instead of a <see cref="LevelData"/>.
+        /// Deck lists are read from the result's dedicated fields rather than from
+        /// <c>toggle.List</c>, which is inspector-only and cannot be set in code.
+        /// </summary>
+        private void LoadRandomisedLevelData(RandomisedLevelResult result)
+        {
+            scoreDataModel.ResetForLevel();
+
+            if (result.UsesCards)
+            {
+                cardLogicController.EnableSelectionLoop();
+                buffService.SubscribeToMatchResolved();
+            }
+
+            if (result.TimerToggle.Enabled)
+            {
+                GameplayTimer.SetMaxTime(result.TimerToggle.Value);
+                GameplayTimer.Start();
+                if (result.TimerDeckList != null && result.TimerDeckList.Count > 0)
+                {
+                    cardLogicController.AddToActiveDeck(result.TimerDeckList.ToArray());
+                }
+            }
+
+            if (result.ScoreToggle.Enabled)
+            {
+                scoreDataModel.SetTargetScoreExists(true);
+                scoreDataModel.SetTargetScore(result.ScoreToggle.Value);
+                if (result.ScoreDeckList != null && result.ScoreDeckList.Count > 0)
+                {
+                    cardLogicController.AddToActiveDeck(result.ScoreDeckList.ToArray());
+                }
+            }
+
+            // Cards-only mode: no timer, no score — apply the card deck directly
+            if (result.UsesCards
+                && !result.TimerToggle.Enabled
+                && !result.ScoreToggle.Enabled
+                && result.CardDeckList != null
+                && result.CardDeckList.Count > 0)
+            {
+                cardLogicController.AddToActiveDeck(result.CardDeckList.ToArray());
+            }
+
+            // Randomised levels always use the default slot count
+            dock.ApplyDefaultSlotCount();
+        }
+
+        // ────────────────────────────────────────────────────────────────────
 
         private void LoadBackground(BackgroundData backgroundData = null)
         {
@@ -423,16 +597,31 @@ namespace Watermelon
             if (isCustomLevel) return;
 
             RaycastController.Disable();
-            levelSave.IsPlayingRandomLevel = false;
-            levelSave.DisplayLevelIndex++;
-            SaveController.MarkAsSaveIsRequired();
 
-            if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
+            if (isEndlessMode)
             {
-                levelSave.MaxReachedLevelIndex = levelSave.DisplayLevelIndex;
-                firstTimeCompletedLevel = true;
+                // In endless mode we keep incrementing the display index so the UI
+                // shows ever-increasing level numbers, but MaxReachedLevelIndex is
+                // clamped to the last hand-crafted level to avoid save corruption.
+                levelSave.DisplayLevelIndex++;
+                levelSave.MaxReachedLevelIndex = database.AmountOfLevels - 1;
+
+                // Endless levels are never "first time completed" for reward purposes
+                firstTimeCompletedLevel = false;
+            }
+            else
+            {
+                levelSave.IsPlayingRandomLevel = false;
+                levelSave.DisplayLevelIndex++;
+
+                if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
+                {
+                    levelSave.MaxReachedLevelIndex = levelSave.DisplayLevelIndex;
+                    firstTimeCompletedLevel = true;
+                }
             }
 
+            SaveController.MarkAsSaveIsRequired();
             GameController.OnLevelCompleted();
             AudioController.PlaySound(AudioController.AudioClips.levelComplete);
         }
@@ -457,11 +646,22 @@ namespace Watermelon
             if (levelRepresentation.Tiles.Count == 0 && dock.IsEmpty)
             {
                 DisableSubsystems();
+
+                // When in endless mode, read score-target state from the randomised
+                // result rather than from LevelData (which holds the source template).
+                bool hasScoreTarget = isEndlessMode
+                    ? (activeRandomisedResult != null && activeRandomisedResult.ScoreToggle.Enabled)
+                    : level.ScoreTarget.Enabled;
+
+                int scoreTarget = isEndlessMode && activeRandomisedResult != null
+                    ? activeRandomisedResult.ScoreToggle.Value
+                    : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
+
                 // If a score target exists, emptying the board does NOT automatically win —
                 // the score must be met. Winning via score is handled by OnScoreTargetReached.
-                if (level.ScoreTarget.Enabled)
+                if (hasScoreTarget)
                 {
-                    if (scoreDataModel.CurrentScore < level.ScoreTarget.Value)
+                    if (scoreDataModel.CurrentScore < scoreTarget)
                     {
                         LoseLevel();
                     }
