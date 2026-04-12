@@ -416,7 +416,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 0f7d61faae5d12a449619239c43b6faf, type: 3}
+  m_Resource: {fileID: 8300000, guid: 29d933197e6ee8842a90702d152ac0fa, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -524,14 +524,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 548377986}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c9d3c27a05bca458cf377ef1acb710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   scoreData: {fileID: 7921812722490943926}
-  audioSource: {fileID: 0}
-  comboStageClips: []
+  audioSource: {fileID: 548377988}
+  comboStageClips:
+  - {fileID: 8300000, guid: f4d8d11f8013cda4b8967ccc05dc4c77, type: 3}
+  - {fileID: 8300000, guid: fc2f5ba443b42464cb2e60a1f434bc25, type: 3}
+  - {fileID: 8300000, guid: 5ab90822f46d9b74498b058db37bd5e2, type: 3}
+  - {fileID: 8300000, guid: 5ec95db35a2745142a098c7a2471418b, type: 3}
+  - {fileID: 8300000, guid: 27772f0b77c515d4ea5dc583c581e778, type: 3}
   clampToLastClip: 1
   volume: 1
 --- !u!1001 &623239137
@@ -3174,6 +3179,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -77.6001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946294646795397675, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946294646795397675, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946294646795397675, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 1060784196}
+    - target: {fileID: 8946294646795397675, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8946294646795397675, guid: b5f6cc9f0ef59d34b9f4a1e24115de70,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
+      value: MoreMountains.Feedbacks.MMF_Player, MoreMountains.Tools
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
