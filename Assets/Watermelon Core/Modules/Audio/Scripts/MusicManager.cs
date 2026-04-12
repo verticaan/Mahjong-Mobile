@@ -16,6 +16,10 @@ namespace Watermelon
         [Header("Audio Source")]
         [SerializeField] private MusicSource musicSource;
 
+        [Header("Main Menu")]
+        [Tooltip("Playlist used exclusively on the main menu screen.")]
+        [SerializeField] private MusicPlaylist menuPlaylist;
+
         [Header("Fallback")]
         [Tooltip("Played when a level's playlist type has no matching entry.")]
         [SerializeField] private MusicPlaylist fallbackPlaylist;
@@ -66,10 +70,27 @@ namespace Watermelon
             foreach (MusicPlaylist playlist in playlists)
                 playlist?.Preload();
 
+            menuPlaylist?.Preload();
             fallbackPlaylist?.Preload();
         }
 
         // ── Playback ─────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Plays a random looping track from the main menu playlist.
+        /// Call from your main menu controller on show/open.
+        /// </summary>
+        public void PlayMenuMusic()
+        {
+            if (menuPlaylist == null)
+            {
+                Debug.LogWarning("[MusicManager] No menu playlist assigned.");
+                return;
+            }
+
+            activePlaylist = menuPlaylist;
+            PlayRandomTrack();
+        }
 
         /// <summary>
         /// Call from your level controller's setup phase.
@@ -112,7 +133,7 @@ namespace Watermelon
             if (activePlaylist == null)
             {
                 Debug.LogWarning("[MusicManager] No active playlist. " +
-                                 "Call PlayForLevel first.");
+                                 "Call PlayForLevel or PlayMenuMusic first.");
                 return;
             }
 
@@ -138,7 +159,7 @@ namespace Watermelon
             if (activePlaylist == null)
             {
                 Debug.LogWarning("[MusicManager] No active playlist. " +
-                                 "Call PlayForLevel first.");
+                                 "Call PlayForLevel or PlayMenuMusic first.");
                 return;
             }
 

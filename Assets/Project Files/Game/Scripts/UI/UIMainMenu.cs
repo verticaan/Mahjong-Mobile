@@ -81,7 +81,7 @@ namespace Watermelon
         public override void PlayShowAnimation()
         {
             showHideStoreAdButtonDelayTweenCase?.Kill();
-
+            
             HideAdButton(true);
             iapStoreButton.Hide(true);
             ShowTapToPlay();
@@ -99,9 +99,9 @@ namespace Watermelon
             });
 
             MapLevelAbstractBehavior.OnLevelClicked += OnLevelOnMapSelected;
-
+            MusicManager.Instance.PlayMenuMusic();
             UIController.OnPageOpened(this);
-
+            
             shopLightAnimation.PlayFeedbacks();
         }
 
