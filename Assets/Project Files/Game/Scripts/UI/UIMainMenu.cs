@@ -202,16 +202,22 @@ namespace Watermelon
 
         #region Buttons
 
+        public void PlayButtonSound()
+        {
+            Debug.Log("FiredPlaysound");
+            AudioController.PlaySound(AudioController.AudioClips.buttonSound);
+        }
+        
         private void PlayButton()
         {
-            AudioController.PlaySound(AudioController.AudioClips.buttonSound);
+            //AudioController.PlaySound(AudioController.AudioClips.buttonSound);
 
             OnPlayTriggered(LevelController.MaxReachedLevelIndex);
         }
 
         private void OnLevelOnMapSelected(int levelId)
         {
-            AudioController.PlaySound(AudioController.AudioClips.buttonSound);
+            //AudioController.PlaySound(AudioController.AudioClips.buttonSound);
 
             OnPlayTriggered(levelId);
         }
@@ -283,7 +289,7 @@ namespace Watermelon
 
         public void PlayMaxReachedLevel() // Open max level via a method call
         {
-            AudioController.PlaySound(AudioController.AudioClips.buttonSound);
+            //AudioController.PlaySound(AudioController.AudioClips.buttonSound);
             OnPlayTriggered(LevelController.MaxReachedLevelIndex);
         }
 
