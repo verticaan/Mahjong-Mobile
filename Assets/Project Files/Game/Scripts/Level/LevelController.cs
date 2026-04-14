@@ -20,7 +20,6 @@ namespace Watermelon
         [SerializeField] GameObject layersParentObject;
         [SerializeField] DockBehavior dock;
         [SerializeField] ScoreDataModel scoreDataModel;
-        
 
         private static bool isLevelLoaded;
         public static bool IsLevelLoaded => isLevelLoaded;
@@ -29,7 +28,6 @@ namespace Watermelon
         public static LevelData Level => level;
 
         private static CardLogicController cardLogicController;
-        
         public static CardLogicController CardLogicController => cardLogicController;
         
         private static CardBuffService buffService;
@@ -42,7 +40,7 @@ namespace Watermelon
         public static LevelDatabase Database => instance.database;
 
         public static int MaxReachedLevelIndex => levelSave.MaxReachedLevelIndex;
-        public static int DisplayedLevelIndex => levelSave.DisplayLevelIndex;
+        public static int DisplayedLevelIndex  => levelSave.DisplayLevelIndex;
 
         private static int loadedLevelIndex;
 
@@ -54,8 +52,8 @@ namespace Watermelon
         private static Dictionary<TileEffectType, TileEffect> effectsLink;
 
         public static Vector2Int EvenLayerSize => new Vector2Int(Level.GetLayer(Level.AmountOfLayers - 1).GetRow(0).AmountOfCells, Level.GetLayer(Level.AmountOfLayers - 1).AmountOfRows);
-        public static Vector2Int OddLayerSize => new Vector2Int(Level.GetLayer(Level.AmountOfLayers - 2).GetRow(0).AmountOfCells, Level.GetLayer(Level.AmountOfLayers - 2).AmountOfRows);
-        public static bool IsEvenLayerBigger => EvenLayerSize.x > OddLayerSize.x;
+        public static Vector2Int OddLayerSize  => new Vector2Int(Level.GetLayer(Level.AmountOfLayers - 2).GetRow(0).AmountOfCells, Level.GetLayer(Level.AmountOfLayers - 2).AmountOfRows);
+        public static bool IsEvenLayerBigger   => EvenLayerSize.x > OddLayerSize.x;
 
         public static int CurrentReward => GetCurrentLevelReward();
         
@@ -73,7 +71,8 @@ namespace Watermelon
         private static bool isBusy;
         public static bool IsBusy => isBusy;
 
-        // ── Endless / randomised mode ────────────────────────────────────────
+        // ── Endless / randomised mode ─────────────────────────────────────────
+
         [Header("Endless Mode")]
         [Tooltip("Configuration asset that drives procedurally-generated levels " +
                  "played after all hand-crafted levels are completed.")]
@@ -86,20 +85,20 @@ namespace Watermelon
         /// <summary>
         /// The result produced by the last call to
         /// <see cref="RandomisedLevelData.Randomise"/>; used by
-        /// <see cref="LoadLevelData"/> to configure gameplay subsystems.
+        /// <see cref="LoadRandomisedLevel"/> to configure gameplay subsystems.
         /// </summary>
         private static RandomisedLevelResult activeRandomisedResult;
 
         public static GameplayTimer GameplayTimer { get; private set; }
 
-        // ── Endless mode helper ──────────────────────────────────────────────
         /// <summary>
         /// Returns true when <paramref name="levelIndex"/> is beyond the last
-        /// hand-crafted level and a <see cref="RandomisedLevelData"/> asset is assigned,
-        /// meaning we should generate a randomised level instead of loading from the DB.
+        /// hand-crafted level and a <see cref="RandomisedLevelData"/> asset is assigned.
         /// </summary>
         private bool ShouldUseEndlessMode(int levelIndex)
             => levelIndex >= database.AmountOfLevels && randomisedLevelConfig != null;
+
+        // ─────────────────────────────────────────────────────────────────────
 
         private void Awake()
         {
@@ -112,19 +111,18 @@ namespace Watermelon
             levelScaler.Init();
 
             GameplayTimer = new GameplayTimer();
-            buffService = new CardBuffService();
-            GameplayTimer.OnTimerFinished += OnTimerFinished;
+            buffService   = new CardBuffService();
+            GameplayTimer.OnTimerFinished       += OnTimerFinished;
             scoreDataModel.OnScoreTargetReached += OnScoreTargetReached;
             scoreDataModel.Init();
             database.Init();
             dock.Init(this);
-            levelSave = SaveController.GetSaveObject<LevelSave>("level");
+            levelSave           = SaveController.GetSaveObject<LevelSave>("level");
             cardLogicController = gameObject.GetComponent<CardLogicController>();
             
             RaycastController raycastController = gameObject.AddComponent<RaycastController>();
             raycastController.Init();
 
-            // Initialise special effects
             effectsLink = new Dictionary<TileEffectType, TileEffect>();
             TileEffect[] availableEffects = database.TileEffects;
             for (int i = 0; i < availableEffects.Length; i++)
@@ -132,7 +130,6 @@ namespace Watermelon
                 if (effectsLink.ContainsKey(availableEffects[i].EffectType))
                 {
                     Debug.LogError(string.Format("Tile effect with type {0} has duplicates in the database!", availableEffects[i].EffectType));
-
                     continue;
                 }
 
@@ -153,56 +150,46 @@ namespace Watermelon
             scoreDataModel.StopAll();
             
             levelRepresentation = null;
-            effectsLink = null;
+            effectsLink         = null;
 
             loadedLevelIndex = -1;
-            isLevelLoaded = false;
+            isLevelLoaded    = false;
+            isBusy           = false;
 
-            isBusy = false;
-
-            isEndlessMode = false;
+            isEndlessMode          = false;
             activeRandomisedResult = null;
         }
         
         private void Update()
         {
-            
-            // 1) Determine whether game-time should advance at all this frame
-            //    (this must mirror the same block rules used by timers).
-            float dt = Time.deltaTime;
-            // add other pause checks here if necessary have them
-            bool timeBlocked = UIController.IsPopupOpened || !UIController.focusedOnGame|| CardLogicController.IsChoosing; 
-
+            float dt          = Time.deltaTime;
+            bool  timeBlocked = UIController.IsPopupOpened || !UIController.focusedOnGame || CardLogicController.IsChoosing;
             float authoritativeDt = timeBlocked ? 0f : dt;
 
-            // 2) Tick independent systems (they may choose to do nothing if not running)
-            GameplayTimer.Tick(authoritativeDt);      // only affects the gameplay/level timer
-            scoreDataModel.Tick(authoritativeDt);     // only affects combo timing inside score model
-
-            // 3) Tick buffs with the same authoritative dt
+            GameplayTimer.Tick(authoritativeDt);
+            scoreDataModel.Tick(authoritativeDt);
             buffService?.Tick(authoritativeDt);
         }
+
+        // ── Custom level ──────────────────────────────────────────────────────
 
         public void LoadCustomLevel(LevelData levelData, PreloadedLevelData preloadedLevelData, BackgroundData backgroundData, bool animateDock, SimpleCallback onLevelLoaded = null)
         {
             level = levelData;
 
-            loadedLevelIndex = -1;
+            loadedLevelIndex        = -1;
             firstTimeCompletedLevel = false;
-            isCustomLevel = true;
-            isBusy = true;
+            isCustomLevel           = true;
+            isBusy                  = true;
 
             UIGame gameUI = UIController.GetPage<UIGame>();
             gameUI.PowerUpsUIController.OnLevelStarted(0);
             gameUI.ActivateTutorial();
 
             levelObject.SetActive(true);
-
             levelScaler.Recalculate();
-
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
 
-            // Initing level representation
             levelRepresentation = new LevelRepresentation(level, layersParentObject);
             levelRepresentation.SpawnObjects(preloadedLevelData);
 
@@ -213,49 +200,40 @@ namespace Watermelon
             levelSpawnAnimation.Play(levelRepresentation, () =>
             {
                 isLevelLoaded = true;
-
                 RaycastController.Enable();
-
                 isBusy = false;
-
                 onLevelLoaded?.Invoke();
             });
 
-            if(animateDock)
+            if (animateDock)
                 dock.PlayAppearAnimation();
 
             LoadBackground(backgroundData);
-            MusicManager.Instance.PlayForLevel(level);
+            MusicManager.Instance.PlayForLevel(level.PlaylistType);
         }
 
         public static void CompleteCustomLevel()
         {
             if (levelRepresentation != null)
-            {
                 UnloadLevel();
-            }
 
             isCustomLevel = false;
         }
 
+        // ── Normal level ──────────────────────────────────────────────────────
+
         public void LoadLevel(int levelIndex, SimpleCallback onLevelLoaded = null)
         {
             if (levelRepresentation != null)
-            {
                 UnloadLevel();
-            }
 
-            // ── Endless / randomised mode ────────────────────────────────────
-            // Once the player passes the last hand-crafted level, generate
-            // procedural levels indefinitely using RandomisedLevelData.
             if (ShouldUseEndlessMode(levelIndex))
             {
                 LoadRandomisedLevel(levelIndex, onLevelLoaded);
                 return;
             }
-            // ────────────────────────────────────────────────────────────────
 
-            isEndlessMode = false;
+            isEndlessMode          = false;
             activeRandomisedResult = null;
 
             int realLevelIndex;
@@ -268,20 +246,18 @@ namespace Watermelon
                 realLevelIndex = database.GetRandomLevelIndex(levelIndex, levelSave.LastPlayerLevelIndex, false);
 
                 levelSave.LastPlayerLevelIndex = realLevelIndex;
-                levelSave.RealLevelIndex = realLevelIndex;
+                levelSave.RealLevelIndex       = realLevelIndex;
 
-                if(realLevelIndex != levelIndex)
-                {
+                if (realLevelIndex != levelIndex)
                     levelSave.IsPlayingRandomLevel = true;
-                }
             }
 
             SaveController.Save();
 
             levelSave.DisplayLevelIndex = levelIndex;
-            loadedLevelIndex = levelIndex;
-            firstTimeCompletedLevel = false;
-            isBusy = true;
+            loadedLevelIndex            = levelIndex;
+            firstTimeCompletedLevel     = false;
+            isBusy                      = true;
 
             level = database.GetLevel(realLevelIndex);
 
@@ -290,16 +266,13 @@ namespace Watermelon
             gameUI.UpdateLevelNumber(levelIndex + 1);
 
             levelObject.SetActive(true);
-
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
             
             LoadLevelData(level);
 
-            // Preparing objects to be placed on the level
             TileData[] availableObjects = database.AvailableForLevel(level);
 
-            // Initing level representation
             levelRepresentation = new LevelRepresentation(level, layersParentObject);
             levelRepresentation.SpawnObjects(availableObjects);
 
@@ -308,20 +281,14 @@ namespace Watermelon
             levelSpawnAnimation.Play(levelRepresentation, () =>
             {
                 isLevelLoaded = true;
-
                 RaycastController.Enable();
-
                 isBusy = false;
-
                 onLevelLoaded?.Invoke();
             });
 
-            
             dock.PlayAppearAnimation();
-            
             LoadBackground();
-            
-            MusicManager.Instance.PlayForLevel(level);
+            MusicManager.Instance.PlayForLevel(level.PlaylistType);
 
             Tween.NextFrame(() =>
             {
@@ -329,35 +296,32 @@ namespace Watermelon
             });
         }
 
-        // ── Endless mode ─────────────────────────────────────────────────────
+        // ── Endless / randomised level ────────────────────────────────────────
 
         /// <summary>
         /// Loads a procedurally-configured level once the player has cleared all
-        /// hand-crafted levels.  A random <see cref="LevelData"/> from the database
-        /// is chosen as the board geometry; <see cref="RandomisedLevelData"/> then
-        /// randomises every other gameplay parameter.
+        /// hand-crafted levels. A random <see cref="LevelData"/> supplies the board
+        /// geometry; <see cref="RandomisedLevelData"/> randomises every gameplay param.
         /// </summary>
         private void LoadRandomisedLevel(int displayLevelIndex, SimpleCallback onLevelLoaded = null)
         {
-            isEndlessMode  = true;
-            isBusy         = true;
+            isEndlessMode           = true;
+            isBusy                  = true;
             firstTimeCompletedLevel = false;
-            loadedLevelIndex = displayLevelIndex;
+            loadedLevelIndex        = displayLevelIndex;
 
-            // Pick a random hand-crafted level to use as the board template
-            int sourceLevelIndex = Random.Range(0, database.AmountOfLevels);
-            LevelData sourceLevelData = database.GetLevel(sourceLevelIndex);
+            // Pick a random hand-crafted level as the board template
+            LevelData sourceLevelData = database.GetLevel(Random.Range(0, database.AmountOfLevels));
 
-            // Generate all randomised parameters
-            activeRandomisedResult = randomisedLevelConfig.Randomise(database, sourceLevelData);
+            // Generate all randomised gameplay parameters
+            activeRandomisedResult = randomisedLevelConfig.Randomise(sourceLevelData);
 
-            // The static 'level' field is set to the source so that helpers that
-            // read LevelController.Level (e.g. EvenLayerSize, OddLayerSize) work.
+            // Keep the static 'level' field pointing at the source so helpers
+            // that read LevelController.Level (EvenLayerSize, OddLayerSize, …) work
             level = sourceLevelData;
 
-            // Update save / UI
-            levelSave.DisplayLevelIndex  = displayLevelIndex;
-            levelSave.IsPlayingRandomLevel = false; // endless mode has its own flag
+            levelSave.DisplayLevelIndex    = displayLevelIndex;
+            levelSave.IsPlayingRandomLevel = false;
             SaveController.MarkAsSaveIsRequired();
 
             UIGame gameUI = UIController.GetPage<UIGame>();
@@ -365,31 +329,16 @@ namespace Watermelon
             gameUI.UpdateLevelNumber(displayLevelIndex + 1);
 
             levelObject.SetActive(true);
-
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
 
-            // Configure gameplay subsystems using the randomised result
-            LoadRandomisedLevelData(activeRandomisedResult);
+            ApplyGameplayConfig(activeRandomisedResult);
 
-            // Build tile selection from the randomised pool, respecting elementsPerLevel
-            TileData[] tilePool = activeRandomisedResult.TilePool;
-            int elementsCount   = Mathf.Clamp(activeRandomisedResult.ElementsPerLevel, 1, tilePool.Length);
-
-            // Shuffle and trim to the chosen element count
-            List<TileData> tileList = new List<TileData>(tilePool);
-            tileList.Shuffle();
-            if (tileList.Count > elementsCount)
-                tileList.RemoveRange(elementsCount, tileList.Count - elementsCount);
-
-            TileData[] availableObjects = tileList.ToArray();
-
-            // Spawn using the source level's geometry
+            TileData[] availableObjects = database.AvailableForLevel(sourceLevelData);
             levelRepresentation = new LevelRepresentation(sourceLevelData, layersParentObject);
             levelRepresentation.SpawnObjects(availableObjects);
 
             RaycastController.Disable();
-
             levelSpawnAnimation.Play(levelRepresentation, () =>
             {
                 isLevelLoaded = true;
@@ -401,20 +350,60 @@ namespace Watermelon
             dock.PlayAppearAnimation();
             LoadBackground();
 
-            // PlayForLevel reads level.PlaylistType internally.  For randomised levels
-            // the source LevelData's playlist type is used as a safe fallback; the
-            // randomised PlaylistType is available on activeRandomisedResult for any
-            // future MusicManager overload that accepts it explicitly.
-            MusicManager.Instance.PlayForLevel(level);
+            // Use the playlist derived from the randomised flags, not from the
+            // source level template (which would give the wrong music context)
+            MusicManager.Instance.PlayForLevel(activeRandomisedResult.PlaylistType);
+        }
+
+        // ── Gameplay configuration ────────────────────────────────────────────
+
+        /// <summary>
+        /// Configures all gameplay subsystems for a hand-crafted <see cref="LevelData"/>.
+        /// Deck application order: timer list → score list, add or override per
+        /// <see cref="LevelData.OverrideDefaultDeck"/>.
+        /// </summary>
+        private void LoadLevelData(LevelData levelData)
+        {
+            scoreDataModel.ResetForLevel();
+
+            if (levelData.UsesCards)
+            {
+                cardLogicController.EnableSelectionLoop();
+                buffService.SubscribeToMatchResolved();
+            }
+
+            var timer       = levelData.GameplayTimer;
+            var scoreTarget = levelData.ScoreTarget;
+
+            if (timer.Enabled)
+            {
+                GameplayTimer.SetMaxTime(timer.Value);
+                GameplayTimer.Start();
+                ApplyDeckList(timer.List, levelData.OverrideDefaultDeck);
+            }
+
+            if (scoreTarget.Enabled)
+            {
+                scoreDataModel.SetTargetScoreExists(true);
+                scoreDataModel.SetTargetScore(scoreTarget.Value);
+                ApplyDeckList(scoreTarget.List, levelData.OverrideDefaultDeck);
+            }
+
+            if (levelData.NonDefaultStartingSlots.Enabled)
+                dock.SetSlotCount(levelData.NonDefaultStartingSlots.Value);
+            else
+                dock.ApplyDefaultSlotCount();
         }
 
         /// <summary>
-        /// Mirrors <see cref="LoadLevelData"/> but reads from a
-        /// <see cref="RandomisedLevelResult"/> instead of a <see cref="LevelData"/>.
-        /// Deck lists are read from the result's dedicated fields rather than from
-        /// <c>toggle.List</c>, which is inspector-only and cannot be set in code.
+        /// Configures all gameplay subsystems from a <see cref="RandomisedLevelResult"/>.
+        /// Deck layering mirrors <see cref="LoadLevelData"/>:
+        ///   1. Default deck — applied first whenever cards are active.
+        ///   2. Timer deck   — applied on top when a timer is active.
+        ///   3. Score deck   — applied on top when a score target is active.
+        /// Timer and score can both be active simultaneously; their decks compose freely.
         /// </summary>
-        private void LoadRandomisedLevelData(RandomisedLevelResult result)
+        private void ApplyGameplayConfig(RandomisedLevelResult result)
         {
             scoreDataModel.ResetForLevel();
 
@@ -422,257 +411,88 @@ namespace Watermelon
             {
                 cardLogicController.EnableSelectionLoop();
                 buffService.SubscribeToMatchResolved();
+
+                // 1. Base deck — always first when cards are on
+                ApplyDeckList(result.DefaultDeckList, overrideDefault: false);
             }
 
-            if (result.TimerToggle.Enabled)
+            if (result.HasTimer)
             {
-                GameplayTimer.SetMaxTime(result.TimerToggle.Value);
+                GameplayTimer.SetMaxTime(result.TimerSeconds.Value);
                 GameplayTimer.Start();
-                if (result.TimerDeckList != null && result.TimerDeckList.Count > 0)
-                {
-                    cardLogicController.AddToActiveDeck(result.TimerDeckList.ToArray());
-                }
+
+                // 2. Timer deck layered on top
+                ApplyDeckList(result.TimerDeckList, overrideDefault: false);
             }
 
-            if (result.ScoreToggle.Enabled)
+            if (result.HasScoreTarget)
             {
                 scoreDataModel.SetTargetScoreExists(true);
-                scoreDataModel.SetTargetScore(result.ScoreToggle.Value);
-                if (result.ScoreDeckList != null && result.ScoreDeckList.Count > 0)
-                {
-                    cardLogicController.AddToActiveDeck(result.ScoreDeckList.ToArray());
-                }
-            }
+                scoreDataModel.SetTargetScore(result.ScoreTarget.Value);
 
-            // Cards-only mode: no timer, no score — apply the card deck directly
-            if (result.UsesCards
-                && !result.TimerToggle.Enabled
-                && !result.ScoreToggle.Enabled
-                && result.CardDeckList != null
-                && result.CardDeckList.Count > 0)
-            {
-                cardLogicController.AddToActiveDeck(result.CardDeckList.ToArray());
+                // 3. Score deck layered on top
+                ApplyDeckList(result.ScoreDeckList, overrideDefault: false);
             }
 
             // Randomised levels always use the default slot count
             dock.ApplyDefaultSlotCount();
         }
 
-        // ────────────────────────────────────────────────────────────────────
+        /// <summary>
+        /// Adds or overrides the active card deck, guarded against null/empty input.
+        /// </summary>
+        private void ApplyDeckList(List<CardDeckSO> decks, bool overrideDefault)
+        {
+            if (decks == null || decks.Count == 0) return;
+
+            if (overrideDefault)
+                cardLogicController.OverrideActiveDeck(decks.ToArray());
+            else
+                cardLogicController.AddToActiveDeck(decks.ToArray());
+        }
+
+        // ── Background ────────────────────────────────────────────────────────
 
         private void LoadBackground(BackgroundData backgroundData = null)
         {
             if (Background != null)
                 Destroy(Background.gameObject);
 
-            if(backgroundData == null)
+            if (backgroundData == null)
                 backgroundData = database.GetLastAvailableBackgroundData();
 
             if (backgroundData != null)
-            {
                 Background = Instantiate(backgroundData.BackgroundPrefab).GetComponent<BackgroundBehavior>();
-            }
-        }
-        
-        //Section for data driven level type control
-        private void LoadLevelData(LevelData levelData)
-        {
-            // Always reset score state first so no previous level's subscriptions or
-            // data carry over — even when this level does not use scoring.
-            scoreDataModel.ResetForLevel();
-            
-            var timer = level.GameplayTimer;
-            var scoreTarget = level.ScoreTarget;
-            
-            if (level.UsesCards)
-            {
-                cardLogicController.EnableSelectionLoop();
-                buffService.SubscribeToMatchResolved();
-            }
-            
-            if(timer.Enabled)
-            {
-                GameplayTimer.SetMaxTime(timer.Value);
-                GameplayTimer.Start();
-                if (timer.List != null && timer.List.Count > 0)
-                {
-                    if (level.OverrideDefaultDeck)
-                    {
-                        cardLogicController.OverrideActiveDeck(timer.List.ToArray());
-                    }
-                    else
-                    {
-                        cardLogicController.AddToActiveDeck(timer.List.ToArray());
-                    }
-                    
-                }
-            }
-            
-            if (scoreTarget.Enabled)
-            {
-                Debug.Log("Score enabled");
-                scoreDataModel.SetTargetScoreExists(scoreTarget.Enabled);
-                scoreDataModel.SetTargetScore(scoreTarget.Value);
-                if (scoreTarget.List != null &&  scoreTarget.List.Count > 0)
-                {
-                    Debug.Log("List exists");
-                    if (level.OverrideDefaultDeck)
-                    {
-                        Debug.Log("List override");
-                        cardLogicController.OverrideActiveDeck(scoreTarget.List.ToArray());
-                    }
-                    else
-                    {
-                        Debug.Log("List add");
-                        cardLogicController.AddToActiveDeck(scoreTarget.List.ToArray());
-                    }
-                }
-            }
-            
-            if (level.NonDefaultStartingSlots.Enabled)
-            {
-                dock.SetSlotCount(level.NonDefaultStartingSlots.Value);
-            }
-            else
-            {   //This is duplicate method call, but leaving here for insurance
-                dock.ApplyDefaultSlotCount();
-            }
-            
         }
 
-        public static void OnTileSubmitted(TileBehavior tileBehavior)
-        {
-            if (!GameController.IsGameActive) return;
-
-            TileEffect effect = tileBehavior.Effect;
-            if (effect != null)
-            {
-                effect.OnTileSubmitted();
-            }
-
-            List<TileBehavior> activeTiles = levelRepresentation.Tiles;
-            foreach (TileBehavior tiles in activeTiles)
-            {
-                effect = tiles.Effect;
-                if (effect != null)
-                {
-                    effect.OnAnyTileSubmitted();
-                }
-            }
-        }
-
-        public static void UnloadLevel()
-        {
-            PUController.ResetBehaviors();
-
-            if (levelRepresentation != null)
-            {
-                levelRepresentation.Clear();
-                levelRepresentation = null;
-            }
-            DisableSubsystems();
-            MusicManager.Instance.StopMusic();
-            instance.levelSpawnAnimation.Clear();
-            instance.dock.DisposeQuickly();
-            instance.dock.HideSlots();
-            
-        }
-
-        public static void DisableSubsystems()
-        {
-            cardLogicController.DisableSelectionLoop(true);
-            GameplayTimer.Reset();
-            buffService?.ClearAllBuffs();
-            buffService?.UnsubscribeFromMatchResolved();
-            instance.scoreDataModel.StopAll();
-        }
-
-        /// <summary>
-        /// Unified method to complete the current level as a win.
-        /// Handles save progression, timer cleanup, and GameController notification.
-        /// </summary>
-        private void WinLevel()
-        {
-            if (!GameController.IsGameActive) return;
-            if (isCustomLevel) return;
-
-            RaycastController.Disable();
-
-            if (isEndlessMode)
-            {
-                // In endless mode we keep incrementing the display index so the UI
-                // shows ever-increasing level numbers, but MaxReachedLevelIndex is
-                // clamped to the last hand-crafted level to avoid save corruption.
-                levelSave.DisplayLevelIndex++;
-                levelSave.MaxReachedLevelIndex = database.AmountOfLevels - 1;
-
-                // Endless levels are never "first time completed" for reward purposes
-                firstTimeCompletedLevel = false;
-            }
-            else
-            {
-                levelSave.IsPlayingRandomLevel = false;
-                levelSave.DisplayLevelIndex++;
-
-                if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
-                {
-                    levelSave.MaxReachedLevelIndex = levelSave.DisplayLevelIndex;
-                    firstTimeCompletedLevel = true;
-                }
-            }
-
-            SaveController.MarkAsSaveIsRequired();
-            GameController.OnLevelCompleted();
-            AudioController.PlaySound(AudioController.AudioClips.levelComplete);
-        }
-
-        /// <summary>
-        /// Unified method to end the current level as a loss.
-        /// Handles timer cleanup and GameController notification.
-        /// </summary>
-        private void LoseLevel()
-        {
-            if (!GameController.IsGameActive) return;
-
-            
-            GameController.OnLevelFailed();
-            AudioController.PlaySound(AudioController.AudioClips.levelFailed);
-        }
+        // ── Level events ──────────────────────────────────────────────────────
 
         public void OnMatchCompleted()
         {
             if (isCustomLevel) return;
+            if (levelRepresentation.Tiles.Count != 0 || !dock.IsEmpty) return;
 
-            if (levelRepresentation.Tiles.Count == 0 && dock.IsEmpty)
+            DisableSubsystems();
+
+            // Read score-target state from the active source (randomised or normal level)
+            bool hasScoreTarget = isEndlessMode
+                ? activeRandomisedResult?.HasScoreTarget ?? false
+                : level.ScoreTarget.Enabled;
+
+            int scoreTarget = isEndlessMode
+                ? activeRandomisedResult?.ScoreTarget ?? 0
+                : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
+
+            if (hasScoreTarget)
             {
-                DisableSubsystems();
-
-                // When in endless mode, read score-target state from the randomised
-                // result rather than from LevelData (which holds the source template).
-                bool hasScoreTarget = isEndlessMode
-                    ? (activeRandomisedResult != null && activeRandomisedResult.ScoreToggle.Enabled)
-                    : level.ScoreTarget.Enabled;
-
-                int scoreTarget = isEndlessMode && activeRandomisedResult != null
-                    ? activeRandomisedResult.ScoreToggle.Value
-                    : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
-
-                // If a score target exists, emptying the board does NOT automatically win —
-                // the score must be met. Winning via score is handled by OnScoreTargetReached.
-                if (hasScoreTarget)
-                {
-                    if (scoreDataModel.CurrentScore < scoreTarget)
-                    {
-                        LoseLevel();
-                    }
-                    // Score target not yet reached but board is empty: do nothing here —
-                    // OnScoreTargetReached will call WinLevel() if/when the target is met.
-                }
-                else
-                {
-                    // No score target — clearing the board wins the level.
-                    WinLevel();
-                }
+                // Board empty but score not yet met → lose
+                // Score-target win is handled by OnScoreTargetReached
+                if (scoreDataModel.CurrentScore < scoreTarget)
+                    LoseLevel();
+            }
+            else
+            {
+                WinLevel();
             }
         }
 
@@ -695,22 +515,179 @@ namespace Watermelon
             WinLevel();
         }
 
-        //helper method,to know when all matches are complete...
-        public static bool AreAllMatchesCompleted()
+        public static void OnTileSubmitted(TileBehavior tileBehavior)
         {
-            return LevelRepresentation != null && LevelRepresentation.Tiles.Count == 0 && Dock.IsEmpty;
+            if (!GameController.IsGameActive) return;
+
+            TileEffect effect = tileBehavior.Effect;
+            if (effect != null)
+                effect.OnTileSubmitted();
+
+            List<TileBehavior> activeTiles = levelRepresentation.Tiles;
+            foreach (TileBehavior tiles in activeTiles)
+            {
+                effect = tiles.Effect;
+                if (effect != null)
+                    effect.OnAnyTileSubmitted();
+            }
         }
 
-        
+        // ── Win / lose ────────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Unified method to complete the current level as a win.
+        /// </summary>
+        private void WinLevel()
+        {
+            if (!GameController.IsGameActive) return;
+            if (isCustomLevel) return;
+
+            RaycastController.Disable();
+
+            if (isEndlessMode)
+            {
+                levelSave.DisplayLevelIndex++;
+                levelSave.MaxReachedLevelIndex = database.AmountOfLevels - 1;
+                firstTimeCompletedLevel        = false;
+            }
+            else
+            {
+                levelSave.IsPlayingRandomLevel = false;
+                levelSave.DisplayLevelIndex++;
+
+                if (levelSave.DisplayLevelIndex > levelSave.MaxReachedLevelIndex)
+                {
+                    levelSave.MaxReachedLevelIndex = levelSave.DisplayLevelIndex;
+                    firstTimeCompletedLevel        = true;
+                }
+            }
+
+            SaveController.MarkAsSaveIsRequired();
+            GameController.OnLevelCompleted();
+            AudioController.PlaySound(AudioController.AudioClips.levelComplete);
+        }
+
+        /// <summary>
+        /// Unified method to end the current level as a loss.
+        /// </summary>
+        private void LoseLevel()
+        {
+            if (!GameController.IsGameActive) return;
+
+            GameController.OnLevelFailed();
+            AudioController.PlaySound(AudioController.AudioClips.levelFailed);
+        }
+
+        // ── Unload ────────────────────────────────────────────────────────────
+
+        public static void UnloadLevel()
+        {
+            PUController.ResetBehaviors();
+
+            if (levelRepresentation != null)
+            {
+                levelRepresentation.Clear();
+                levelRepresentation = null;
+            }
+
+            DisableSubsystems();
+            MusicManager.Instance.StopMusic();
+            instance.levelSpawnAnimation.Clear();
+            instance.dock.DisposeQuickly();
+            instance.dock.HideSlots();
+        }
+
+        public static void DisableSubsystems()
+        {
+            cardLogicController.DisableSelectionLoop(true);
+            GameplayTimer.Reset();
+            buffService?.ClearAllBuffs();
+            buffService?.UnsubscribeFromMatchResolved();
+            instance.scoreDataModel.StopAll();
+        }
+
+        // ── Tile helpers ──────────────────────────────────────────────────────
+
+        public static bool AreAllMatchesCompleted()
+            => LevelRepresentation != null && LevelRepresentation.Tiles.Count == 0 && Dock.IsEmpty;
 
         public static bool SubmitIsAllowed()
+            => !instance.dock.IsFilled;
+
+        public static void SubmitElement(TileBehavior tileBehavior)
         {
-            return !instance.dock.IsFilled;
+            tileBehavior.MarkAsSubmitted();
+            instance.dock.SubmitToSlot(tileBehavior, false);
+            levelRepresentation.RemoveObject(tileBehavior);
+            levelRepresentation.UpdateStates(true);
+        }
+
+        public static void SubmitElements(List<TileBehavior> tileBehaviors)
+        {
+            for (int i = 0; i < tileBehaviors.Count; i++)
+            {
+                var tileBehavior = tileBehaviors[i];
+                tileBehavior.MarkAsSubmitted();
+                instance.dock.SubmitToSlot(tileBehavior, false);
+                levelRepresentation.RemoveObject(tileBehavior);
+            }
+
+            levelRepresentation.UpdateStates(true);
+        }
+
+        public static void RevertElement(TileBehavior tileBehavior)
+        {
+            tileBehavior.ResetSubmitState();
+            levelRepresentation.AddObject(tileBehavior);
+            levelRepresentation.UpdateStates(true);
+        }
+
+        public static void RevertElements(List<TileBehavior> tileBehaviors)
+        {
+            foreach (TileBehavior tileBehavior in tileBehaviors)
+            {
+                tileBehavior.ResetSubmitState();
+                levelRepresentation.AddObject(tileBehavior);
+            }
+
+            levelRepresentation.UpdateStates(true);
+        }
+
+        public static bool ReturnTiles(int count, SimpleCallback callback)
+        {
+            List<TileBehavior> removedTiles = DockBehavior.RemoveObjects(count).ConvertAll((slotable) => (TileBehavior)slotable);
+            if (removedTiles.IsNullOrEmpty())
+            {
+                callback?.Invoke();
+                return false;
+            }
+
+            int revertedTiles = 0;
+            foreach (TileBehavior tile in removedTiles)
+            {
+                Vector3 returnPosition = LevelScaler.GetPosition(tile.ElementPosition);
+
+                Transform parentTransform = tile.transform.parent;
+                if (parentTransform != null)
+                    returnPosition = parentTransform.TransformPoint(returnPosition);
+
+                tile.SubmitMove(returnPosition, Vector3.one * LevelScaler.TileSize, () =>
+                {
+                    revertedTiles++;
+                    callback?.Invoke();
+                    tile.SetPosition(tile.ElementPosition);
+
+                    if (revertedTiles >= removedTiles.Count)
+                        RevertElements(removedTiles);
+                });
+            }
+
+            return true;
         }
 
         public static TileBehavior SpawnDockTile(int tileID)
         {
-            TileData tileData = Database.GetTile(tileID);
+            TileData        tileData        = Database.GetTile(tileID);
             ElementPosition elementPosition = new ElementPosition(-1, -1);
 
             TileBehavior tileBehavior = tileData.Pool.GetPooledObject().GetComponent<TileBehavior>();
@@ -724,52 +701,6 @@ namespace Watermelon
             return tileBehavior;
         }
 
-        public static void SubmitElement(TileBehavior tileBehavior)
-        {
-            tileBehavior.MarkAsSubmitted();
-
-            instance.dock.SubmitToSlot(tileBehavior, false);
-
-            levelRepresentation.RemoveObject(tileBehavior);
-            levelRepresentation.UpdateStates(true);
-        }
-
-        public static void RevertElement(TileBehavior tileBehavior)
-        {
-            tileBehavior.ResetSubmitState();
-
-            levelRepresentation.AddObject(tileBehavior);
-            levelRepresentation.UpdateStates(true);
-        }
-
-        public static void RevertElements(List<TileBehavior> tileBehaviors)
-        {
-            foreach (TileBehavior tileBehavior in tileBehaviors)
-            {
-                tileBehavior.ResetSubmitState();
-
-                levelRepresentation.AddObject(tileBehavior);
-            }
-
-            levelRepresentation.UpdateStates(true);
-        }
-
-        public static void SubmitElements(List<TileBehavior> tileBehaviors)
-        {
-            for (int i = 0; i < tileBehaviors.Count; i++)
-            {
-                var tileBehavior = tileBehaviors[i];
-
-                tileBehavior.MarkAsSubmitted();
-
-                instance.dock.SubmitToSlot(tileBehavior, false);
-
-                levelRepresentation.RemoveObject(tileBehavior);
-            }
-
-            levelRepresentation.UpdateStates(true);
-        }
-
         public static TileEffect GetTileEffect(TileEffectType tileEffectType)
         {
             if (effectsLink.ContainsKey(tileEffectType))
@@ -780,7 +711,7 @@ namespace Watermelon
 
         public static List<TileBehavior> GetActiveTiles(bool ignoreEffects)
         {
-            List<TileBehavior> tempTiles = new List<TileBehavior>();
+            List<TileBehavior> tempTiles   = new List<TileBehavior>();
             List<TileBehavior> activeTiles = levelRepresentation.Tiles;
 
             for (int i = 0; i < activeTiles.Count; i++)
@@ -790,9 +721,7 @@ namespace Watermelon
                     if (ignoreEffects)
                     {
                         if (activeTiles[i].Effect == null)
-                        {
                             tempTiles.Add(activeTiles[i]);
-                        }
                     }
                     else
                     {
@@ -806,15 +735,13 @@ namespace Watermelon
 
         public static List<TileBehavior> GetClickableTiles()
         {
-            List<TileBehavior> tempTiles = new List<TileBehavior>();
+            List<TileBehavior> tempTiles   = new List<TileBehavior>();
             List<TileBehavior> activeTiles = levelRepresentation.Tiles;
 
             for (int i = 0; i < activeTiles.Count; i++)
             {
                 if (!activeTiles[i].IsSubmitted && activeTiles[i].IsClickable)
-                {
                     tempTiles.Add(activeTiles[i]);
-                }
             }
 
             return tempTiles;
@@ -822,20 +749,17 @@ namespace Watermelon
 
         public static List<TileBehavior> GetTilesByType(TileData tileData, int amount = int.MaxValue)
         {
-            List<TileBehavior> tempTiles = new List<TileBehavior>();
+            List<TileBehavior> tempTiles   = new List<TileBehavior>();
             List<TileBehavior> activeTiles = levelRepresentation.Tiles;
 
             for (int i = 0; i < activeTiles.Count; i++)
             {
-                if (!activeTiles[i].IsSubmitted)
+                if (!activeTiles[i].IsSubmitted && activeTiles[i].TileData == tileData)
                 {
-                    if (activeTiles[i].TileData == tileData)
-                    {
-                        tempTiles.Add(activeTiles[i]);
+                    tempTiles.Add(activeTiles[i]);
 
-                        if (tempTiles.Count >= amount)
-                            break;
-                    }
+                    if (tempTiles.Count >= amount)
+                        break;
                 }
             }
 
@@ -846,13 +770,18 @@ namespace Watermelon
         {
             List<TileBehavior> neighbourTiles = new List<TileBehavior>();
 
-            ElementPosition[] neighbourPositions = new ElementPosition[] { elementPosition.UpNeighbourPos, elementPosition.RightNeighbourPos, elementPosition.BottomNeighbourPos, elementPosition.LeftNeighbourPos };
-            for(int i = 0; i < neighbourPositions.Length; i++)
+            ElementPosition[] neighbourPositions = new ElementPosition[]
             {
-                if(levelRepresentation.IsTileExists(neighbourPositions[i]))
-                {
+                elementPosition.UpNeighbourPos,
+                elementPosition.RightNeighbourPos,
+                elementPosition.BottomNeighbourPos,
+                elementPosition.LeftNeighbourPos
+            };
+
+            for (int i = 0; i < neighbourPositions.Length; i++)
+            {
+                if (levelRepresentation.IsTileExists(neighbourPositions[i]))
                     neighbourTiles.Add(levelRepresentation.Layers[neighbourPositions[i]].Tile);
-                }
             }
 
             return neighbourTiles;
@@ -861,91 +790,37 @@ namespace Watermelon
         public static TileBehavior GetTile(ElementPosition elementPosition)
         {
             if (levelRepresentation.IsTileExists(elementPosition))
-            {
                 return levelRepresentation.Layers[elementPosition].Tile;
-            }
 
             return null;
         }
 
         public static bool HasNeighbourTiles(ElementPosition elementPosition)
         {
-            ElementPosition[] neighbourPositions = new ElementPosition[] { elementPosition.UpNeighbourPos, elementPosition.RightNeighbourPos, elementPosition.BottomNeighbourPos, elementPosition.LeftNeighbourPos };
+            ElementPosition[] neighbourPositions = new ElementPosition[]
+            {
+                elementPosition.UpNeighbourPos,
+                elementPosition.RightNeighbourPos,
+                elementPosition.BottomNeighbourPos,
+                elementPosition.LeftNeighbourPos
+            };
+
             for (int i = 0; i < neighbourPositions.Length; i++)
             {
                 if (levelRepresentation.IsTileExists(neighbourPositions[i]))
-                {
                     return true;
-                }
             }
 
             return false;
         }
 
-        private static int GetCurrentLevelReward()
-        {
-            if (Level != null)
-            {
-                if (firstTimeCompletedLevel)
-                {
-                    return level.CoinsReward;
-                }
-                else
-                {
-                    return (int)(level.CoinsReward * 0.25f);
-                }
-            }
-
-            return 5;
-        }
-
-        public static bool ReturnTiles(int count, SimpleCallback callback)
-        {
-            List<TileBehavior> removedTiles = DockBehavior.RemoveObjects(count).ConvertAll((slotable) => (TileBehavior)slotable);
-            if (removedTiles.IsNullOrEmpty())
-            {
-                callback?.Invoke();
-                return false;
-            } 
-
-            int revertedTiles = 0;
-            foreach (TileBehavior tile in removedTiles)
-            {
-                Vector3 returnPosition = LevelScaler.GetPosition(tile.ElementPosition);
-
-                Transform parentTransform = tile.transform.parent;
-                if (parentTransform != null)
-                {
-                    returnPosition = parentTransform.TransformPoint(returnPosition);
-                }
-
-                tile.SubmitMove(returnPosition, Vector3.one * LevelScaler.TileSize, () =>
-                {
-                    revertedTiles++;
-
-                    callback?.Invoke();
-
-                    tile.SetPosition(tile.ElementPosition);
-
-                    if (revertedTiles >= removedTiles.Count)
-                    {
-                        RevertElements(removedTiles);
-                    }
-                });
-            }
-
-            return true;
-        }
-
         public static bool IsLevelCompletable()
         {
             List<TileBehavior> tiles = levelRepresentation.Tiles;
-            foreach(TileBehavior tile in tiles)
+            foreach (TileBehavior tile in tiles)
             {
                 if (tile.IsClickable)
-                {
                     return true;
-                }
             }
 
             return false;
@@ -964,8 +839,17 @@ namespace Watermelon
         public static void Revive()
         {
             RaycastController.Enable();
-
             ReturnTiles(3, null);
+        }
+
+        // ── Private helpers ───────────────────────────────────────────────────
+
+        private static int GetCurrentLevelReward()
+        {
+            if (Level != null)
+                return firstTimeCompletedLevel ? level.CoinsReward : (int)(level.CoinsReward * 0.25f);
+
+            return 5;
         }
     }
 }

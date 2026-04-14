@@ -9,215 +9,118 @@ namespace Watermelon
     /// Configuration asset for the endless randomised levels that play after all
     /// hand-crafted levels have been completed.
     ///
-    /// At runtime, call <see cref="Randomise"/> to generate a
-    /// <see cref="RandomisedLevelResult"/> that describes a fully-configured level
-    /// ready to be loaded by <see cref="LevelController"/>.
+    /// Gameplay flags (cards, timer, score) are rolled independently, so any
+    /// combination is possible — mirroring how <see cref="LevelData"/> composes
+    /// them.  Decks layer in the same order as the hand-crafted path:
+    ///   1. Default deck  — applied whenever cards are on.
+    ///   2. Timer deck    — applied on top when a timer is active.
+    ///   3. Score deck    — applied on top when a score target is active.
+    ///
+    /// Call <see cref="Randomise"/> at runtime to produce a
+    /// <see cref="RandomisedLevelResult"/> ready to be consumed by
+    /// <see cref="LevelController"/>.
     /// </summary>
     [CreateAssetMenu(
         menuName = "Content/Level Database/Randomised Level Config",
         fileName = "Randomised Level Config")]
     public class RandomisedLevelData : ScriptableObject
     {
+        // ── Independent feature weights ───────────────────────────────────────
+        // Each flag is rolled separately so all eight combinations are reachable
+        // (Regular / Cards / Timer / Score / Timer+Cards / Score+Cards /
+        //  Timer+Score / Timer+Score+Cards).
 
-        // ------------------------------------------------------------------ //
-        //  Gameplay-mode probabilities
-        // ------------------------------------------------------------------ //
+        [Header("Feature Weights  (0 = never, higher = more likely)")]
+        [Tooltip("Weight for the level NOT using cards (relative to weightCards).")]
+        [SerializeField, Min(0)] private int weightNoCards = 3;
+        [Tooltip("Weight for the level using cards.")]
+        [SerializeField, Min(0)] private int weightCards   = 1;
 
-        [Header("Mode Weights  (0 = never, higher = more likely)")]
-        [SerializeField, Min(0)] private int weightRegular     = 4;
-        [SerializeField, Min(0)] private int weightTimer       = 2;
-        [SerializeField, Min(0)] private int weightScore       = 2;
-        [SerializeField, Min(0)] private int weightCards       = 1;
-        [SerializeField, Min(0)] private int weightTimerCards  = 1;
-        [SerializeField, Min(0)] private int weightScoreCards  = 1;
+        [Tooltip("Weight for the level NOT having a countdown timer (relative to weightTimer).")]
+        [SerializeField, Min(0)] private int weightNoTimer = 2;
+        [Tooltip("Weight for the level having a countdown timer.")]
+        [SerializeField, Min(0)] private int weightTimer   = 1;
 
-        // ------------------------------------------------------------------ //
-        //  Card deck pools  (one list per mode that involves cards)
-        // ------------------------------------------------------------------ //
+        [Tooltip("Weight for the level NOT having a score target (relative to weightScore).")]
+        [SerializeField, Min(0)] private int weightNoScore = 2;
+        [Tooltip("Weight for the level having a score target.")]
+        [SerializeField, Min(0)] private int weightScore   = 1;
+
+        // ── Card deck pools ───────────────────────────────────────────────────
+        // Three pools matching the three layers of LevelData's deck system.
 
         [Header("Card Deck Pools")]
+        [Tooltip("Base deck applied whenever cards are active (any mode with cards).")]
+        [SerializeField] private List<CardDeckSO> defaultDecks = new();
 
-        [Tooltip("Decks used when the randomised level is in Regular-Cards mode.")]
-        [SerializeField] private List<CardDeckSO> cardsDecks = new List<CardDeckSO>();
+        [Tooltip("Deck applied on top of the default when a timer is active.")]
+        [SerializeField] private List<CardDeckSO> timerDecks   = new();
 
-        [Tooltip("Decks used when the randomised level is in Timer mode (no cards).")]
-        [SerializeField] private List<CardDeckSO> timerDecks = new List<CardDeckSO>();
+        [Tooltip("Deck applied on top of the default when a score target is active.")]
+        [SerializeField] private List<CardDeckSO> scoreDecks   = new();
 
-        [Tooltip("Decks used when the randomised level is in Score mode (no cards).")]
-        [SerializeField] private List<CardDeckSO> scoreDecks = new List<CardDeckSO>();
-
-        [Tooltip("Decks used when the randomised level is in Timer+Cards mode.")]
-        [SerializeField] private List<CardDeckSO> timerCardsDecks = new List<CardDeckSO>();
-
-        [Tooltip("Decks used when the randomised level is in Score+Cards mode.")]
-        [SerializeField] private List<CardDeckSO> scoreCardsDecks = new List<CardDeckSO>();
-
-        // ------------------------------------------------------------------ //
-        //  Timer randomisation
-        // ------------------------------------------------------------------ //
+        // ── Scaling ranges ────────────────────────────────────────────────────
 
         [Header("Timer Randomisation")]
-        [Tooltip("The timer value (in seconds) is calculated as:\n" +
-                 "  Random.Range(min, max+1)  *  totalTilesInLevel\n" +
-                 "This gives more time to larger levels automatically.")]
-        [SerializeField] private Vector2Int timerSecondsPerTileRange = new Vector2Int(3, 6);
-
-        // ------------------------------------------------------------------ //
-        //  Score-target randomisation
-        // ------------------------------------------------------------------ //
+        [Tooltip("Timer (seconds) = Random.Range(min, max+1) * totalTilesInLevel")]
+        [SerializeField] private Vector2Int timerSecondsPerTileRange = new(3, 6);
 
         [Header("Score Target Randomisation")]
-        [Tooltip("The score target is calculated as:\n" +
-                 "  Random.Range(min, max+1)  *  totalTilesInLevel\n" +
-                 "Tune these so the target feels reachable but challenging.")]
-        [SerializeField] private Vector2Int scorePerTileRange = new Vector2Int(10, 25);
+        [Tooltip("Score target = Random.Range(min, max+1) * totalTilesInLevel")]
+        [SerializeField] private Vector2Int scorePerTileRange = new(10, 25);
 
-        // ------------------------------------------------------------------ //
-        //  Layer structure randomisation
-        // ------------------------------------------------------------------ //
-
-        [Header("Layer Count Randomisation")]
-        [SerializeField] private Vector2Int layerCountRange = new Vector2Int(2, 5);
-
-        [Header("Elements Per Level Randomisation")]
-        [SerializeField] private Vector2Int elementsPerLevelRange = new Vector2Int(6, 12);
-
-        // ------------------------------------------------------------------ //
-        //  Public API
-        // ------------------------------------------------------------------ //
+        // ── Public API ────────────────────────────────────────────────────────
 
         /// <summary>
-        /// Picks a random gameplay mode and builds all configuration needed to
-        /// load a randomised level.  The caller is responsible for sourcing the
-        /// actual <see cref="LevelData"/> layers from the database.
+        /// Independently rolls each gameplay feature flag, then builds a fully-
+        /// configured <see cref="RandomisedLevelResult"/> for
+        /// <paramref name="sourceLevelData"/>.
         /// </summary>
-        /// <param name="database">The game's level database (used for fallback tile list).</param>
-        /// <param name="sourceLevelData">
-        ///   The <see cref="LevelData"/> whose layer geometry will be reused.
-        ///   A random level from the database is chosen externally and passed in.
-        /// </param>
-        /// <returns>A fully populated <see cref="RandomisedLevelResult"/>.</returns>
-        public RandomisedLevelResult Randomise(LevelDatabase database, LevelData sourceLevelData)
+        public RandomisedLevelResult Randomise(LevelData sourceLevelData)
         {
-            // --- Pick gameplay mode via weighted random ---
-            LevelPlaylistType mode = PickMode();
+            bool usesCards = RollFeature(weightCards, weightNoCards);
+            bool usesTimer = RollFeature(weightTimer, weightNoTimer);
+            bool usesScore = RollFeature(weightScore, weightNoScore);
 
-            bool usesCards  = mode == LevelPlaylistType.RegularCards
-                           || mode == LevelPlaylistType.TimerCards
-                           || mode == LevelPlaylistType.ScoreCards;
+            int tileCount = Mathf.Max(1, sourceLevelData.GetAmountOfFilledCells());
 
-            bool usesTimer  = mode == LevelPlaylistType.Timer
-                           || mode == LevelPlaylistType.TimerCards;
+            int? timerSeconds = usesTimer
+                ? Random.Range(timerSecondsPerTileRange.x, timerSecondsPerTileRange.y + 1) * tileCount
+                : null;
 
-            bool usesScore  = mode == LevelPlaylistType.Score
-                           || mode == LevelPlaylistType.ScoreCards;
-
-            // --- Layer count ---
-            int layerCount = Random.Range(layerCountRange.x, layerCountRange.y + 1);
-
-            // --- Elements per level ---
-            int elementsPerLevel = Random.Range(elementsPerLevelRange.x, elementsPerLevelRange.y + 1);
-
-            // --- Tile pool ---
-            TileData[] tilePool = database.Tiles;
-
-            // Rough tile count estimate: use source level's filled cell count as a proxy.
-            int estimatedTileCount = Mathf.Max(1, sourceLevelData.GetAmountOfFilledCells());
-
-            // --- Timer ---
-            // CompositeToggle only has a (bool, TValue) constructor in this project,
-            // so we use that and supply the deck list separately via RandomisedLevelResult.
-            CompositeToggle<int, CardDeckSO> timerToggle;
-            List<CardDeckSO> timerDeckList = new List<CardDeckSO>();
-            if (usesTimer)
-            {
-                int multiplier = Random.Range(timerSecondsPerTileRange.x, timerSecondsPerTileRange.y + 1);
-                int timerValue = multiplier * estimatedTileCount;
-                timerToggle    = new CompositeToggle<int, CardDeckSO>(true, timerValue);
-                timerDeckList  = PickDecksForMode(mode);
-            }
-            else
-            {
-                timerToggle = new CompositeToggle<int, CardDeckSO>(false, 60);
-            }
-
-            // --- Score target ---
-            CompositeToggle<int, CardDeckSO> scoreToggle;
-            List<CardDeckSO> scoreDeckList = new List<CardDeckSO>();
-            if (usesScore)
-            {
-                int multiplier = Random.Range(scorePerTileRange.x, scorePerTileRange.y + 1);
-                int scoreValue = multiplier * estimatedTileCount;
-                scoreToggle    = new CompositeToggle<int, CardDeckSO>(true, scoreValue);
-                scoreDeckList  = PickDecksForMode(mode);
-            }
-            else
-            {
-                scoreToggle = new CompositeToggle<int, CardDeckSO>(false, 1000);
-            }
-
-            // --- Card deck (cards-only mode) ---
-            List<CardDeckSO> cardDeckList = new List<CardDeckSO>();
-            if (usesCards && mode == LevelPlaylistType.RegularCards)
-            {
-                cardDeckList = PickDecksForMode(mode);
-            }
+            int? scoreTarget = usesScore
+                ? Random.Range(scorePerTileRange.x, scorePerTileRange.y + 1) * tileCount
+                : null;
 
             return new RandomisedLevelResult(
-                sourceLevelData:  sourceLevelData,
-                tilePool:         tilePool,
-                elementsPerLevel: elementsPerLevel,
-                layerCount:       layerCount,
-                usesCards:        usesCards,
-                timerToggle:      timerToggle,
-                timerDeckList:    timerDeckList,
-                scoreToggle:      scoreToggle,
-                scoreDeckList:    scoreDeckList,
-                cardDeckList:     cardDeckList,
-                playlistType:     mode
-            );
+                sourceLevelData: sourceLevelData,
+                usesCards:       usesCards,
+                defaultDeckList: usesCards ? PickDeck(defaultDecks) : new(),
+                timerSeconds:    timerSeconds,
+                timerDeckList:   usesTimer  ? PickDeck(timerDecks)  : new(),
+                scoreTarget:     scoreTarget,
+                scoreDeckList:   usesScore  ? PickDeck(scoreDecks)  : new());
         }
 
-        // ------------------------------------------------------------------ //
-        //  Private helpers
-        // ------------------------------------------------------------------ //
+        // ── Helpers ───────────────────────────────────────────────────────────
 
-        private LevelPlaylistType PickMode()
+        /// <summary>
+        /// Returns true with probability <c>weightOn / (weightOn + weightOff)</c>.
+        /// Falls back to false when both weights are zero.
+        /// </summary>
+        private static bool RollFeature(int weightOn, int weightOff)
         {
-            int total = weightRegular + weightTimer + weightScore
-                      + weightCards  + weightTimerCards + weightScoreCards;
-
-            if (total <= 0)
-                return LevelPlaylistType.Regular;
-
-            int roll = Random.Range(0, total);
-
-            if ((roll -= weightRegular)    <  0) return LevelPlaylistType.Regular;
-            if ((roll -= weightTimer)      <  0) return LevelPlaylistType.Timer;
-            if ((roll -= weightScore)      <  0) return LevelPlaylistType.Score;
-            if ((roll -= weightCards)      <  0) return LevelPlaylistType.RegularCards;
-            if ((roll -= weightTimerCards) <  0) return LevelPlaylistType.TimerCards;
-            /* weightScoreCards */               return LevelPlaylistType.ScoreCards;
+            int total = weightOn + weightOff;
+            return total > 0 && Random.Range(0, total) < weightOn;
         }
 
-        private List<CardDeckSO> PickDecksForMode(LevelPlaylistType mode)
-        {
-            List<CardDeckSO> pool = mode switch
-            {
-                LevelPlaylistType.Timer       => timerDecks,
-                LevelPlaylistType.Score       => scoreDecks,
-                LevelPlaylistType.RegularCards => cardsDecks,
-                LevelPlaylistType.TimerCards  => timerCardsDecks,
-                LevelPlaylistType.ScoreCards  => scoreCardsDecks,
-                _                             => new List<CardDeckSO>()
-            };
-
-            if (pool == null || pool.Count == 0)
-                return new List<CardDeckSO>();
-
-            // Return a single randomly-chosen deck from the appropriate pool
-            int index = Random.Range(0, pool.Count);
-            return new List<CardDeckSO> { pool[index] };
-        }
+        /// <summary>
+        /// Returns a single randomly-chosen deck from <paramref name="pool"/>,
+        /// or an empty list if the pool is null or empty.
+        /// </summary>
+        private static List<CardDeckSO> PickDeck(List<CardDeckSO> pool)
+            => pool is { Count: > 0 }
+                ? new List<CardDeckSO> { pool[Random.Range(0, pool.Count)] }
+                : new List<CardDeckSO>();
     }
 }

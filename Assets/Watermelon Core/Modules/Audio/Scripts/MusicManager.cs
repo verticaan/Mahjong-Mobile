@@ -97,20 +97,14 @@ namespace Watermelon
         /// Finds the playlist matching the level's <see cref="LevelPlaylistType"/>
         /// and begins playback of a random looping track.
         /// </summary>
-        public void PlayForLevel(LevelData levelData)
+        public void PlayForLevel(LevelPlaylistType levelMusic)
         {
-            if (levelData == null)
-            {
-                Debug.LogWarning("[MusicManager] PlayForLevel called with null LevelData.");
-                return;
-            }
-
-            MusicPlaylist chosen = GetPlaylist(levelData.PlaylistType);
+            MusicPlaylist chosen = GetPlaylist(levelMusic);
 
             if (chosen == null)
             {
                 Debug.LogWarning($"[MusicManager] No playlist found for type " +
-                                 $"'{levelData.PlaylistType}' — using fallback.");
+                                 $"'{levelMusic}' — using fallback.");
                 chosen = fallbackPlaylist;
             }
 
