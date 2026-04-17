@@ -27,7 +27,7 @@ namespace Watermelon
         [SerializeField, LevelEditorSetting] int coinsReward = 20;
         public int CoinsReward => coinsReward;
 
-        [SerializeField, LevelEditorSetting] string editorNote; // used only in level editor
+        [SerializeField, LevelEditorSetting] string editorNote;
 
         [SerializeField]
         private IntToggle nonDefaultStartingSlots;
@@ -41,30 +41,22 @@ namespace Watermelon
         private bool overrideDefaultDeck = false;
         public bool OverrideDefaultDeck => overrideDefaultDeck;
         
-        
         [SerializeField]
-        private CompositeToggle<int,CardDeckSO> gameplayTimer = new CompositeToggle<int,CardDeckSO>(false,60);
-        public CompositeToggle<int,CardDeckSO> GameplayTimer => gameplayTimer;
+        private CompositeToggle<int, CardDeckSO> gameplayTimer = new CompositeToggle<int, CardDeckSO>(false, 60);
+        public CompositeToggle<int, CardDeckSO> GameplayTimer => gameplayTimer;
         
         [SerializeField] 
-        private CompositeToggle<int,CardDeckSO> scoreTarget = new CompositeToggle<int,CardDeckSO>(false, 1000);
-        public CompositeToggle<int,CardDeckSO> ScoreTarget => scoreTarget;
+        private CompositeToggle<int, CardDeckSO> scoreTarget = new CompositeToggle<int, CardDeckSO>(false, 1000);
+        public CompositeToggle<int, CardDeckSO> ScoreTarget => scoreTarget;
         
-        /*
-        [Header("Music")]
-        [Tooltip("Determines which playlist the MusicManager will use for this level.")]
-        [SerializeField] private LevelPlaylistType playlistType = LevelPlaylistType.Regular;
-        public LevelPlaylistType PlaylistType => playlistType;
-    */
         [Header("Music")]
         [Tooltip("When enabled, uses the selected playlist type instead of the auto-detected one.")]
         [SerializeField] private ToggleType<LevelPlaylistType> playlistOverride =
             new ToggleType<LevelPlaylistType>(false, LevelPlaylistType.Regular);
 
         /// <summary>
-        /// The playlist type that will be used by MusicManager for this level.
-        /// Returns the override value when the override is enabled, otherwise
-        /// derives the type automatically from the level's gameplay toggles.
+        /// The playlist type used by MusicManager for this level.
+        /// Returns the override value when enabled, otherwise auto-detects from gameplay toggles.
         /// </summary>
         public LevelPlaylistType PlaylistType => playlistOverride.Enabled
             ? playlistOverride.Value
@@ -77,10 +69,10 @@ namespace Watermelon
             bool hasCards = usesCards;
 
             if (hasTimer && hasCards) return LevelPlaylistType.TimerCards;
-            if (hasTimer) return LevelPlaylistType.Timer;
+            if (hasTimer)             return LevelPlaylistType.Timer;
             if (hasScore && hasCards) return LevelPlaylistType.ScoreCards;
-            if (hasScore) return LevelPlaylistType.Score;
-            if (hasCards) return LevelPlaylistType.RegularCards;
+            if (hasScore)             return LevelPlaylistType.Score;
+            if (hasCards)             return LevelPlaylistType.RegularCards;
 
             return LevelPlaylistType.Regular;
         }
@@ -91,20 +83,29 @@ namespace Watermelon
         public Layer GetLayer(int i)
         {
             if (i < AmountOfLayers && i >= 0) return layers[i];
-
             return null;
         }
 
         public int GetAmountOfFilledCells()
         {
             int counter = 0;
-
             for (int i = 0; i < AmountOfLayers; i++)
             {
                 counter += layers[i].GetAmountOfFilledCells();
             }
-
             return counter;
+        }
+
+        /// <summary>
+        /// Populates this instance's layer geometry and dimensions from code.
+        /// Only called by <see cref="LevelController.StripEffects"/> on a transient
+        /// <see cref="ScriptableObject.CreateInstance"/> copy — never on saved assets.
+        /// </summary>
+        public void InitFromLayers(Layer[] sourceLayers, int width, int height)
+        {
+            layers            = sourceLayers;
+            bottomLayerWidth  = width;
+            bottomLayerHeight = height;
         }
     }
 }

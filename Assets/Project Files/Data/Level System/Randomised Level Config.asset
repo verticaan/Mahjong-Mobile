@@ -12,18 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e815bfd5bada77479dad5457160240c, type: 3}
   m_Name: Randomised Level Config
   m_EditorClassIdentifier: 
-  weightRegular: 2
-  weightTimer: 2
-  weightScore: 2
+  weightNoCards: 3
   weightCards: 1
-  weightTimerCards: 1
-  weightScoreCards: 1
-  cardsDecks: []
-  timerDecks: []
-  scoreDecks: []
-  timerCardsDecks: []
-  scoreCardsDecks: []
+  weightNoTimer: 2
+  weightTimer: 2
+  weightNoScore: 2
+  weightScore: 2
+  defaultDecks:
+  - {fileID: 11400000, guid: 0db73b7d9a49a6d47a214411a1b2646b, type: 2}
+  timerDecks:
+  - {fileID: 11400000, guid: 6174eee4482e369479cee38090c096c6, type: 2}
+  scoreDecks:
+  - {fileID: 11400000, guid: f09ac799e7822e545a5fbac49162753d, type: 2}
   timerSecondsPerTileRange: {x: 3, y: 6}
   scorePerTileRange: {x: 10, y: 25}
-  layerCountRange: {x: 2, y: 5}
-  elementsPerLevelRange: {x: 6, y: 12}

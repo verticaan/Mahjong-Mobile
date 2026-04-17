@@ -334,8 +334,9 @@ namespace Watermelon
 
             ApplyGameplayConfig(activeRandomisedResult);
 
-            TileData[] availableObjects = database.AvailableForLevel(sourceLevelData);
-            levelRepresentation = new LevelRepresentation(sourceLevelData, layersParentObject);
+            TileData[] availableObjects  = database.AvailableForLevel(sourceLevelData);
+            LevelData  strippedLevelData = StripEffects(sourceLevelData);
+            levelRepresentation = new LevelRepresentation(strippedLevelData, layersParentObject);
             levelRepresentation.SpawnObjects(availableObjects);
 
             RaycastController.Disable();
@@ -843,6 +844,56 @@ namespace Watermelon
         }
 
         // ── Private helpers ───────────────────────────────────────────────────
+
+        /// <summary>
+        /// Returns a transient runtime-only copy of <paramref name="source"/> with
+        /// every cell's <see cref="CellData.Effect"/> cleared to
+        /// <see cref="TileEffectType.None"/>.
+        ///
+        /// Used by <see cref="LoadRandomisedLevel"/> so that the board geometry is
+        /// reused as-is, but hand-crafted tile effects do not carry over into
+        /// procedurally-generated levels. The copy is a plain
+        /// <see cref="ScriptableObject.CreateInstance"/> and is never saved to disk;
+        /// it will be garbage-collected when the level unloads.
+        /// </summary>
+        private static LevelData StripEffects(LevelData source)
+        {
+            LevelData copy = ScriptableObject.CreateInstance<LevelData>();
+
+            int layerCount = source.AmountOfLayers;
+            var layers     = new Layer[layerCount];
+
+            for (int l = 0; l < layerCount; l++)
+            {
+                Layer sourceLayer = source.GetLayer(l);
+                int   rowCount    = sourceLayer.AmountOfRows;
+                var   rows        = new LayerRow[rowCount];
+
+                for (int r = 0; r < rowCount; r++)
+                {
+                    LayerRow sourceRow  = sourceLayer.GetRow(r);
+                    int      cellCount  = sourceRow.AmountOfCells;
+                    var      cells      = new CellData[cellCount];
+
+                    for (int c = 0; c < cellCount; c++)
+                    {
+                        CellData sourceCell = sourceRow.GetCell(c);
+                        cells[c] = new CellData
+                        {
+                            IsFilled = sourceCell.IsFilled,
+                            Effect   = TileEffectType.None   // strip effect
+                        };
+                    }
+
+                    rows[r] = new LayerRow(cells);
+                }
+
+                layers[l] = new Layer(rows);
+            }
+
+            copy.InitFromLayers(layers, source.BottomLayerWidth, source.BottomLayerHeight);
+            return copy;
+        }
 
         private static int GetCurrentLevelReward()
         {
