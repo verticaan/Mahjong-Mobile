@@ -84,19 +84,19 @@ namespace Watermelon
             if (!watchedRV) return;
 
             GameController.Revive();
-
             UIController.HidePage<UIGameOver>();
+            LevelController.ResumeSubsystems();
             UIController.ShowPage<UIGame>();
         }
 
         private void ReplayButton()
         {
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
-
+            
             if (LivesSystem.Lives > 0 || LivesSystem.InfiniteMode)
             {
                 UIController.HidePage<UIGameOver>();
-
+                LevelController.ResetSubsystems();
                 GameController.ReplayLevel();
             }
             else
@@ -108,7 +108,7 @@ namespace Watermelon
         private void MenuButton()
         {
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
-
+            LevelController.ResetSubsystems();
             UIController.HidePage<UIGameOver>(() =>
             {
                 GameController.ReturnToMenu();

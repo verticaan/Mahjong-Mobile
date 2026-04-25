@@ -473,8 +473,6 @@ namespace Watermelon
             if (isCustomLevel) return;
             if (levelRepresentation.Tiles.Count != 0 || !dock.IsEmpty) return;
 
-            DisableSubsystems();
-
             // Read score-target state from the active source (randomised or normal level)
             bool hasScoreTarget = isEndlessMode
                 ? activeRandomisedResult?.HasScoreTarget ?? false
@@ -499,20 +497,17 @@ namespace Watermelon
 
         public void OnSlotsFilled()
         {
-            DisableSubsystems();
             LoseLevel();
         }
 
         private void OnTimerFinished()
         {
-            DisableSubsystems();
             LoseLevel();
         }
 
         private void OnScoreTargetReached()
         {
             Debug.Log("OnScoreTargetReached");
-            DisableSubsystems();
             WinLevel();
         }
 
@@ -564,6 +559,7 @@ namespace Watermelon
             }
 
             SaveController.MarkAsSaveIsRequired();
+            ResetSubsystems();
             GameController.OnLevelCompleted();
             AudioController.PlaySound(AudioController.AudioClips.levelComplete);
         }
@@ -574,7 +570,7 @@ namespace Watermelon
         private void LoseLevel()
         {
             if (!GameController.IsGameActive) return;
-
+            PauseSubsystems();
             GameController.OnLevelFailed();
             AudioController.PlaySound(AudioController.AudioClips.levelFailed);
         }
@@ -591,20 +587,37 @@ namespace Watermelon
                 levelRepresentation = null;
             }
 
-            DisableSubsystems();
+            ResetSubsystems();
             MusicManager.Instance.StopMusic();
             instance.levelSpawnAnimation.Clear();
             instance.dock.DisposeQuickly();
             instance.dock.HideSlots();
         }
 
-        public static void DisableSubsystems()
+        public static void ResetSubsystems()
         {
             cardLogicController.DisableSelectionLoop(true);
             GameplayTimer.Reset();
             buffService?.ClearAllBuffs();
             buffService?.UnsubscribeFromMatchResolved();
-            instance.scoreDataModel.StopAll();
+            ScoreDataModel.StopAll();
+        }
+
+        public static void ResumeSubsystems()
+        {
+            GameplayTimer.Resume();
+            ScoreDataModel.ResumeComboTimer();
+        }
+        
+        public static void PauseSubsystems()
+        {
+            GameplayTimer.Pause();
+            ScoreDataModel.PauseComboTimer();
+        }
+        
+        public static void DisableSubsystems()
+        {
+            
         }
 
         // ── Tile helpers ──────────────────────────────────────────────────────
