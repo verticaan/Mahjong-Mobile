@@ -22,8 +22,9 @@ MonoBehaviour:
   qualityValue: 35
   activeEffects:
   - rid: 4491945106977062996
-  - rid: 4491945106977062997
-  buffEffects: []
+  - rid: 8345400508948414481
+  buffEffects:
+  - rid: 8345400508948414485
   references:
     version: 2
     RefIds:
@@ -33,9 +34,23 @@ MonoBehaviour:
         ChangeGameplayTimerTime:
           enabled: 1
           value: -20
-    - rid: 4491945106977062997
-      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
+    - rid: 8345400508948414481
+      type: {class: ManipulatePowerupsActive, ns: Watermelon, asm: Assembly-CSharp}
       data:
-        ChangeSlotCount:
+        DisablePowerupUse: 1
+    - rid: 8345400508948414485
+      type: {class: ManipulateGameplayTimerBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 1
+            value: 7
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 1
+        CanStackEffect: 0
+        AddTickSpeedMultiplier:
           enabled: 1
-          value: 1
+          value: -0.8
+        PauseGamePlayTimer: 0

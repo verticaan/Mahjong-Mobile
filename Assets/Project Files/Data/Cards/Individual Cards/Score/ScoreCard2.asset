@@ -20,7 +20,8 @@ MonoBehaviour:
   titleText: Sotto Voce
   descriptionText: -2 score per Stave, +1 to Stave for 4 turns.
   qualityValue: 25
-  activeEffects: []
+  activeEffects:
+  - rid: 8345400508948414467
   buffEffects:
   - rid: 4491945106977062987
   - rid: 4491945228975734858
@@ -60,3 +61,10 @@ MonoBehaviour:
         ChangeSlotCount:
           enabled: 1
           value: 1
+    - rid: 8345400508948414467
+      type: {class: ManipulateCardSystemActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RedrawHand: 0
+        ChangePlayerQualityBy:
+          enabled: 1
+          value: 10

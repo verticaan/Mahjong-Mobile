@@ -33,6 +33,10 @@ namespace Watermelon
 
         public event SimpleCallback OnScoreTargetReached;
 
+        public event Action<int> OnScoreAdded;
+
+        //public event Action OnScoreVisualApplied;
+
         /// <summary>
         /// Fired when a combo round ends because the combo timer reached zero.
         /// </summary>
@@ -359,10 +363,21 @@ namespace Watermelon
         public void AddRawScorePerSlot(int slotCount)
         {
             if (IsInactiveForScoring || !IsTimerRunning) return;
+            int addedScore = slotCount * PerSlotValueEffective;
             rawScore = Mathf.Max(0, rawScore + slotCount * PerSlotValueEffective);
+
+            OnScoreAdded?.Invoke(addedScore);
             UpdateCurrentScore();
             RefreshUI();
         }
+
+        //public void ApplyScoreToUI()
+        //{
+        //    if (IsInactiveForScoring) return;
+
+        //    RefreshUI();
+        //    OnScoreVisualApplied?.Invoke();
+        //}
 
         public void ChangeRawScoreDirect(int value)
         {
@@ -573,6 +588,8 @@ namespace Watermelon
             public float TickDeltaSeconds  { get; private set; }
 
             public event SimpleCallback OnFinished;
+
+          
 
             private readonly List<float> tickSpeedMultipliers = new();
             private bool finishedInvoked;

@@ -20,7 +20,8 @@ MonoBehaviour:
   titleText: CANON
   descriptionText: +1 from Stave but Pauses Timer While active
   qualityValue: 40
-  activeEffects: []
+  activeEffects:
+  - rid: 8345400508948414475
   buffEffects:
   - rid: 4491945106977062998
   - rid: 4491945228975734857
@@ -58,3 +59,9 @@ MonoBehaviour:
         ChangeSlotCount:
           enabled: 1
           value: 1
+    - rid: 8345400508948414475
+      type: {class: ManipulateGameplayTimerActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeGameplayTimerTime:
+          enabled: 1
+          value: -30

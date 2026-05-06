@@ -27,6 +27,7 @@ MonoBehaviour:
   - rid: 2064241211670790165
   buffEffects:
   - rid: 2064241211670790162
+  - rid: 8345400508948414489
   - rid: 2064241211670790166
   references:
     version: 2
@@ -48,8 +49,8 @@ MonoBehaviour:
           activeForTime:
             enabled: 0
             value: 15
-        CanStackDuration: 0
-        CanStackEffect: 0
+        CanStackDuration: 1
+        CanStackEffect: 1
         AddTickSpeedMultiplier:
           enabled: 1
           value: 1.75
@@ -84,3 +85,19 @@ MonoBehaviour:
         CanStackDuration: 0
         CanStackEffect: 0
         DisablePowerupUse: 1
+    - rid: 8345400508948414489
+      type: {class: ManipulateGameplayTimerBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 0
+            value: 6
+          activeForTime:
+            enabled: 1
+            value: 15
+        CanStackDuration: 1
+        CanStackEffect: 1
+        AddTickSpeedMultiplier:
+          enabled: 1
+          value: 1.5
+        PauseGamePlayTimer: 0

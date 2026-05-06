@@ -13,7 +13,8 @@ namespace Watermelon
     public class ScoreUIController : MonoBehaviour
     {
         [Header("UI References")]
-        [SerializeField] private GameObject scoreUIParent;
+        [SerializeField] private GameObject ComboUIParent;
+        [SerializeField] private GameObject TargetScore;
         [SerializeField] private TextMeshProUGUI rawScoreText;
         [SerializeField] private TextMeshProUGUI scoreMultiplierText;
         [SerializeField] private TextMeshProUGUI currentScoreText;
@@ -63,7 +64,8 @@ namespace Watermelon
 
         public void SetScoreSystemVisible(bool visible)
         {
-            scoreUIParent.gameObject.SetActive(visible);
+            ComboUIParent.gameObject.SetActive(visible);
+            TargetScore.gameObject.SetActive(visible);
         }
     }
 }

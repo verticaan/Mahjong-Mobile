@@ -1,3 +1,4 @@
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,7 +49,9 @@ namespace Watermelon
         [SerializeField] private Vector3 endScale = new(1.5f, 1.5f, 1.5f);
         [SerializeField] private float tweenDuration = 0.5f;
         [SerializeField] private Ease.Type tweenEase = Ease.Type.BounceOut;
-        
+
+        [SerializeField] MMFeedbacks selectFeedback;
+
         private void Awake()
         {
             button = GetComponent<Button>();
@@ -91,13 +94,19 @@ namespace Watermelon
         private void BecomeSelected()
         {
             transform.position = selectPos.position;
-            
+
+            transform.localScale = endScale;
+
             Debug.Log("Selected");
+
+            selectFeedback.PlayFeedbacks();
         }
 
         private void BecomeUnselected()
         {
             transform.position = spawnPos.position;
+
+            transform.localScale = startScale;
             Debug.Log("Not Selected");
         }
         private void OnButtonClicked()

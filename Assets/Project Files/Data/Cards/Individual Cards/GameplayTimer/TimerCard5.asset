@@ -48,5 +48,5 @@ MonoBehaviour:
         CanStackEffect: 0
         AddTickSpeedMultiplier:
           enabled: 1
-          value: 1.5
+          value: 1.2
         PauseGamePlayTimer: 0

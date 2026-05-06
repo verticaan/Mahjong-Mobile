@@ -19,7 +19,9 @@ MonoBehaviour:
   titleText: Crescendo
   descriptionText: +5 score per Stave for 6 turns
   qualityValue: 65
-  activeEffects: []
+  activeEffects:
+  - rid: 8345400508948414468
+  - rid: 8345400508948414469
   buffEffects:
   - rid: 4491945106977062988
   references:
@@ -41,5 +43,24 @@ MonoBehaviour:
           enabled: 1
           value: 5
         PerMatchMultiplierModifier:
+          enabled: 0
+          value: 0
+    - rid: 8345400508948414468
+      type: {class: ManipulateScoreComboActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RestoreToLastCombo: 1
+    - rid: 8345400508948414469
+      type: {class: ManipulateScoreActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeRawScoreBy:
+          enabled: 0
+          value: 0
+        ChangeScoreMultiplierBy:
+          enabled: 1
+          value: 15
+        ChangeCurrentScoreBy:
+          enabled: 0
+          value: 0
+        ChangeTargetScoreBy:
           enabled: 0
           value: 0
