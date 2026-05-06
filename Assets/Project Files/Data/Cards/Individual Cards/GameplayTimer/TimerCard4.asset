@@ -23,6 +23,7 @@ MonoBehaviour:
   activeEffects:
   - rid: 2064241169189044224
   - rid: 2064241211670790167
+  - rid: 8345400508948414472
   buffEffects:
   - rid: 2064241169189044227
   - rid: 2064241169189044228
@@ -71,3 +72,6 @@ MonoBehaviour:
         ChangePlayerQualityBy:
           enabled: 1
           value: 30
+    - rid: 8345400508948414472
+      type: {class: PowerupHintActive, ns: Watermelon, asm: Assembly-CSharp}
+      data: 

@@ -316,15 +316,15 @@ MonoBehaviour:
   - {fileID: 6289686921209105323, guid: 27b92b391fe531e4eadcc21dd41fe9e5, type: 3}
   - {fileID: 8393393293438007501, guid: 5c16d57e9a7ada143aaec6b2de55972b, type: 3}
   backgroundData:
-  - backgroundPrefab: {fileID: 6236222446239046324, guid: 956710d3fc7a880429b907d4cab15fe4,
+  - backgroundPrefab: {fileID: 6236222446239046324, guid: 269583515b66225488c4ef570119a472,
       type: 3}
     availableFromLevel: 0
     collectionId: 0
-  - backgroundPrefab: {fileID: 6236222446239046324, guid: 6fb955908817665409569861e6228144,
+  - backgroundPrefab: {fileID: 6236222446239046324, guid: 269583515b66225488c4ef570119a472,
       type: 3}
     availableFromLevel: 6
     collectionId: 0
-  - backgroundPrefab: {fileID: 6236222446239046324, guid: 956710d3fc7a880429b907d4cab15fe4,
+  - backgroundPrefab: {fileID: 6236222446239046324, guid: 269583515b66225488c4ef570119a472,
       type: 3}
     availableFromLevel: 20
     collectionId: 0

@@ -18,9 +18,11 @@ MonoBehaviour:
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: 21300000, guid: b1e7282744ddd4c46839061d8904cedf, type: 3}
   titleText: Con Fuoco
-  descriptionText: +1 multiplier to matches for 4 turns
+  descriptionText: Changes score multiplier by 6
   qualityValue: 60
-  activeEffects: []
+  activeEffects:
+  - rid: 8345400508948414465
+  - rid: 8345400508948414470
   buffEffects:
   - rid: 4491945106977062991
   references:
@@ -37,10 +39,32 @@ MonoBehaviour:
             enabled: 0
             value: 0
         CanStackDuration: 0
-        CanStackEffect: 0
+        CanStackEffect: 1
         PerSlotValueModifier:
           enabled: 0
           value: 0
         PerMatchMultiplierModifier:
           enabled: 1
           value: 1
+    - rid: 8345400508948414465
+      type: {class: ManipulateScoreActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeRawScoreBy:
+          enabled: 1
+          value: 50
+        ChangeScoreMultiplierBy:
+          enabled: 1
+          value: 6
+        ChangeCurrentScoreBy:
+          enabled: 0
+          value: 0
+        ChangeTargetScoreBy:
+          enabled: 0
+          value: 0
+    - rid: 8345400508948414470
+      type: {class: PowerupShuffleActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ScaleTime: 0.5
+        ScaleMinDelay: 0.05
+        ScaleMaxDelay: 0.4
+        ScaleEasingType: 26
