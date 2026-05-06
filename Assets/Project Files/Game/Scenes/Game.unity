@@ -923,7 +923,9 @@ MonoBehaviour:
   menuPlaylist:
     playlistType: 0
     fadeDuration: 0.3
-    tracks: []
+    tracks:
+    - clip: {fileID: 8300000, guid: 29d933197e6ee8842a90702d152ac0fa, type: 3}
+      fadeDurationOverride: 0.2
   fallbackPlaylist:
     playlistType: 0
     fadeDuration: 0.3
@@ -1283,7 +1285,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BackGroundColor: {r: 0.16226411, g: 0.16226411, b: 0.15032391, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
