@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e815bfd5bada77479dad5457160240c, type: 3}
+  m_Name: Randomised Level Config
+  m_EditorClassIdentifier: 
+  weightNoCards: 3
+  weightCards: 1
+  weightNoTimer: 2
+  weightTimer: 2
+  weightNoScore: 2
+  weightScore: 2
+  defaultDecks:
+  - {fileID: 11400000, guid: 0db73b7d9a49a6d47a214411a1b2646b, type: 2}
+  timerDecks:
+  - {fileID: 11400000, guid: 6174eee4482e369479cee38090c096c6, type: 2}
+  scoreDecks:
+  - {fileID: 11400000, guid: f09ac799e7822e545a5fbac49162753d, type: 2}
+  timerSecondsPerTileRange: {x: 3, y: 6}
+  scorePerTileRange: {x: 10, y: 25}
