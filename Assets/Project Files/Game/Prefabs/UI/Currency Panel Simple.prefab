@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 3068759683175949611}
   - component: {fileID: 5485836894590043103}
   - component: {fileID: 2321499706710939989}
+  - component: {fileID: 6398142647819569515}
   m_Layer: 5
   m_Name: Amount Text
   m_TagString: Untagged
@@ -258,6 +259,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6398142647819569515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5196155773550417816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 2321499706710939989}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 50
 --- !u!1 &5770846571886544758
 GameObject:
   m_ObjectHideFlags: 0

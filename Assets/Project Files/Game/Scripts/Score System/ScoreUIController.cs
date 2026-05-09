@@ -20,9 +20,11 @@ namespace Watermelon
         [SerializeField] private TextMeshProUGUI currentScoreText;
         [SerializeField] private TextMeshProUGUI targetScoreText;
         [SerializeField] private Image timerFillImage;
+
+        //[SerializeField] private ParticleSystem timerParticles;
         //For testing, we can show that the game is winnable by changing text tint.
         //Some other UI thing can be added here
-        [SerializeField] private MMF_Player scoreStacking;
+        //[SerializeField] private MMF_Player scoreStacking;
 
         [Header("Winnable Colors")]
         [SerializeField] private Color normalColor = Color.white;
@@ -40,12 +42,12 @@ namespace Watermelon
             if (model.CurrentScore <= 0)
                 return;
 
-            if (scoreStacking.IsPlaying)
-                return;
+            //if (scoreStacking.IsPlaying)
+            //    return;
 
-            MMF_FloatingText floatingText = scoreStacking.GetFeedbackOfType<MMF_FloatingText>();
-            floatingText.Value = model.CurrentScore.ToString();
-            scoreStacking.PlayFeedbacks();
+            //MMF_FloatingText floatingText = scoreStacking.GetFeedbackOfType<MMF_FloatingText>();
+            //floatingText.Value = model.CurrentScore.ToString();
+            //scoreStacking.PlayFeedbacks();
         }
 
 
@@ -60,6 +62,14 @@ namespace Watermelon
             {
                 timerFillImage.fillAmount = normalized;
             }
+
+            //if (timerParticles != null)
+            //{
+            //    var shape = timerParticles.shape;
+
+            //    // Arc goes from 0 -> 360 degrees
+            //    shape.arc = (1-normalized) * 360f;
+            //}
         }
 
         public void SetScoreSystemVisible(bool visible)

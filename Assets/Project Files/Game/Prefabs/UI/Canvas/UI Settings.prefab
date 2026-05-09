@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 3869329137628571404}
   - component: {fileID: 5700383974575434775}
   - component: {fileID: 9116659916047886911}
+  - component: {fileID: 4232573961391726943}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -367,6 +368,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &4232573961391726943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967052800173225535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 9116659916047886911}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &1396025945474950115
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,6 +676,7 @@ GameObject:
   - component: {fileID: 1240833731901258836}
   - component: {fileID: 1602205868604681974}
   - component: {fileID: 8416150555223508935}
+  - component: {fileID: 1296340017971758222}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -778,6 +804,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1296340017971758222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2709075479343937144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 8416150555223508935}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &2852486894738746014
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,6 +989,7 @@ GameObject:
   - component: {fileID: 5398117488941097508}
   - component: {fileID: 680957777989589348}
   - component: {fileID: 5029797139745545734}
+  - component: {fileID: 1343159695275567931}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1066,6 +1117,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1343159695275567931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3164720076407623281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 5029797139745545734}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &3469591908370148368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1286,7 @@ GameObject:
   - component: {fileID: 1289608106624541625}
   - component: {fileID: 1513925788177320018}
   - component: {fileID: 655719112430613438}
+  - component: {fileID: 8958875019285223517}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1338,6 +1414,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8958875019285223517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4469181203761387111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 655719112430613438}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &4484689120852150726
 GameObject:
   m_ObjectHideFlags: 0
@@ -1679,6 +1779,7 @@ GameObject:
   - component: {fileID: 1392660141507421277}
   - component: {fileID: 2297739639041216040}
   - component: {fileID: 1582953490743447295}
+  - component: {fileID: 6771784336949791161}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1806,6 +1907,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6771784336949791161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5719145579891660461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1582953490743447295}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &5735380326141273878
 GameObject:
   m_ObjectHideFlags: 0
@@ -1894,6 +2019,7 @@ GameObject:
   - component: {fileID: 8899032863223387843}
   - component: {fileID: 9162912265970401845}
   - component: {fileID: 2881405943691056706}
+  - component: {fileID: 7184300745814191675}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -2021,6 +2147,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7184300745814191675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5957047389911638602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 2881405943691056706}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &6858868084006707981
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,6 +2332,7 @@ GameObject:
   - component: {fileID: 558318831002397312}
   - component: {fileID: 5407881357497594857}
   - component: {fileID: 4520920107577687711}
+  - component: {fileID: 8960100668377863490}
   m_Layer: 5
   m_Name: Title Text
   m_TagString: Untagged
@@ -2309,6 +2460,30 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &8960100668377863490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722896613889195711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 4520920107577687711}
+  usePreset: 0
+  preset: {fileID: 0}
+  tagEffects: []
+  globalEffects:
+  - triggerWhen: 0
+    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    onEffectCompleted:
+      m_PersistentCalls:
+        m_Calls: []
+    overrideTagEffects: 0
+  updatesPerSecond: 60
 --- !u!1 &8559897632510169224
 GameObject:
   m_ObjectHideFlags: 0
