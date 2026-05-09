@@ -6,51 +6,49 @@ using Watermelon;
 
 public class VfxManager : MonoBehaviour
 {
-    [SerializeField] private UIParticleAttractor uIParticleAttractor;
+    ////[SerializeField] private UIParticleAttractor uIParticleAttractor;
 
-    [Header("Particles")]
+    //[Header("Particles")]
     
-    [SerializeField] private ParticleSystem attractorParticle;
+    ////[SerializeField] private ParticleSystem attractorParticle;
 
-    [SerializeField] private UIParticle comboParticle;
+    //[Header("References")]
+    //[SerializeField] private ScoreDataModel scoreData;
 
-    [Header("References")]
-    [SerializeField] private ScoreDataModel scoreData;
+    //[SerializeField] private MMFeedbacks combofeedback;
 
-    [SerializeField] private MMFeedbacks combofeedback;
+    //private void OnEnable()
+    //{
+    //    if (scoreData != null)
+    //        scoreData.OnScoreAdded += HandleScoreAdded;
 
-    private void OnEnable()
-    {
-        if (scoreData != null)
-            scoreData.OnScoreAdded += HandleScoreAdded;
+    //    //if (uIParticleAttractor != null)
+    //    //    uIParticleAttractor.onAttracted.AddListener(HandleAttraction);
+    //}
 
-        if (uIParticleAttractor != null)
-            uIParticleAttractor.onAttracted.AddListener(HandleAttraction);
-    }
+    //private void OnDisable()
+    //{
+    //    if (scoreData != null)
+    //        scoreData.OnScoreAdded -= HandleScoreAdded;
 
-    private void OnDisable()
-    {
-        if (scoreData != null)
-            scoreData.OnScoreAdded -= HandleScoreAdded;
-
-        if (uIParticleAttractor != null)
-            uIParticleAttractor.onAttracted.RemoveListener(HandleAttraction);
-    }
+    //    //if (uIParticleAttractor != null)
+    //    //    uIParticleAttractor.onAttracted.RemoveListener(HandleAttraction);
+    //}
 
 
-    private void HandleScoreAdded(int amount)
-    {
-        int particles = Mathf.CeilToInt(5 + Mathf.Sqrt(amount) * 2f);
-        attractorParticle.Emit(particles);
-        Debug.Log(particles);
+    //private void HandleScoreAdded(int amount)
+    //{
+    //    int particles = Mathf.CeilToInt(5 + Mathf.Sqrt(amount) * 2f);
+    //    //attractorParticle.Emit(particles);
+    //    Debug.Log(particles);
 
-        combofeedback.PlayFeedbacks();
-    }
+    //    combofeedback.PlayFeedbacks();
+    //}
 
-    private void HandleAttraction()
-    {
-        //scoreData.ApplyScoreToUI();
-        Debug.Log("Attraction Ended");
-    }
+    //private void HandleAttraction()
+    //{
+    //    //scoreData.ApplyScoreToUI();
+    //    Debug.Log("Attraction Ended");
+    //}
 
 }

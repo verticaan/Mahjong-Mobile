@@ -58,7 +58,7 @@ namespace Watermelon
         private void OnDisable()
         {
             exitPopUp.OnConfirmExitEvent -= ExitPopUpConfirmExitButton;
-            exitPopUp.OnCancelExitEvent += ExitPopCloseButton;
+            exitPopUp.OnCancelExitEvent -= ExitPopCloseButton;
         }
 
         #region Show/Hide
@@ -108,15 +108,7 @@ namespace Watermelon
 
         public void ShowExitPopUp()
         {
-            if(!LivesSystem.InfiniteMode)
-            {
-                exitPopUp.Show();
-            }
-            else
-            {
-                ExitPopUpConfirmExitButton();
-            }
-
+            exitPopUp.Show();
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
         }
 
