@@ -157,7 +157,7 @@ MonoBehaviour:
   tagEffects: []
   globalEffects:
   - triggerWhen: 0
-    effect: {fileID: 11400000, guid: bef25e39d4ad04412a2363b9e5251d94, type: 2}
+    effect: {fileID: 11400000, guid: b0181322eec2e4155a59b5d71636e181, type: 2}
     onEffectCompleted:
       m_PersistentCalls:
         m_Calls: []
