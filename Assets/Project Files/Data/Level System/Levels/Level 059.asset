@@ -105,7 +105,7 @@ MonoBehaviour:
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -220,7 +220,7 @@ MonoBehaviour:
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -239,7 +239,7 @@ MonoBehaviour:
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -448,11 +448,11 @@ MonoBehaviour:
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
       - IsFilled: 1
         Effect: 0
       - IsFilled: 0
@@ -580,25 +580,6 @@ MonoBehaviour:
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-    - cells:
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 1
         Effect: 0
       - IsFilled: 0
         Effect: 0
@@ -637,7 +618,26 @@ MonoBehaviour:
       - IsFilled: 0
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+    - cells:
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -723,40 +723,6 @@ MonoBehaviour:
         Effect: 0
     - cells:
       - IsFilled: 1
-        Effect: 3
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-    - cells:
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 0
-        Effect: 0
-      - IsFilled: 1
-        Effect: 0
-    - cells:
-      - IsFilled: 1
         Effect: 0
       - IsFilled: 0
         Effect: 0
@@ -825,7 +791,41 @@ MonoBehaviour:
         Effect: 0
     - cells:
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+    - cells:
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 0
+        Effect: 0
+      - IsFilled: 1
+        Effect: 0
+    - cells:
+      - IsFilled: 1
+        Effect: 0
       - IsFilled: 0
         Effect: 0
       - IsFilled: 0
@@ -856,13 +856,13 @@ MonoBehaviour:
       - IsFilled: 1
         Effect: 0
       - IsFilled: 1
-        Effect: 3
+        Effect: 0
   bottomLayerWidth: 8
   bottomLayerHeight: 9
   useInRandomizer: 1
   elementsPerLevel: 13
   coinsReward: 20
-  editorNote: ' sets: 34,effects: ice'
+  editorNote: ' sets: 34'
   nonDefaultStartingSlots:
     enabled: 0
     value: 0
@@ -878,3 +878,6 @@ MonoBehaviour:
     value: 1000
     list: []
     ensureNonNullListResult: 0
+  playlistOverride:
+    enabled: 0
+    value: 0
