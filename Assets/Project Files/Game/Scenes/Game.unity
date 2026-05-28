@@ -1760,12 +1760,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02aac1500b1b8414ca72238d54eacc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingQuality: 40
-  discardQualityGain: 8
-  matchQualityGainPerEmptySlot: 2
+  startingQuality: 30
+  discardQualityGain: 4
+  matchQualityGainPerEmptySlot: 1
   cardPickQualityLossMultiplier: 0.4
-  minQuality: 0
-  maxQuality: 100
+  minQuality: 1
+  maxQuality: 80
 --- !u!114 &1060784216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1785,7 +1785,7 @@ MonoBehaviour:
   triggerMode: 1
   selectionIntervalSeconds: 3
   matchesPerSelection: 3
-  sigma: 10
+  sigma: 15
   minWeight: 0.0001
 --- !u!114 &1060784217
 MonoBehaviour:
@@ -2920,6 +2920,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3343327927296006466, guid: f498ec5c4d8606d44b8576c76181fe5a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3388036203490570653, guid: f498ec5c4d8606d44b8576c76181fe5a,
         type: 3}
       propertyPath: m_SizeDelta.x
@@ -3992,7 +3997,7 @@ MonoBehaviour:
   updateButtonLabel: 1
   showLabel: Show Debug
   hideLabel: Hide Debug
-  visible: 0
+  visible: 1
   panelPos: {x: 10, y: 10}
   panelSize: {x: 560, y: 420}
   refreshRate: 0.1

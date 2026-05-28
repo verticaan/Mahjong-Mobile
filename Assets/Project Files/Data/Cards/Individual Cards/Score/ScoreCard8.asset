@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
+  m_Name: ScoreCard8
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: -747651775, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
+  typeIconImage: {fileID: 1833921066897734877, guid: fe42c8b526e77e54ab91d0590272d9e8,
+    type: 3}
+  backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
+  frameImage: {fileID: 21300000, guid: b1e7282744ddd4c46839061d8904cedf, type: 3}
+  titleText: Aria
+  descriptionText: Reduce score multiplier by 2 for a short period increase Card
+    Quality by 8
+  qualityValue: 35
+  activeEffects:
+  - rid: 4074007886673215495
+  - rid: 4074007886673215496
+  buffEffects:
+  - rid: 4074007886673215491
+  - rid: 4074007886673215492
+  references:
+    version: 2
+    RefIds:
+    - rid: 4074007886673215491
+      type: {class: ManipulateScoreComboBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 0
+            value: 5
+          activeForTime:
+            enabled: 1
+            value: 10
+        CanStackDuration: 0
+        CanStackEffect: 1
+    - rid: 4074007886673215492
+      type: {class: ManipulateScoreBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 0
+            value: 0
+          activeForTime:
+            enabled: 1
+            value: 10
+        CanStackDuration: 0
+        CanStackEffect: 0
+        PerSlotValueModifier:
+          enabled: 0
+          value: 6
+        PerMatchMultiplierModifier:
+          enabled: 0
+          value: -2
+    - rid: 4074007886673215495
+      type: {class: ManipulateScoreActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeRawScoreBy:
+          enabled: 0
+          value: 0
+        ChangeScoreMultiplierBy:
+          enabled: 1
+          value: -2
+        ChangeCurrentScoreBy:
+          enabled: 0
+          value: 0
+        ChangeTargetScoreBy:
+          enabled: 0
+          value: 0
+    - rid: 4074007886673215496
+      type: {class: ManipulateCardSystemActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        RedrawHand: 0
+        ChangePlayerQualityBy:
+          enabled: 1
+          value: 8

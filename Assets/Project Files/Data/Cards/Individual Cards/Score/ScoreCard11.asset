@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
+  m_Name: ScoreCard11
+  m_EditorClassIdentifier: 
+  iconImage: {fileID: -747651775, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
+  typeIconImage: {fileID: 21300158, guid: 9bd9265533309304db171aa9f916554a, type: 3}
+  backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
+  frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
+  titleText: Poi
+  descriptionText: Reduce stave drasctically, increase score multiplier, Reduce score
+    target by 600 for 2 turns
+  qualityValue: 45
+  activeEffects:
+  - rid: 4074007886673215497
+  - rid: 4074007886673215498
+  - rid: 4074007886673215499
+  buffEffects:
+  - rid: 4074007886673215491
+  references:
+    version: 2
+    RefIds:
+    - rid: 4074007886673215491
+      type: {class: ManipulateScoreComboBuff, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        Length:
+          activeForTurns:
+            enabled: 1
+            value: 2
+          activeForTime:
+            enabled: 0
+            value: 0
+        CanStackDuration: 0
+        CanStackEffect: 0
+    - rid: 4074007886673215497
+      type: {class: PowerupHintActive, ns: Watermelon, asm: Assembly-CSharp}
+      data: 
+    - rid: 4074007886673215498
+      type: {class: ManipulateDockActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeSlotCount:
+          enabled: 1
+          value: -3
+    - rid: 4074007886673215499
+      type: {class: ManipulateScoreActive, ns: Watermelon, asm: Assembly-CSharp}
+      data:
+        ChangeRawScoreBy:
+          enabled: 0
+          value: 0
+        ChangeScoreMultiplierBy:
+          enabled: 1
+          value: 2
+        ChangeCurrentScoreBy:
+          enabled: 0
+          value: 0
+        ChangeTargetScoreBy:
+          enabled: 1
+          value: -600

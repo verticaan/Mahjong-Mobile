@@ -26,14 +26,11 @@ MonoBehaviour:
   - rid: 2064241119253233948
   - rid: 8345400508948414487
   - rid: 8345400508948414488
-  - rid: -2
   buffEffects:
   - rid: 8345400508948414486
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
     - rid: 2064241119253233948
       type: {class: PowerupShuffleActive, ns: Watermelon, asm: Assembly-CSharp}
       data:
