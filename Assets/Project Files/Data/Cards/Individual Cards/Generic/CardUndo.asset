@@ -15,8 +15,8 @@ MonoBehaviour:
   iconImage: {fileID: 21300000, guid: 3249f9e2f5b69e1478a31b9d203a411b, type: 3}
   typeIconImage: {fileID: 21300000, guid: 2fa1c264f304d844b96a1dcf017cb48b, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
-  titleText: Undo
+  frameImage: {fileID: 1387735185, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
+  titleText: UNDO
   descriptionText: Undo last tile added to the Stave
   qualityValue: 30
   activeEffects:

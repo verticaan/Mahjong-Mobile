@@ -922,7 +922,7 @@ MonoBehaviour:
   musicSource: {fileID: 548377987}
   menuPlaylist:
     playlistType: 0
-    fadeDuration: 0.3
+    fadeDuration: 0.5
     tracks:
     - clip: {fileID: 8300000, guid: 29d933197e6ee8842a90702d152ac0fa, type: 3}
       fadeDurationOverride: 0.2
@@ -2487,6 +2487,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4437299096243657708, guid: a6a57bc430670554483b9c3ee65a7f34,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -168.79999
+      objectReference: {fileID: 0}
     - target: {fileID: 4570446424211630742, guid: a6a57bc430670554483b9c3ee65a7f34,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3997,7 +4002,7 @@ MonoBehaviour:
   updateButtonLabel: 1
   showLabel: Show Debug
   hideLabel: Hide Debug
-  visible: 1
+  visible: 0
   panelPos: {x: 10, y: 10}
   panelSize: {x: 560, y: 420}
   refreshRate: 0.1

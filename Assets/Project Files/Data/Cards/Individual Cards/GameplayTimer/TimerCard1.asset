@@ -12,11 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
   m_Name: TimerCard1
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 1943007310, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
-  typeIconImage: {fileID: 2657873270443967794, guid: 3da05e9f66c9f254c8875335e7e9179e,
-    type: 3}
+  iconImage: {fileID: -2096709469, guid: 03ce8331cf37c3d49bc3246faf55d6c0, type: 3}
+  typeIconImage: {fileID: 931967323, guid: 22a4240bf0b72354397afe466ea9bca7, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
+  frameImage: {fileID: -1702838677, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
   titleText: GIUSTO
   descriptionText: 'Gives 1 extra <i>Stave</i> but takes 20 Seconds '
   qualityValue: 35

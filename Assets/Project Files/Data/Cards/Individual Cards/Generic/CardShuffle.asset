@@ -15,8 +15,8 @@ MonoBehaviour:
   iconImage: {fileID: 21300000, guid: b91d70028c46b9147bd9a5c2a6223e56, type: 3}
   typeIconImage: {fileID: 21300000, guid: 80077964494899a41a7a25dc2e52096e, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 5d275642c41e25c48aa66df73795e2a8, type: 3}
-  titleText: Shuffle
+  frameImage: {fileID: 1526115842, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
+  titleText: SHUFFLE
   descriptionText: Shuffles entire board at random
   qualityValue: 20
   activeEffects:

@@ -16,7 +16,7 @@ MonoBehaviour:
   typeIconImage: {fileID: -1001581268832274596, guid: fe42c8b526e77e54ab91d0590272d9e8,
     type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: b1e7282744ddd4c46839061d8904cedf, type: 3}
+  frameImage: {fileID: -1702838677, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
   titleText: 4'
   descriptionText: Disables powerups but +1 slot to Stave
   qualityValue: 40

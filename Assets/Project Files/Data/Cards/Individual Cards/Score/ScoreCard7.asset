@@ -16,8 +16,8 @@ MonoBehaviour:
   typeIconImage: {fileID: -6415259062133742075, guid: 3da05e9f66c9f254c8875335e7e9179e,
     type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: b1e7282744ddd4c46839061d8904cedf, type: 3}
-  titleText: Niente
+  frameImage: {fileID: -483169559, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
+  titleText: NIENTE
   descriptionText: Multiplier, Current and Target score reduced by 1 for 30 seconds
   qualityValue: 60
   activeEffects:
