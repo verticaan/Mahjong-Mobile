@@ -15,8 +15,8 @@ MonoBehaviour:
   iconImage: {fileID: 1383997060, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
   typeIconImage: {fileID: 21300000, guid: 72f78609533108147970fa660ad0bcee, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: b1e7282744ddd4c46839061d8904cedf, type: 3}
-  titleText: Arietta
+  frameImage: {fileID: -748275890, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
+  titleText: ARIETTA
   descriptionText: (Even Shorter Aria) Reduce score multiplier by 1 for a short period
     increase Card Quality by 4
   qualityValue: 35

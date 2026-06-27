@@ -4,6 +4,8 @@
     {
         None = 0,
         FirstLevel = 1,
-        CardLevel = 2
+        CardLevel = 2,
+        ScoreLevel = 3,
+        TimerLevel = 4
     }
 }

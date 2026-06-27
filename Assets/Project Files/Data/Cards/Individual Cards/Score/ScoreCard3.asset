@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a966dc18b3d2e4a87940f9f46b6903, type: 3}
   m_Name: ScoreCard3
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 1383997060, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
-  typeIconImage: {fileID: 21300000, guid: e2611d2b291e3374a979553a9a11c752, type: 3}
+  iconImage: {fileID: 1799597212, guid: 03ce8331cf37c3d49bc3246faf55d6c0, type: 3}
+  typeIconImage: {fileID: 378741965, guid: 22a4240bf0b72354397afe466ea9bca7, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
-  titleText: Crescendo
+  frameImage: {fileID: -1705217603, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
+  titleText: CRESCENDO
   descriptionText: +5 score per Stave for 6 turns
   qualityValue: 65
   activeEffects:

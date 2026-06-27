@@ -15,8 +15,8 @@ MonoBehaviour:
   iconImage: {fileID: -747651775, guid: 240931ed87c9ac74c88c5c840840724c, type: 3}
   typeIconImage: {fileID: 21300158, guid: 9bd9265533309304db171aa9f916554a, type: 3}
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
-  frameImage: {fileID: 21300000, guid: 13a1cd7b45be4d944bed7366a2d8f417, type: 3}
-  titleText: Poi
+  frameImage: {fileID: 1526115842, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
+  titleText: POI
   descriptionText: Reduce stave drasctically, increase score multiplier, Reduce score
     target by 600 for 2 turns
   qualityValue: 45
