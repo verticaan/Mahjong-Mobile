@@ -113,6 +113,7 @@ namespace Watermelon
                 levelController.LoadLevel(index, onLevelLoaded);
 
                 UIController.ShowPage<UIGame>();
+                UIController.GetPage<UIGame>().RefreshGameplayTimerVisibility();
 
                 isGameActive = true;
             });

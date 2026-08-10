@@ -92,6 +92,18 @@ namespace Watermelon
         public static GameplayTimer GameplayTimer { get; private set; }
 
         /// <summary>
+        /// Whether the currently active level has a countdown timer, reading from
+        /// the same active source as <see cref="OnMatchCompleted"/>'s score-target
+        /// check — the rolled <see cref="RandomisedLevelResult"/> in endless mode,
+        /// or the hand-crafted <see cref="LevelData"/> otherwise. <see cref="Level"/>
+        /// stays pointed at the randomised mode's board-geometry template even in
+        /// endless mode, so it must not be used for this check.
+        /// </summary>
+        public static bool ActiveTimerEnabled => isEndlessMode
+            ? activeRandomisedResult?.HasTimer ?? false
+            : level.GameplayTimer.Enabled;
+
+        /// <summary>
         /// Returns true when <paramref name="levelIndex"/> is beyond the last
         /// hand-crafted level and a <see cref="RandomisedLevelData"/> asset is assigned.
         /// </summary>

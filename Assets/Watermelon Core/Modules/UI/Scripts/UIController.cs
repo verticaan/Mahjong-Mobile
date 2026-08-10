@@ -18,6 +18,7 @@ namespace Watermelon
         private static List<IPopupWindow> popupWindows;
         public static bool IsPopupOpened => !popupWindows.IsNullOrEmpty();
         private static UIPage currentPage;
+        private static UIPage previousPage;
         public static bool focusedOnGame => currentPage is UIGame;
 
         private static bool isTablet;
@@ -111,6 +112,10 @@ namespace Watermelon
         {
             Type pageType = typeof(T);
             UIPage page = pagesLink[pageType];
+
+            if (currentPage != page)
+                previousPage = currentPage;
+
             currentPage = page;
             Debug.Log("Current page: " + currentPage);
             if (!page.IsPageDisplayed)
@@ -123,6 +128,9 @@ namespace Watermelon
 
         public static void ShowPage(UIPage page)
         {
+            if (currentPage != page)
+                previousPage = currentPage;
+
             currentPage = page;
             if (!page.IsPageDisplayed)
             {
@@ -175,6 +183,12 @@ namespace Watermelon
         public static void OnPageClosed(UIPage page)
         {
             page.DisableCanvas();
+
+            if (currentPage == page && previousPage != null)
+            {
+                currentPage = previousPage;
+                previousPage = null;
+            }
 
             PageClosed?.Invoke(page, page.GetType());
 
