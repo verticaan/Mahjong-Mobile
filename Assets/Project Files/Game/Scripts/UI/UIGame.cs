@@ -70,8 +70,6 @@ namespace Watermelon
 
             UILevelNumberText.Show();
 
-            RefreshGameplayTimerVisibility();
-
             UIController.OnPageOpened(this);
         }
 
@@ -82,32 +80,7 @@ namespace Watermelon
 
             UILevelNumberText.Hide();
 
-            if (LevelController.ActiveTimerEnabled)
-            {
-                gameplayTimer.Hide();
-            }
-
             UIController.OnPageClosed(this);
-        }
-
-        /// <summary>
-        /// Shows or hides the gameplay timer widget for whichever level is
-        /// currently active. Called from <see cref="PlayShowAnimation"/>, and also
-        /// callable directly for level transitions that don't re-trigger a page
-        /// show (e.g. loading straight into a level from a tutorial that already
-        /// left this page displayed).
-        /// </summary>
-        public void RefreshGameplayTimerVisibility()
-        {
-            if (LevelController.ActiveTimerEnabled)
-            {
-                gameplayTimer.gameObject.SetActive(true);
-                gameplayTimer.Show(LevelController.GameplayTimer);
-            }
-            else
-            {
-                gameplayTimer.gameObject.SetActive(false);
-            }
         }
 
         public void UpdateLevelNumber(int levelNumber)

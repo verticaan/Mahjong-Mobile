@@ -198,6 +198,11 @@ namespace Watermelon
             gameUI.PowerUpsUIController.OnLevelStarted(0);
             gameUI.ActivateTutorial();
 
+            if (ActiveTimerEnabled)
+                gameUI.GameplayTimer.Show(GameplayTimer);
+            else
+                gameUI.GameplayTimer.Hide();
+
             levelObject.SetActive(true);
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
@@ -277,6 +282,11 @@ namespace Watermelon
             gameUI.PowerUpsUIController.OnLevelStarted(levelIndex);
             gameUI.UpdateLevelNumber(levelIndex + 1);
 
+            if (ActiveTimerEnabled)
+                gameUI.GameplayTimer.Show(GameplayTimer);
+            else
+                gameUI.GameplayTimer.Hide();
+
             levelObject.SetActive(true);
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
@@ -339,6 +349,11 @@ namespace Watermelon
             UIGame gameUI = UIController.GetPage<UIGame>();
             gameUI.PowerUpsUIController.OnLevelStarted(displayLevelIndex);
             gameUI.UpdateLevelNumber(displayLevelIndex + 1);
+
+            if (ActiveTimerEnabled)
+                gameUI.GameplayTimer.Show(GameplayTimer);
+            else
+                gameUI.GameplayTimer.Hide();
 
             levelObject.SetActive(true);
             levelScaler.Recalculate();
