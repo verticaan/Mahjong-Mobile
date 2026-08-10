@@ -20,6 +20,9 @@ namespace Watermelon
         [SerializeField] bool infiniteLevels;
         public bool InfiniteLevels => infiniteLevels;
 
+        [SerializeField, Min(0f)] float reviveTimerBonusSeconds = 15f;
+        public float ReviveTimerBonusSeconds => reviveTimerBonusSeconds;
+
         private void OnValidate()
         {
             tileSize.x = Mathf.Clamp(tileSize.x, 1, maxTileSize);

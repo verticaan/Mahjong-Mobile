@@ -883,6 +883,9 @@ namespace Watermelon
         {
             RaycastController.Enable();
             ReturnTiles(3, null);
+
+            if (ActiveTimerEnabled)
+                GameplayTimer.AddSeconds(GameController.Data.ReviveTimerBonusSeconds);
         }
 
         // ── Private helpers ───────────────────────────────────────────────────
