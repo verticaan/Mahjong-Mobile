@@ -393,6 +393,7 @@ namespace Watermelon
         private void LoadLevelData(LevelData levelData)
         {
             scoreDataModel.ResetForLevel();
+            GameplayTimer.Reset();
 
             if (levelData.UsesCards)
             {
@@ -434,6 +435,7 @@ namespace Watermelon
         private void ApplyGameplayConfig(RandomisedLevelResult result)
         {
             scoreDataModel.ResetForLevel();
+            GameplayTimer.Reset();
 
             if (result.UsesCards)
             {
