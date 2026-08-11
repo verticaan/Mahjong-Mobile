@@ -634,7 +634,9 @@ namespace Watermelon
 
         public static void ResumeSubsystems()
         {
-            GameplayTimer.Resume();
+            if (ActiveTimerEnabled)
+                GameplayTimer.Resume();
+
             ScoreDataModel.ResumeComboTimer();
         }
         
