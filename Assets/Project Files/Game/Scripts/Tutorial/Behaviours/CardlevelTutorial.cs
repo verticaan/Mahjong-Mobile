@@ -156,7 +156,7 @@ namespace Watermelon
             FinishTutorial();
             LevelController.CompleteCustomLevel();
             gameUI.DisableTutorial();
-            GameController.LoadLevel(30, () => { });
+            GameController.LoadLevel(6, () => { });
         }
 
         private void OnMatchCombined(List<ISlotable> tiles)

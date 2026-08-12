@@ -94,7 +94,7 @@ namespace Watermelon
 
             gameController.mapBehavior.Hide();
 
-            int cardLevelIndex = 30;
+            int cardLevelIndex = 6;
 
             if (gameController.data.ShowCardTutorial && index == cardLevelIndex)
             {
