@@ -440,7 +440,20 @@ namespace Watermelon
             UpdateCurrentScore();
             RefreshUI();
         }
-        
+
+        /// <summary>
+        /// Grants a revive bonus outside of the combo round timer's state
+        /// (the round is still paused from the loss at revive time), unlike
+        /// <see cref="ChangeCurrentScoreDirect"/> which is gated on IsTimerRunning.
+        /// </summary>
+        public void AddReviveBonus(int amount)
+        {
+            if (IsInactiveForScoring) return;
+            bankedScore = Mathf.Max(0, bankedScore + amount);
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+
         #endregion
 
         #region Public API - Modifier Handles

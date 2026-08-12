@@ -196,11 +196,12 @@ namespace Watermelon
 
         public static void Revive()
         {
-            LevelController.Revive();
+            bool tilesReturned = LevelController.Revive();
 
             Tween.NextFrame(() =>
             {
                 isGameActive = true;
+                LevelController.ApplyReviveScoreOutcome(tilesReturned);
             });
         }
 

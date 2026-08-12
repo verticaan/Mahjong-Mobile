@@ -17,3 +17,5 @@ MonoBehaviour:
   maxTileSize: 1.5
   tileSize: {x: 1, y: 1}
   infiniteLevels: 1
+  reviveTimerBonusSeconds: 30
+  reviveScoreBonus: 300

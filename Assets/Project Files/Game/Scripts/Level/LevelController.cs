@@ -502,16 +502,7 @@ namespace Watermelon
             if (isCustomLevel) return;
             if (levelRepresentation.Tiles.Count != 0 || !dock.IsEmpty) return;
 
-            // Read score-target state from the active source (randomised or normal level)
-            bool hasScoreTarget = isEndlessMode
-                ? activeRandomisedResult?.HasScoreTarget ?? false
-                : level.ScoreTarget.Enabled;
-
-            int scoreTarget = isEndlessMode
-                ? activeRandomisedResult?.ScoreTarget ?? 0
-                : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
-
-            if (hasScoreTarget)
+            if (TryGetScoreTarget(out int scoreTarget))
             {
                 // Board empty but score not yet met → lose
                 // Score-target win is handled by OnScoreTargetReached
@@ -522,6 +513,22 @@ namespace Watermelon
             {
                 WinLevel();
             }
+        }
+
+        /// <summary>
+        /// Reads score-target state from the active source (randomised or normal level).
+        /// </summary>
+        private static bool TryGetScoreTarget(out int scoreTarget)
+        {
+            bool hasScoreTarget = isEndlessMode
+                ? activeRandomisedResult?.HasScoreTarget ?? false
+                : level.ScoreTarget.Enabled;
+
+            scoreTarget = isEndlessMode
+                ? activeRandomisedResult?.ScoreTarget ?? 0
+                : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
+
+            return hasScoreTarget;
         }
 
         public void OnSlotsFilled()
@@ -881,13 +888,33 @@ namespace Watermelon
             levelSave.MaxReachedLevelIndex = Mathf.Clamp(levelSave.MaxReachedLevelIndex, 0, Database.AmountOfLevels - 1);
         }
 
-        public static void Revive()
+        /// <returns>Whether any tiles were actually returned to the board.</returns>
+        public static bool Revive()
         {
             RaycastController.Enable();
-            ReturnTiles(3, null);
+            bool tilesReturned = ReturnTiles(3, null);
 
             if (ActiveTimerEnabled)
                 GameplayTimer.AddSeconds(GameController.Data.ReviveTimerBonusSeconds);
+
+            return tilesReturned;
+        }
+
+        /// <summary>
+        /// Grants the revive score bonus and, on score-target levels, evaluates
+        /// the outcome directly — since if no tiles were returned, the board is
+        /// permanently empty and no future match will ever fire OnMatchCompleted
+        /// to check win/lose. Must run after GameController.IsGameActive is back
+        /// to true (WinLevel/LoseLevel both guard on it).
+        /// </summary>
+        public static void ApplyReviveScoreOutcome(bool tilesReturned)
+        {
+            if (!TryGetScoreTarget(out int scoreTarget)) return;
+
+            ScoreDataModel.AddReviveBonus(GameController.Data.ReviveScoreBonus);
+
+            if (!tilesReturned && ScoreDataModel.CurrentScore < scoreTarget)
+                instance.LoseLevel();
         }
 
         // ── Private helpers ───────────────────────────────────────────────────
