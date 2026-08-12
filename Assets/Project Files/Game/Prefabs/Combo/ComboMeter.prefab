@@ -18213,7 +18213,7 @@ MonoBehaviour:
     - rid: 4074007477808529413
       type: {class: MMF_TMPTextReveal, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
       data:
-        Active: 1
+        Active: 0
         UniqueID: 2141951064
         Label: TMP Text Reveal
         OriginalLabel: TMP Text Reveal
