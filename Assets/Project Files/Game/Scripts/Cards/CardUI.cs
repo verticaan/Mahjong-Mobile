@@ -79,6 +79,9 @@ namespace Watermelon
             
             titleText.text = cardData.TitleText;
             descriptionText.text = cardData.DescriptionText;
+
+            titleText.ForceMeshUpdate();
+            descriptionText.ForceMeshUpdate();
         }
         
         public void SetSelected(bool selected)

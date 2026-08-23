@@ -193,7 +193,7 @@ namespace Watermelon
 
         #region Public API - Combo Round Timer
 
-        public void StartTimerFromList()
+        public void StartTimerFromList(bool refreshUI = true)
         {
             if (IsInactiveForScoring) return;
 
@@ -202,7 +202,7 @@ namespace Watermelon
             comboTimer.SetMaxTime(roundDurationSeconds);
             comboTimer.Start();
             CaptureSnapshot();
-            RefreshUI();
+            if (refreshUI) RefreshUI();
         }
 
         public void ResetComboTimerIndex()
@@ -360,15 +360,22 @@ namespace Watermelon
 
         #region Public API - Scoring
 
+        /*
         public void AddRawScorePerSlot(int slotCount)
         {
             if (IsInactiveForScoring || !IsTimerRunning) return;
+            ApplyRawScoreDelta(slotCount);
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+        */
+
+        private void ApplyRawScoreDelta(int slotCount)
+        {
             int addedScore = slotCount * PerSlotValueEffective;
             rawScore = Mathf.Max(0, rawScore + slotCount * PerSlotValueEffective);
 
             OnScoreAdded?.Invoke(addedScore);
-            UpdateCurrentScore();
-            RefreshUI();
         }
 
         //public void ApplyScoreToUI()
@@ -395,12 +402,19 @@ namespace Watermelon
             RefreshUI();
         }
 
+        /*
         public void IncreaseMultiplierPerMatch(int times)
         {
             if (IsInactiveForScoring || !IsTimerRunning) return;
-            scoreMultiplier = Mathf.Max(1, scoreMultiplier + times * MultiplierIncreaseEffective);
+            ApplyMultiplierDelta(times);
             UpdateCurrentScore();
             RefreshUI();
+        }
+        */
+
+        private void ApplyMultiplierDelta(int times)
+        {
+            scoreMultiplier = Mathf.Max(1, scoreMultiplier + times * MultiplierIncreaseEffective);
         }
 
         public void ChangeMultiplierDirect(int value)
@@ -426,7 +440,20 @@ namespace Watermelon
             UpdateCurrentScore();
             RefreshUI();
         }
-        
+
+        /// <summary>
+        /// Grants a revive bonus outside of the combo round timer's state
+        /// (the round is still paused from the loss at revive time), unlike
+        /// <see cref="ChangeCurrentScoreDirect"/> which is gated on IsTimerRunning.
+        /// </summary>
+        public void AddReviveBonus(int amount)
+        {
+            if (IsInactiveForScoring) return;
+            bankedScore = Mathf.Max(0, bankedScore + amount);
+            UpdateCurrentScore();
+            RefreshUI();
+        }
+
         #endregion
 
         #region Public API - Modifier Handles
@@ -530,9 +557,15 @@ namespace Watermelon
         private void UpdateScoresAfterMatch(int emptySlots)
         {
             if (IsInactiveForScoring) return;
-            StartTimerFromList();
-            AddRawScorePerSlot(emptySlots);
-            IncreaseMultiplierPerMatch(1);
+
+            StartTimerFromList(refreshUI: false);
+            if (!IsTimerRunning) return;
+
+            ApplyRawScoreDelta(emptySlots);
+            ApplyMultiplierDelta(1);
+
+            UpdateCurrentScore();
+            RefreshUI();
         }
 
         private IEnumerator CompleteCoroutine()

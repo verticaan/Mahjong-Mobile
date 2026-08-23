@@ -182,6 +182,7 @@ namespace Watermelon
 
             if (ClampToMaxTime) CurrentTime = Mathf.Min(CurrentTime, MaxTime);
             if (CurrentTime < 0f) CurrentTime = 0f;
+            if (CurrentTime > 0f) finishedInvoked = false;
 
             UpdateTimeSpanAndEvents(prev);
             TryFinishIfZero();

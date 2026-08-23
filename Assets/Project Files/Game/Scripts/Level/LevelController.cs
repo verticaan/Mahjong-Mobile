@@ -92,6 +92,18 @@ namespace Watermelon
         public static GameplayTimer GameplayTimer { get; private set; }
 
         /// <summary>
+        /// Whether the currently active level has a countdown timer, reading from
+        /// the same active source as <see cref="OnMatchCompleted"/>'s score-target
+        /// check — the rolled <see cref="RandomisedLevelResult"/> in endless mode,
+        /// or the hand-crafted <see cref="LevelData"/> otherwise. <see cref="Level"/>
+        /// stays pointed at the randomised mode's board-geometry template even in
+        /// endless mode, so it must not be used for this check.
+        /// </summary>
+        public static bool ActiveTimerEnabled => isEndlessMode
+            ? activeRandomisedResult?.HasTimer ?? false
+            : level.GameplayTimer.Enabled;
+
+        /// <summary>
         /// Returns true when <paramref name="levelIndex"/> is beyond the last
         /// hand-crafted level and a <see cref="RandomisedLevelData"/> asset is assigned.
         /// </summary>
@@ -186,6 +198,11 @@ namespace Watermelon
             gameUI.PowerUpsUIController.OnLevelStarted(0);
             gameUI.ActivateTutorial();
 
+            if (ActiveTimerEnabled)
+                gameUI.GameplayTimer.Show(GameplayTimer);
+            else
+                gameUI.GameplayTimer.Hide();
+
             levelObject.SetActive(true);
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
@@ -265,6 +282,11 @@ namespace Watermelon
             gameUI.PowerUpsUIController.OnLevelStarted(levelIndex);
             gameUI.UpdateLevelNumber(levelIndex + 1);
 
+            if (ActiveTimerEnabled)
+                gameUI.GameplayTimer.Show(GameplayTimer);
+            else
+                gameUI.GameplayTimer.Hide();
+
             levelObject.SetActive(true);
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
@@ -328,6 +350,11 @@ namespace Watermelon
             gameUI.PowerUpsUIController.OnLevelStarted(displayLevelIndex);
             gameUI.UpdateLevelNumber(displayLevelIndex + 1);
 
+            if (ActiveTimerEnabled)
+                gameUI.GameplayTimer.Show(GameplayTimer);
+            else
+                gameUI.GameplayTimer.Hide();
+
             levelObject.SetActive(true);
             levelScaler.Recalculate();
             layersParentObject.transform.position = levelScaler.LevelFieldCenter;
@@ -366,6 +393,7 @@ namespace Watermelon
         private void LoadLevelData(LevelData levelData)
         {
             scoreDataModel.ResetForLevel();
+            GameplayTimer.Reset();
 
             if (levelData.UsesCards)
             {
@@ -407,6 +435,7 @@ namespace Watermelon
         private void ApplyGameplayConfig(RandomisedLevelResult result)
         {
             scoreDataModel.ResetForLevel();
+            GameplayTimer.Reset();
 
             if (result.UsesCards)
             {
@@ -473,16 +502,7 @@ namespace Watermelon
             if (isCustomLevel) return;
             if (levelRepresentation.Tiles.Count != 0 || !dock.IsEmpty) return;
 
-            // Read score-target state from the active source (randomised or normal level)
-            bool hasScoreTarget = isEndlessMode
-                ? activeRandomisedResult?.HasScoreTarget ?? false
-                : level.ScoreTarget.Enabled;
-
-            int scoreTarget = isEndlessMode
-                ? activeRandomisedResult?.ScoreTarget ?? 0
-                : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
-
-            if (hasScoreTarget)
+            if (TryGetScoreTarget(out int scoreTarget))
             {
                 // Board empty but score not yet met → lose
                 // Score-target win is handled by OnScoreTargetReached
@@ -493,6 +513,22 @@ namespace Watermelon
             {
                 WinLevel();
             }
+        }
+
+        /// <summary>
+        /// Reads score-target state from the active source (randomised or normal level).
+        /// </summary>
+        private static bool TryGetScoreTarget(out int scoreTarget)
+        {
+            bool hasScoreTarget = isEndlessMode
+                ? activeRandomisedResult?.HasScoreTarget ?? false
+                : level.ScoreTarget.Enabled;
+
+            scoreTarget = isEndlessMode
+                ? activeRandomisedResult?.ScoreTarget ?? 0
+                : (level.ScoreTarget.Enabled ? level.ScoreTarget.Value : 0);
+
+            return hasScoreTarget;
         }
 
         public void OnSlotsFilled()
@@ -605,7 +641,9 @@ namespace Watermelon
 
         public static void ResumeSubsystems()
         {
-            GameplayTimer.Resume();
+            if (ActiveTimerEnabled)
+                GameplayTimer.Resume();
+
             ScoreDataModel.ResumeComboTimer();
         }
         
@@ -850,10 +888,33 @@ namespace Watermelon
             levelSave.MaxReachedLevelIndex = Mathf.Clamp(levelSave.MaxReachedLevelIndex, 0, Database.AmountOfLevels - 1);
         }
 
-        public static void Revive()
+        /// <returns>Whether any tiles were actually returned to the board.</returns>
+        public static bool Revive()
         {
             RaycastController.Enable();
-            ReturnTiles(3, null);
+            bool tilesReturned = ReturnTiles(3, null);
+
+            if (ActiveTimerEnabled)
+                GameplayTimer.AddSeconds(GameController.Data.ReviveTimerBonusSeconds);
+
+            return tilesReturned;
+        }
+
+        /// <summary>
+        /// Grants the revive score bonus and, on score-target levels, evaluates
+        /// the outcome directly — since if no tiles were returned, the board is
+        /// permanently empty and no future match will ever fire OnMatchCompleted
+        /// to check win/lose. Must run after GameController.IsGameActive is back
+        /// to true (WinLevel/LoseLevel both guard on it).
+        /// </summary>
+        public static void ApplyReviveScoreOutcome(bool tilesReturned)
+        {
+            if (!TryGetScoreTarget(out int scoreTarget)) return;
+
+            ScoreDataModel.AddReviveBonus(GameController.Data.ReviveScoreBonus);
+
+            if (!tilesReturned && ScoreDataModel.CurrentScore < scoreTarget)
+                instance.LoseLevel();
         }
 
         // ── Private helpers ───────────────────────────────────────────────────

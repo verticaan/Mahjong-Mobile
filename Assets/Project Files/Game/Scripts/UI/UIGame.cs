@@ -70,17 +70,6 @@ namespace Watermelon
 
             UILevelNumberText.Show();
 
-            var timer = LevelController.Level.GameplayTimer;
-            if (timer.Enabled)
-            {
-                gameplayTimer.gameObject.SetActive(true);
-                gameplayTimer.Show(LevelController.GameplayTimer);
-            }
-            else
-            {
-                gameplayTimer.gameObject.SetActive(false);
-            }
-
             UIController.OnPageOpened(this);
         }
 
@@ -90,12 +79,6 @@ namespace Watermelon
             exitButtonFadeAnimation.Hide();
 
             UILevelNumberText.Hide();
-
-            var timer = LevelController.Level.GameplayTimer;
-            if (timer.Enabled)
-            {
-                gameplayTimer.Hide();
-            }
 
             UIController.OnPageClosed(this);
         }

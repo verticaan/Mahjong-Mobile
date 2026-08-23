@@ -94,7 +94,7 @@ namespace Watermelon
 
             gameController.mapBehavior.Hide();
 
-            int cardLevelIndex = 30;
+            int cardLevelIndex = 6;
 
             if (gameController.data.ShowCardTutorial && index == cardLevelIndex)
             {
@@ -196,11 +196,12 @@ namespace Watermelon
 
         public static void Revive()
         {
-            LevelController.Revive();
+            bool tilesReturned = LevelController.Revive();
 
             Tween.NextFrame(() =>
             {
                 isGameActive = true;
+                LevelController.ApplyReviveScoreOutcome(tilesReturned);
             });
         }
 

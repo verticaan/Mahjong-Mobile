@@ -13,6 +13,9 @@ namespace Watermelon
 
         public void Show(GameplayTimer timer)
         {
+            if (this.timer != null)
+                this.timer.OnTimeSpanChanged -= OnTimeChanged;
+
             this.timer = timer;
             gameObject.SetActive(true);
 
@@ -30,7 +33,11 @@ namespace Watermelon
         {
             gameObject.SetActive(false);
 
-            timer.OnTimeSpanChanged -= OnTimeChanged;
+            if (timer != null)
+            {
+                timer.OnTimeSpanChanged -= OnTimeChanged;
+                timer = null;
+            }
         }
 
         public void SetFreezeFillAmount(float t)
