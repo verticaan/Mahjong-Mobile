@@ -4969,6 +4969,11 @@ PrefabInstance:
       propertyPath: managedReferences[4074007456489144415].Curve.MMTweenDefinitionType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2261410239942285589, guid: 2774aaf90e6ef2e46b7278a4c7969824,
+        type: 3}
+      propertyPath: managedReferences[4074007477808529413].Active
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2494126291043879534, guid: 2774aaf90e6ef2e46b7278a4c7969824,
         type: 3}
       propertyPath: m_SizeDelta.x

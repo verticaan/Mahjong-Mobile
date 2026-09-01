@@ -17,7 +17,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 21300000, guid: cecdbf60b0c9d47c9a26b99a41425de0, type: 3}
   frameImage: {fileID: -164843222, guid: 0b4938bfbcea80545b48c4b6960b65b6, type: 3}
   titleText: ACCELERANDO
-  descriptionText: +2 Stave, redraw, undo 2 notes, shuffle, increase timer
+  descriptionText: +2 Stave, redraw, undo 2 notes, shuffle, increase timer speed
   qualityValue: 35
   activeEffects:
   - rid: 2064241211670790163
