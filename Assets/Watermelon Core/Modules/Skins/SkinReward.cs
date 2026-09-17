@@ -1,55 +1,62 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
 {
-    public class SkinReward : Reward
+    [Serializable]
+    [RegisterReward(typeof(SkinRewardView))]
+    public sealed class SkinReward : Reward
     {
+        private const int PREVIEW_SORTING_ORDER = 0;
+
         [SkinPicker]
         [SerializeField] string skinID;
+        public string SkinID => skinID;
 
-        [SerializeField] bool disableIfSkinIsUnlocked;
+        [SerializeField] bool autoSelect = true;
 
-        private SkinController skinsController;
-
-        private void Start()
+        public SkinReward() { }
+        public SkinReward(string skinID, bool autoSelect)
         {
-            skinsController = SkinController.Instance;
-        }
-
-        private void OnEnable()
-        {
-            SkinController.SkinUnlocked += OnSkinUnlocked;    
-        }
-
-        private void OnDisable()
-        {
-            SkinController.SkinUnlocked -= OnSkinUnlocked;
+            this.skinID = skinID;
+            this.autoSelect = autoSelect;
         }
 
         public override void ApplyReward()
         {
-            skinsController.UnlockSkin(skinID, true);
+            SkinController.Instance?.UnlockSkin(skinID, autoSelect);
         }
 
         public override bool CheckDisableState()
         {
-            if(disableIfSkinIsUnlocked)
+            SkinController skinController = SkinController.Instance;
+            if(skinController != null)
             {
-                return skinsController.IsSkinUnlocked(skinID);
+                return skinController.IsSkinUnlocked(skinID);
             }
 
             return false;
         }
 
-        private void OnSkinUnlocked(ISkinData skinData)
+        public override List<IRewardPreview> GetRewardPreviews()
         {
-            if(disableIfSkinIsUnlocked)
+            Sprite skinPreviewSprite = null;
+
+            SkinController skinController = SkinController.Instance;
+            if (skinController != null)
             {
-                if(skinData.ID == skinID)
+                ISkinData skinData = skinController.GetSkinData(skinID);
+                if (skinData != null)
                 {
-                    gameObject.SetActive(false);
+                    skinPreviewSprite = skinData.PreviewSprite;
                 }
             }
+
+            return new List<IRewardPreview>()
+            {
+                new RewardPreview(skinPreviewSprite, "NEW SKIN!", PREVIEW_SORTING_ORDER)
+            };
         }
     }
 }

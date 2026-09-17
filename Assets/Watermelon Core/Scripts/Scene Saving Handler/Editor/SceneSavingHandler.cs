@@ -42,7 +42,7 @@ namespace Watermelon
         {
             foreach (var type in registeredTypes)
             {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
                 UnityEngine.Object[] sceneObjects = GameObject.FindObjectsByType(type, FindObjectsInactive.Include, FindObjectsSortMode.None);
 #else
                 UnityEngine.Object[] sceneObjects = GameObject.FindObjectsOfType(type, true);

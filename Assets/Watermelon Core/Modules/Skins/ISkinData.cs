@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
@@ -9,10 +7,11 @@ namespace Watermelon
         string ID { get; }
         int Hash { get; }
         bool IsUnlocked { get; }
+
         AbstractSkinDatabase SkinsProvider { get; }
+        Sprite PreviewSprite { get; }
 
         void Init(AbstractSkinDatabase provider);
         void Unlock();
-        
     }
 }

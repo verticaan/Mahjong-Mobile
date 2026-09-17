@@ -63,6 +63,11 @@ namespace Watermelon
             RequireUpdate = true;
         }
 
+        public void RequestUpdate()
+        {
+            RequireUpdate = true;
+        }
+
         public void MarkAsUpdated()
         {
             RequireUpdate = false;

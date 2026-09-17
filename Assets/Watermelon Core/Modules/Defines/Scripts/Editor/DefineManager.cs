@@ -4,8 +4,9 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
 using UnityEditor.Build;
 #endif
 
@@ -15,7 +16,7 @@ namespace Watermelon
     {
         public static bool HasDefine(string define)
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             string definesLine = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
             string definesLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -26,7 +27,7 @@ namespace Watermelon
 
         public static void EnableDefine(string define)
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             string defineLine = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
             string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -39,7 +40,7 @@ namespace Watermelon
 
             defineLine = defineLine.Insert(0, define + ";");
 
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)), defineLine);
 #else
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), defineLine);
@@ -48,7 +49,7 @@ namespace Watermelon
 
         public static void DisableDefine(string define)
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             string defineLine = PlayerSettings.GetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
             string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -71,7 +72,7 @@ namespace Watermelon
 
             if (defineLine != tempDefineLine)
             {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
                 PlayerSettings.SetScriptingDefineSymbols(NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)), tempDefineLine);
 #else
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), tempDefineLine);
@@ -79,21 +80,47 @@ namespace Watermelon
             }
         }
 
-        public static void CheckAutoDefines()
+        public static void CheckAutoDefines(string[] deletedAssets = null)
         {
             if (EditorApplication.isCompiling || EditorApplication.isUpdating || string.IsNullOrEmpty(CoreEditor.FOLDER_CORE))
             {
-                EditorApplication.delayCall += CheckAutoDefines;
+                EditorApplication.delayCall += () => { CheckAutoDefines(deletedAssets); };
 
                 return;
+            }
+
+            bool CheckDeletedAssets(string filePath)
+            {
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    if (!deletedAssets.IsNullOrEmpty())
+                    {
+                        foreach (string deletedAsset in deletedAssets)
+                        {
+                            if (deletedAsset.EndsWith(filePath, StringComparison.OrdinalIgnoreCase))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
             }
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
             List<DefineState> markedDefines = new List<DefineState>();
-            List<RegisteredDefine> registeredDefines = DefineSettings.GetDynamicDefines();
+            List<RegisteredDefine> registeredDefines = GetDynamicDefines();
             foreach (RegisteredDefine registeredDefine in registeredDefines)
             {
+                if(CheckDeletedAssets(registeredDefine.FilePath))
+                {
+                    markedDefines.Add(new DefineState(registeredDefine.Define, false));
+
+                    continue;
+                }
+
                 bool defineFound = false;
 
                 foreach(Assembly assembly in assemblies)
@@ -101,18 +128,16 @@ namespace Watermelon
                     Type targetType = assembly.GetType(registeredDefine.AssemblyType, false);
                     if (targetType != null)
                     {
-                        markedDefines.Add(new DefineState(registeredDefine.Define, true));
-
                         defineFound = true;
+
+                        markedDefines.Add(new DefineState(registeredDefine.Define, true));
 
                         break;
                     }
                 }
 
                 if(!defineFound)
-                {
                     markedDefines.Add(new DefineState(registeredDefine.Define, false));
-                }
             }
 
             ChangeAutoDefinesState(markedDefines);
@@ -169,21 +194,54 @@ namespace Watermelon
 
             definesString.ApplyDefines();
         }
+
+        public static List<RegisteredDefine> GetDynamicDefines()
+        {
+            //Get assembly
+            List<Type> gameTypes = new List<Type>();
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (Assembly assembly in assemblies)
+            {
+                if (assembly != null)
+                {
+                    try
+                    {
+                        Type[] tempTypes = assembly.GetTypes();
+
+                        tempTypes = tempTypes.Where(m => m.IsDefined(typeof(DefineAttribute), true)).ToArray();
+
+                        if (!tempTypes.IsNullOrEmpty())
+                            gameTypes.AddRange(tempTypes);
+                    }
+                    catch (ReflectionTypeLoadException e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+            }
+
+            List<RegisteredDefine> registeredDefines = new List<RegisteredDefine>();
+            registeredDefines.AddRange(DefineSettings.STATIC_REGISTERED_DEFINES);
+
+            foreach (Type type in gameTypes)
+            {
+                //Get attribute
+                DefineAttribute[] defineAttributes = (DefineAttribute[])Attribute.GetCustomAttributes(type, typeof(DefineAttribute));
+
+                for (int i = 0; i < defineAttributes.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(defineAttributes[i].AssemblyType))
+                    {
+                        int methodId = registeredDefines.FindIndex(x => x.Define == defineAttributes[i].Define);
+                        if (methodId == -1)
+                        {
+                            registeredDefines.Add(new RegisteredDefine(defineAttributes[i]));
+                        }
+                    }
+                }
+            }
+
+            return registeredDefines;
+        }
     }
 }
-
-// -----------------
-// Define Manager v0.3.1
-// -----------------
-
-// Changelog
-// v 0.3.1
-// • Added ability to load auto-defines by adding Define attributes to classes
-// v 0.3
-// • Added auto toggle for specific defines
-// • UI moved from scriptable object editor to editor window
-// v 0.2.1
-// • Added link to the documentation
-// • Enable define function fix
-// v 0.1
-// • Added basic version

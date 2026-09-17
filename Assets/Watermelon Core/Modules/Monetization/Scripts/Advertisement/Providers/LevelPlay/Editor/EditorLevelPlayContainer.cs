@@ -15,17 +15,17 @@ namespace Watermelon
 
             if (GUILayout.Button("Getting Started Guide", EditorCustomStyles.button))
             {
-                Application.OpenURL(@"https://developers.is.com/ironsource-mobile/unity/levelplay-starter-kit/");
+                Application.OpenURL(@"https://docs.unity.com/en-us/grow/levelplay/sdk/unity/get-started");
             }
 
             if (GUILayout.Button("Integration Testing", EditorCustomStyles.button))
             {
-                Application.OpenURL(@"https://developers.is.com/ironsource-mobile/unity/unity-levelplay-test-suite/#step-1");
+                Application.OpenURL(@"https://docs.unity.com/en-us/grow/levelplay/sdk/unity/integration-test-suite");
             }
 
             GUILayout.Space(8);
 
-            EditorGUILayout.HelpBox("Tested with ironSource v8.4.1", MessageType.Info);
+            EditorGUILayout.HelpBox("Tested with LevelPlay v9.1.0", MessageType.Info);
         }
     }
 }

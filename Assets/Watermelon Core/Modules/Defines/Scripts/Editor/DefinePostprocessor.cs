@@ -33,7 +33,7 @@ namespace Watermelon
 
             if (EditorPrefs.GetBool(PREFS_KEY, false))
             {
-                DefineManager.CheckAutoDefines();
+                DefineManager.CheckAutoDefines(deletedAssets);
 
                 EditorPrefs.SetBool(PREFS_KEY, false);
             }

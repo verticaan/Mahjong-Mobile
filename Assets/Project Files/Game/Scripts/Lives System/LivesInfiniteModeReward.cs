@@ -1,27 +1,39 @@
-using TMPro;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
 {
-    public class LivesInfiniteModeReward : Reward
+    [Serializable]
+    [RegisterReward(typeof(LivesInfiniteModeRewardView))]
+    public sealed class LivesInfiniteModeReward : Reward
     {
+        private const int PREVIEW_SORTING_ORDER = 0;
+
         [SerializeField] float durationInMinutes = 60;
+        public float DurationInMinutes => durationInMinutes;
 
-        [Space]
-        [SerializeField] TextMeshProUGUI durationText;
-        [SerializeField] string durationFormat = "{hh}hrs";
-
-        public override void Init()
+        public LivesInfiniteModeReward() { }
+        public LivesInfiniteModeReward(float durationInMinutes)
         {
-            if (durationText != null)
-            {
-                durationText.text = TimeUtils.GetFormatedTime(durationInMinutes, durationFormat);
-            }
+            this.durationInMinutes = durationInMinutes;
         }
 
         public override void ApplyReward()
         {
             LivesSystem.EnableInfiniteMode(durationInMinutes * 60);
+        }
+
+        public override List<IRewardPreview> GetRewardPreviews()
+        {
+            string durationFormat = "{mm} min";
+            if (durationInMinutes > 60)
+                durationFormat = "{hh} hr";
+
+            return new List<IRewardPreview>()
+            {
+                new RewardPreview(LivesSystem.Data.RewardPreviewSprite, TimeUtils.GetFormatedTime(durationInMinutes, durationFormat), PREVIEW_SORTING_ORDER, LivesSystem.Data.RewardInfiniteModePreviewPrefab)
+            };
         }
     }
 }

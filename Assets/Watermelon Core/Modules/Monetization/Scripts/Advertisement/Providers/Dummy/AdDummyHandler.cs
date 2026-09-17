@@ -41,6 +41,8 @@ namespace Watermelon
             dummyController.ShowBanner();
 
             AdsManager.OnProviderAdDisplayed(providerType, AdType.Banner);
+
+            AdsManager.SetBannerHeight(50);
         }
 
         public override void HideBanner()

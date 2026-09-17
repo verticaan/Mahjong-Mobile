@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace Watermelon
+{
     [System.Serializable]
     public sealed class CachedBoxCollider : ICachedComponent<BoxCollider>
     {
@@ -26,3 +28,4 @@
             size = collider.size;
         }
     }
+}

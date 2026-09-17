@@ -114,6 +114,25 @@ namespace Watermelon
             return null;
         }
 
+        public static FloatingTextBaseBehavior GetFloatingText(string floatingTextName)
+        {
+            return GetFloatingText(floatingTextName.GetHashCode());
+        }
+
+        public static FloatingTextBaseBehavior GetFloatingText(int floatingTextNameHash)
+        {
+            if (floatingTextController.floatingTextLink.ContainsKey(floatingTextNameHash))
+            {
+                FloatingTextCase floatingTextCase = floatingTextController.floatingTextLink[floatingTextNameHash];
+
+                GameObject floatingTextObject = floatingTextCase.FloatingTextPool.GetPooledObject();
+
+                return floatingTextObject.GetComponent<FloatingTextBaseBehavior>();
+            }
+
+            return null;
+        }
+
         public static void Unload()
         {
             FloatingTextCase[] floatingTextCases = floatingTextController.floatingTextCases;

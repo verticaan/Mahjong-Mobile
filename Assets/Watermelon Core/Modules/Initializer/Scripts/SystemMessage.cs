@@ -25,7 +25,7 @@ namespace Watermelon
 
         private bool isLoadingActive;
 
-        private void Start()
+        public void Init()
         {
             if (floatingMessage != null) return;
 
@@ -46,7 +46,7 @@ namespace Watermelon
         {
             if (isLoadingActive)
             {
-                loadingIconRectTransform.Rotate(0, 0, -50 * Time.deltaTime);
+                loadingIconRectTransform.Rotate(0, 0, -50 * Time.unscaledDeltaTime);
             }
         }
 

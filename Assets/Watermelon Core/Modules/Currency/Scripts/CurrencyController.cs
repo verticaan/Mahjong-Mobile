@@ -19,12 +19,15 @@ namespace Watermelon
 
             // Store active currencies
             currencies = currenciesDatabase.Currencies;
-            
+
             // Initialize currencies
             foreach (Currency currency in currencies)
             {
                 currency.Init();
             }
+
+            // Load currencies from remote config
+            CurrencyRemoteConfigData remoteConfigData = RemoteConfigController.TryGetConfig<CurrencyRemoteConfigData>("currencies");
 
             // Link currencies by the type
             currenciesLink = new Dictionary<CurrencyType, int>();
@@ -40,8 +43,21 @@ namespace Watermelon
                 }
 
                 Currency.Save save = SaveController.GetSaveObject<Currency.Save>("currency" + ":" + (int)currencies[i].CurrencyType);
-                if(save.Amount == -1)
-                    save.Amount = currencies[i].DefaultAmount;
+                if (save.Amount == -1)
+                {
+                    int defaultAmount = currencies[i].DefaultAmount;
+
+                    if (remoteConfigData != null)
+                    {
+                        CurrencyRemoteConfigData.Currency currencyOverride = remoteConfigData.GetCurrencyOverride(currencies[i].CurrencyType);
+                        if (currencyOverride != null)
+                        {
+                            defaultAmount = currencyOverride.defaultCount;
+                        }
+                    }
+
+                    save.Amount = defaultAmount;
+                }
 
                 currencies[i].SetSave(save);
             }
@@ -62,13 +78,13 @@ namespace Watermelon
         public static Currency GetCurrency(CurrencyType currencyType)
         {
 #if UNITY_EDITOR
-            if(!Application.isPlaying)
+            if (!Application.isPlaying)
             {
                 ProjectInitSettings projectInitSettings = RuntimeEditorUtils.GetAsset<ProjectInitSettings>();
                 if (projectInitSettings != null)
                 {
                     CurrencyInitModule currencyInitModule = projectInitSettings.GetModule<CurrencyInitModule>();
-                    if(currencyInitModule != null)
+                    if (currencyInitModule != null)
                     {
                         CurrencyDatabase currencyDatabase = currencyInitModule.Database;
                         if (currencyDatabase != null)
@@ -98,7 +114,7 @@ namespace Watermelon
             currency.InvokeChangeEvent(0);
         }
 
-        public static void Add(CurrencyType currencyType, int amount)
+        public static void Add(CurrencyType currencyType, int amount, string analyticsEvent = "")
         {
             Currency currency = currencies[currenciesLink[currencyType]];
 
@@ -109,9 +125,12 @@ namespace Watermelon
 
             // Invoke currency change event;
             currency.InvokeChangeEvent(amount);
+
+            if(!string.IsNullOrEmpty(analyticsEvent))
+                AnalyticsController.OnCurrencySource(analyticsEvent, new Dictionary<CurrencyType, int>() { { currencyType, amount } });
         }
 
-        public static void Substract(CurrencyType currencyType, int amount)
+        public static void Substract(CurrencyType currencyType, int amount, string analyticsEvent = "")
         {
             Currency currency = currencies[currenciesLink[currencyType]];
 
@@ -122,11 +141,14 @@ namespace Watermelon
 
             // Invoke currency change event
             currency.InvokeChangeEvent(-amount);
+
+            if (!string.IsNullOrEmpty(analyticsEvent))
+                AnalyticsController.OnCurrencySink(analyticsEvent, new Dictionary<CurrencyType, int>() { { currencyType, amount } });
         }
 
         public static void SubscribeGlobalCallback(CurrencyCallback currencyChange)
         {
-            for(int i = 0; i < currencies.Length; i++)
+            for (int i = 0; i < currencies.Length; i++)
             {
                 currencies[i].OnCurrencyChanged += currencyChange;
             }
@@ -134,7 +156,7 @@ namespace Watermelon
 
         public static void UnsubscribeGlobalCallback(CurrencyCallback currencyChange)
         {
-            if(!currencies.IsNullOrEmpty())
+            if (!currencies.IsNullOrEmpty())
             {
                 for (int i = 0; i < currencies.Length; i++)
                 {

@@ -141,7 +141,7 @@ namespace Watermelon
         {
             Type targetType = serializedObject.targetObject.GetType();
 
-            IEnumerable<FieldInfo> fieldInfos = targetType.GetFields(ReflectionUtils.FLAGS_INSTANCE).Where(x => x.GetCustomAttribute<GroupAttribute>() == null);
+            IEnumerable<FieldInfo> fieldInfos = targetType.GetFields(ReflectionUtils.FLAGS_INSTANCE).Where(x => x.GetCustomAttribute<GroupAttribute>() == null && x.GetCustomAttribute<HideAttribute>() == null);
             foreach (var field in fieldInfos)
             {
                 SerializedProperty serializedProperty = serializedObject.FindProperty(field.Name);

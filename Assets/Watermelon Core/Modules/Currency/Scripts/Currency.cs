@@ -20,6 +20,9 @@ namespace Watermelon
         [SerializeField] FloatingCloudCase floatingCloud;
         public FloatingCloudCase FloatingCloud => floatingCloud;
 
+        [SerializeField] CurrencyRewardPreviewSettings previewSettings;
+        public CurrencyRewardPreviewSettings PreviewSettings => previewSettings;
+
         public int Amount { get => save.Amount; set => save.Amount = value; }
 
         public string AmountFormatted => CurrencyHelper.Format(save.Amount);
@@ -31,6 +34,9 @@ namespace Watermelon
         public void Init()
         {
             data.Init(this);
+
+            // Initialize preview settings if available
+            previewSettings?.Init(this);
         }
 
         public void SetSave(Save save)

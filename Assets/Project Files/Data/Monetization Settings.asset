@@ -16,11 +16,11 @@ MonoBehaviour:
   adsSettings: {fileID: 1338303973460554233}
   isModuleActive: 1
   verboseLogging: 1
-  debugMode: 0
+  debugMode: 1
   testDevices:
   - 91687A6357C9E0169C1471C98D0237EB
-  privacyLink: https://mywebsite.com/privacy
-  termsOfUseLink: https://mywebsite.com/terms
+  privacyLink: https://www.indiecorestudios.com/privacy-policy
+  termsOfUseLink: https://www.indiecorestudios.com/jazz-hands/terms-of-use
 --- !u!114 &1338303973460554233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37,18 +37,12 @@ MonoBehaviour:
   interstitialType: 1
   rewardedVideoType: 1
   loadAdsOnStart: 1
+  noAdsRewardSprite: {fileID: 21300000, guid: ab459ab1eec1de34badb882b0ca5f2f5, type: 3}
   interstitialFirstStartDelay: 40
   interstitialStartDelay: 40
   interstitialShowingDelay: 30
-  autoShowInterstitial: 0
   loadingAdDuration: 0
   loadingMessage: Ad is loading..
-  isUMPEnabled: 0
-  umpTagForUnderAgeOfConsent: 0
-  umpDebugMode: 1
-  umpDebugGeography: 1
-  isIDFAEnabled: 0
-  trackingDescription: Your data will be used to deliver personalized ads to you.
   adMobContainer:
     androidAppId: ca-app-pub-3940256099942544~3347511713
     iosAppId: ca-app-pub-3940256099942544~3347511713
@@ -64,27 +58,29 @@ MonoBehaviour:
     appOpenAdExpirationHoursTime: 4
     bannerType: 0
     bannerPosition: 0
-  unityAdsContainer:
-    androidAppID: 5717128
-    iOSAppID: 5717129
-    androidBannerID: Banner_Android
-    iOSBannerID: Banner_iOS
-    androidInterstitialID: Interstitial_Android
-    iOSInterstitialID: Interstitial_iOS
-    androidRewardedVideoID: Rewarded_Android
-    iOSRewardedVideoID: Rewarded_iOS
-    bannerPosition: 4
   levelPlayContainer:
     androidAppKey: 85460dcd
-    iOSAppKey: 8545d445
     androidBannerID: thnfvcsog13bhn08
-    iOSBannerID: iep3rxsyp9na3rw8
     androidInterstitialID: aeyqi3vqlv6o8sh9
+    androidRVID: 
+    iOSAppKey: 8545d445
+    iOSBannerID: iep3rxsyp9na3rw8
     iOSInterstitialID: wmgt0712uuux8ju4
+    iOSRVID: 
     bannerPosition: 0
     bannerType: 0
   dummyContainer:
     bannerPosition: 0
+  applovinContainer:
+    androidBannerID: banner
+    iOSBannerID: banner
+    androidInterstitialID: video
+    iOSInterstitialID: video
+    androidRewardedVideoID: rewardedVideo
+    iOSRewardedVideoID: rewardedVideo
+    bannerPosition: 0
+    useAdaptiveBanner: 1
+    bannerBackgroundColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1569315140361065267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,23 +100,35 @@ MonoBehaviour:
     iOSID: com.example.game.noads
     productKeyType: 0
     productType: 1
+    defaultUSDPrice: 0.99
+    rewardsSet: {fileID: 0}
   - androidID: com.example.game.pack
     iOSID: com.example.game.pack
     productKeyType: 1
     productType: 1
+    defaultUSDPrice: 0.99
+    rewardsSet: {fileID: 0}
   - androidID: com.example.game.gold.small
     iOSID: com.example.game.gold.small
     productKeyType: 2
     productType: 0
+    defaultUSDPrice: 0.99
+    rewardsSet: {fileID: 0}
   - androidID: com.example.game.gold.medium
     iOSID: com.example.game.gold.medium
     productKeyType: 3
     productType: 0
+    defaultUSDPrice: 0.99
+    rewardsSet: {fileID: 0}
   - androidID: com.example.game.gold.big
     iOSID: com.example.game.gold.big
     productKeyType: 4
     productType: 0
+    defaultUSDPrice: 0.99
+    rewardsSet: {fileID: 0}
   - androidID: com.example.game.pu
     iOSID: com.example.game.pu
     productKeyType: 5
     productType: 0
+    defaultUSDPrice: 0.99
+    rewardsSet: {fileID: 0}

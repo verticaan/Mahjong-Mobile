@@ -10,7 +10,7 @@ namespace Watermelon
         [InitializeOnLoadMethod]
         public static void CheckCanvasSize()
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             UIController uiController = FindFirstObjectByType<UIController>();
 #else
             UIController uiController = FindObjectOfType<UIController>();

@@ -22,6 +22,8 @@ namespace Watermelon
 
         private static IAPSettings settings;
 
+        private static Save save;
+
         public static void Init(MonetizationSettings monetizationSettings)
         {
             if (IsInitialized)
@@ -37,13 +39,22 @@ namespace Watermelon
                 return;
             }
 
+            save = SaveController.GetSaveObject<Save>("iapGlobalSave");
+
             productsTypeToProductLink = new Dictionary<ProductKeyType, IAPItem>();
+
+            IAPRemoteConfigData remoteConfigData = RemoteConfigController.TryGetConfig<IAPRemoteConfigData>("iaps");
 
             IAPItem[] items = settings.StoreItems;
             if (items != null)
             {
                 foreach (IAPItem item in items)
                 {
+                    item.Init();
+
+                    IAPRemoteConfigData.IAP remoteConfigItem = remoteConfigData?.GetOverride(item.ID);
+                    item.OverrideDefaultPrice(remoteConfigItem);
+
                     if (!productsTypeToProductLink.ContainsKey(item.ProductKeyType))
                     {
                         productsTypeToProductLink.Add(item.ProductKeyType, item);
@@ -78,14 +89,6 @@ namespace Watermelon
 
             return item;
         }
-
-#if MODULE_IAP
-        public static Product GetProduct(ProductKeyType productKeyType)
-        {
-            var iapItem = GetIAPItem(productKeyType);
-            return iapItem != null ? UnityIAPWrapper.Controller.products.WithID(iapItem.ID) : null;
-        }
-#endif
 
         public static void RestorePurchases()
         {
@@ -127,7 +130,7 @@ namespace Watermelon
         {
             if (!Monetization.IsActive || !IsInitialized) return new ProductData();
 
-            var product = wrapper.GetProductData(productKeyType);
+            ProductData product = wrapper.GetProductData(productKeyType);
 
             if (product == null)
             {
@@ -142,6 +145,19 @@ namespace Watermelon
             if (!Monetization.IsActive || !IsInitialized) return false;
 
             return wrapper.IsSubscribed(productKeyType);
+        }
+
+        public static bool IsPurchased(ProductKeyType productKeyType)
+        {
+#if MODULE_IAP
+            IAPItem iapItem = GetIAPItem(productKeyType);
+            if(iapItem != null)
+            {
+                return wrapper.IsPurchased(iapItem.ID);
+            }
+#endif
+
+            return false;
         }
 
         public static string GetProductLocalPriceString(ProductKeyType productKeyType)
@@ -161,15 +177,51 @@ namespace Watermelon
         {
             IsInitialized = true;
 
-            Initialized?.Invoke();
+            if (Initialized != null)
+            {
+                System.Delegate[] listDelegates = Initialized.GetInvocationList();
+                foreach (var d in listDelegates)
+                {
+                    SimpleCallback cb = (SimpleCallback)d; 
+
+                    if (d.Target is UnityEngine.Object uo && uo == null)
+                        continue;
+
+                    try
+                    {
+                        cb?.Invoke();
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+            }
 
             if (Monetization.VerboseLogging)
                 Debug.Log("[IAPManager]: Module is initialized!");
         }
 
-        public static void OnPurchaseCompleted(ProductKeyType productKey)
+        public static void OnPurchaseCompleted(IAPItem item)
         {
-            PurchaseCompleted?.Invoke(productKey);
+            if(!save.FirstPurchase)
+            {
+                AnalyticsController.TrackEvent(AnalyticsEventType.IAPFirstPurchase);
+
+                save.FirstPurchase = true;
+            }
+
+            item.OnProductPurchased();
+
+            PurchaseCompleted?.Invoke(item.ProductKeyType);
+        }
+
+        public static bool IsPayableUser()
+        {
+            if(save != null)
+                return save.FirstPurchase;
+
+            return false;
         }
 
         public static void OnPurchaseFailed(ProductKeyType productKey, Watermelon.PurchaseFailureReason failureReason)
@@ -180,7 +232,11 @@ namespace Watermelon
         private static IAPWrapper GetPlatformWrapper()
         {
 #if MODULE_IAP
+#if UNITY_IAP_NEW
+            return new UnityIAP5Wrapper();
+#else
             return new UnityIAPWrapper();
+#endif
 #else
             return new DummyIAPWrapper();
 #endif
@@ -201,5 +257,16 @@ namespace Watermelon
 
         public delegate void ProductCallback(ProductKeyType productKeyType);
         public delegate void ProductFailCallback(ProductKeyType productKeyType, Watermelon.PurchaseFailureReason failureReason);
+
+        [System.Serializable]
+        public class Save : ISaveObject
+        {
+            public bool FirstPurchase = false;
+
+            public void Flush()
+            {
+
+            }
+        }
     }
 }

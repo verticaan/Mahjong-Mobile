@@ -3,14 +3,12 @@ using UnityEngine.UI;
 
 namespace Watermelon
 {
-    public class DummyOverlayPanel : IOverlayPanel
+    public class DummyOverlayPanel : BaseOverlayPanel
     {
-        private Canvas canvas;
-
         private Image image;
         private TweenCase fadeTweenCase;
 
-        public void Init()
+        public override void Init()
         {
             GameObject overlayObject = new GameObject("Overlay Image");
             overlayObject.transform.SetParent(canvas.transform);
@@ -26,38 +24,23 @@ namespace Watermelon
             image.raycastTarget = true;
         }
 
-        public void SetCanvas(Canvas canvas)
-        {
-            this.canvas = canvas;
-        }
-
-        public void Show(float duration, SimpleCallback onCompleted)
+        public override void Show(float duration, SimpleCallback onCompleted)
         {
             fadeTweenCase.KillActive();
             fadeTweenCase = image.DOFade(1.0f, duration, unscaledTime: true).SetEasing(Ease.Type.Linear).OnComplete(onCompleted);
         }
 
-        public void Hide(float duration, SimpleCallback onCompleted)
+        public override void Hide(float duration, SimpleCallback onCompleted)
         {
             fadeTweenCase.KillActive();
             fadeTweenCase = image.DOFade(0.0f, duration, unscaledTime: true).SetEasing(Ease.Type.Linear).OnComplete(onCompleted);
         }
 
-        public void Clear()
+        public override void Clear()
         {
             fadeTweenCase.KillActive();
 
-            Object.Destroy(canvas.gameObject);
-        }
-
-        public void SetState(bool state)
-        {
-            canvas.enabled = state;
-        }
-
-        public void SetLoadingState(bool state)
-        {
-            // Loading isn't supported implemented for dummy panel
+            Object.Destroy(gameObject);
         }
     }
 }

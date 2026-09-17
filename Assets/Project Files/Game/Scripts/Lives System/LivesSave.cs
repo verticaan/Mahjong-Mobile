@@ -6,6 +6,7 @@ namespace Watermelon
     public class LivesSave : ISaveObject
     {
         public int LivesCount = -1;
+        public int MaxLivesCount = -1;
 
         public bool LifeLocked = false;
         public long NewLifeDateBinary;

@@ -42,7 +42,6 @@ MonoBehaviour:
   m_Name: Project Init Settings
   m_EditorClassIdentifier: 
   modules:
-  - {fileID: 465105545023070882}
   - {fileID: 150167048453217202}
   - {fileID: 6377013955087300433}
   - {fileID: 2650117374181925186}

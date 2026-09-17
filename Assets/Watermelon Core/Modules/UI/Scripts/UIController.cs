@@ -5,32 +5,69 @@ using UnityEngine.UI;
 
 namespace Watermelon
 {
+
+    [StaticUnload]
     public class UIController : MonoBehaviour
     {
         private static UIController uiController;
 
         [SerializeField] FloatingCloud currencyCloud;
         [SerializeField] NotchSaveArea notchSaveArea;
+        [SerializeField] CachedPages cachedPages;
+
+        [Space]
+        [SerializeField] bool usePausePopups = true;
         
-        private static List<UIPage> pages;
-        private static Dictionary<Type, UIPage> pagesLink = new Dictionary<Type, UIPage>();
+        private List<UIPage> pages;
+        public List<UIPage> Pages => pages;
 
-        private static List<IPopupWindow> popupWindows;
-        public static bool IsPopupOpened => !popupWindows.IsNullOrEmpty();
+        private Dictionary<Type, UIPage> pagesLink = new Dictionary<Type, UIPage>();
+        public Dictionary<Type, UIPage> PagesLink => pagesLink;
+
+        private List<IPopupWindow> popupWindows;
+
         private static UIPage currentPage;
-        private static UIPage previousPage;
         public static bool focusedOnGame => currentPage is UIGame;
+        public static bool IsPopupOpened
+        {
+            get
+            {
+                if(uiController == null)
+                {
+                    Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
 
-        private static bool isTablet;
-        public static bool IsTablet => isTablet;
+                    return false;
+                }
+
+                return !uiController.popupWindows.IsNullOrEmpty();
+            }
+        }
+
+        private List<IPausePopup> pausePopups = new List<IPausePopup>();
+        public List<IPausePopup> PausePopups => pausePopups;
+
+        public bool IsPausePopupOpened => !pausePopups.IsNullOrEmpty();
+
+        private bool isTablet;
+        public static bool IsTablet 
+        { 
+            get
+            {
+                if(uiController == null)
+                    return UIUtils.IsWideScreen(Camera.main);
+
+                return uiController.isTablet;
+            }
+        }
 
         private static Canvas mainCanvas;
         public static Canvas MainCanvas => mainCanvas;
         public static CanvasScaler CanvasScaler { get; private set; }
+        public static float ScaleFactor { get; private set; } = 1.0f;
 
         private static Camera mainCamera;
 
-        private static SimpleCallback localPageClosedCallback;
+        private SimpleCallback localPageClosedCallback;
 
         public static event PageCallback PageOpened;
         public static event PageCallback PageClosed;
@@ -45,12 +82,13 @@ namespace Watermelon
             mainCanvas = GetComponent<Canvas>();
             CanvasScaler = GetComponent<CanvasScaler>();
 
-            isTablet = UIUtils.IsWideScreen(Camera.main);
             mainCamera = Camera.main;
+            isTablet = UIUtils.IsWideScreen(mainCamera);
 
             CanvasScaler.matchWidthOrHeight = isTablet ? 1 : 0;
 
             popupWindows = new List<IPopupWindow>();
+            pausePopups = new List<IPausePopup>();
 
             pages = new List<UIPage>();
             pagesLink = new Dictionary<Type, UIPage>();
@@ -74,22 +112,41 @@ namespace Watermelon
                 }
             }
 
-            // Initialize global overlay
-            Overlay.Init(this);
+            cachedPages.Init(this);
+        }
+
+        private void RecalculateScaleFactor(CanvasScaler canvasScaler)
+        {
+            Vector2 refRes = CanvasScaler.referenceResolution;
+            float match = CanvasScaler.matchWidthOrHeight;
+
+            float screenRatio = (float)Screen.width / Screen.height;
+            float targetRatio = refRes.x / refRes.y;
+
+            if (screenRatio > targetRatio)
+            {
+                ScaleFactor = Screen.height / refRes.y;
+            }
+            else
+            {
+                ScaleFactor = Screen.width / refRes.x;
+            }
         }
 
         public void InitPages()
         {
+            RecalculateScaleFactor(CanvasScaler);
+
             // Refresh notch save area
-            notchSaveArea.Init();
+            notchSaveArea.Init(new Vector2(Screen.width / ScaleFactor, Screen.height / ScaleFactor));
 
             // Initialize currency cloud
             currencyCloud.Init();
 
             for (int i = 0; i < pages.Count; i++)
             {
+                pages[i].PreparePage();
                 pages[i].Init();
-                pages[i].DisableCanvas();
             }
         }
 
@@ -98,6 +155,7 @@ namespace Watermelon
             UIController controller = uiController;
             if (controller != null)
             {
+                List<UIPage> pages = controller.pages;
                 for (int i = 0; i < pages.Count; i++)
                 {
                     if (pages[i].IsPageDisplayed)
@@ -110,56 +168,159 @@ namespace Watermelon
 
         public static void ShowPage<T>() where T : UIPage
         {
+            if(uiController == null)
+            {
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
+
+                return;
+            }
+
+            UIPage page = null;
             Type pageType = typeof(T);
-            UIPage page = pagesLink[pageType];
 
-            if (currentPage != page)
-                previousPage = currentPage;
+            Dictionary<Type, UIPage> pagesLink = uiController.pagesLink;
+            List<UIPage> pages = uiController.pages;
 
-            currentPage = page;
-            Debug.Log("Current page: " + currentPage);
+            if(!pagesLink.ContainsKey(pageType))
+            {
+                if(!uiController.cachedPages.HasPage(pageType))
+                {
+                    Debug.LogError($"[UIController]: Page {pageType} not found in the scene and not linked as a cached page. Ensure it’s instantiated or registered before showing.");
+
+                    return;
+                }
+
+                page = uiController.cachedPages.InstantiateCachedPage(pageType);
+            }
+            else
+            {
+                page = pagesLink[pageType];
+            }
+
             if (!page.IsPageDisplayed)
             {
+                page.GraphicRaycaster.enabled = true;
                 page.PlayShowAnimation();
                 page.EnableCanvas();
-                page.GraphicRaycaster.enabled = true;
             }
         }
 
         public static void ShowPage(UIPage page)
         {
-            if (currentPage != page)
-                previousPage = currentPage;
+            if (uiController == null)
+            {
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
+
+                return;
+            }
+
+            if(page == null)
+            {
+                Debug.LogError("[UIController]: Provided page reference cannot be null!");
+
+                return;
+            }
 
             currentPage = page;
             if (!page.IsPageDisplayed)
             {
+                page.GraphicRaycaster.enabled = true;
                 page.PlayShowAnimation();
                 page.EnableCanvas();
-                page.GraphicRaycaster.enabled = true;
             }
         }
 
-        public static void HidePage<T>(SimpleCallback onPageClosed = null)
+        public static void HidePage<T>(SimpleCallback onPageClosed = null) where T : UIPage
         {
-            Type pageType = typeof(T);
-            UIPage page = pagesLink[pageType];
-            if (page.IsPageDisplayed)
+            if (uiController == null)
             {
-                localPageClosedCallback = onPageClosed;
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
 
-                page.GraphicRaycaster.enabled = false;
-                page.PlayHideAnimation();
+                onPageClosed?.Invoke();
+
+                return;
             }
-            else
+
+            Dictionary<Type, UIPage> pagesLink = uiController.pagesLink;
+            Type pageType = typeof(T);
+
+            if (!pagesLink.ContainsKey(pageType))
+            {
+                Debug.LogError($"[UIController]: Page type {pageType.Name} was not found in the registered pages!");
+
+                onPageClosed?.Invoke();
+
+                return;
+            }
+
+            UIPage page = pagesLink[pageType];
+            currentPage = page;
+            Debug.Log("Current page: " + currentPage);
+            if (!page.IsPageDisplayed)
             {
                 onPageClosed?.Invoke();
+
+                return;
             }
+
+            uiController.localPageClosedCallback = onPageClosed;
+
+            page.GraphicRaycaster.enabled = false;
+            page.PlayHideAnimation();
+        }
+
+        public static void HidePage(UIPage page, SimpleCallback onPageClosed = null)
+        {
+            if (uiController == null)
+            {
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
+
+                onPageClosed?.Invoke();
+
+                return;
+            }
+
+            if (page == null)
+            {
+                Debug.LogError("[UIController]: Provided page reference cannot be null!");
+
+                onPageClosed?.Invoke();
+
+                return;
+            }
+
+            if (!page.IsPageDisplayed)
+            {
+                onPageClosed?.Invoke();
+
+                return;
+            }
+
+            uiController.localPageClosedCallback = onPageClosed;
+
+            page.GraphicRaycaster.enabled = false;
+            page.PlayHideAnimation();
         }
 
         public static void DisablePage<T>()
         {
+            if (uiController == null)
+            {
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
+
+                return;
+            }
+
+            Dictionary<Type, UIPage> pagesLink = uiController.pagesLink;
             Type pageType = typeof(T);
+
+            if (!pagesLink.ContainsKey(pageType))
+            {
+                Debug.LogError($"[UIController]: Page type {pageType.Name} was not found in the registered pages!");
+
+                return;
+            }
+
             UIPage page = pagesLink[pageType];
             if (page.IsPageDisplayed)
             {
@@ -171,67 +332,166 @@ namespace Watermelon
 
         public static bool IsDisplayed<T>() where T : UIPage
         {
-            Type type = typeof(T);
-            if (pagesLink.ContainsKey(type))
+            if (uiController == null)
             {
-                return pagesLink[type].IsPageDisplayed;
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
+
+                return false;
             }
 
-            return false;
+            Dictionary<Type, UIPage> pagesLink = uiController.pagesLink;
+            Type pageType = typeof(T);
+
+            if (!pagesLink.ContainsKey(pageType))
+            {
+                Debug.LogError($"[UIController]: Page type {pageType.Name} was not found in the registered pages!");
+
+                return false;
+            }
+
+            return pagesLink[pageType].IsPageDisplayed;
         }
 
         public static void OnPageClosed(UIPage page)
         {
             page.DisableCanvas();
 
-            if (currentPage == page && previousPage != null)
-            {
-                currentPage = previousPage;
-                previousPage = null;
-            }
-
             PageClosed?.Invoke(page, page.GetType());
 
-            if (localPageClosedCallback != null)
+            if (page is IPopupWindow popup)
             {
-                localPageClosedCallback.Invoke();
-                localPageClosedCallback = null;
+                if (uiController.popupWindows.Contains(popup))
+                {
+                    uiController.popupWindows.Remove(popup);
+
+                    if (popup is IPausePopup pausePopup)
+                    {
+                        uiController.pausePopups.Remove(pausePopup);
+
+                        if (uiController.pausePopups.Count == 0)
+                        {
+                            if (uiController.usePausePopups)
+                                Time.timeScale = 1.0f;
+                        }
+                    }
+
+                    PopupClosed?.Invoke(popup, false);
+                }
+            }
+
+            if (uiController.localPageClosedCallback != null)
+            {
+                uiController.localPageClosedCallback.Invoke();
+                uiController.localPageClosedCallback = null;
+            }
+
+            if(page.IsCached)
+            {
+                Type pageType = page.GetType();
+
+                CachedPages.PageData data = uiController.cachedPages.GetPageData(pageType);
+                if (data != null)
+                {
+                    if(data.AutoDestroy)
+                    {
+                        uiController.pagesLink.Remove(pageType);
+                        uiController.pages.Remove(page);
+
+                        Destroy(page.gameObject);
+                    }
+                }
             }
         }
 
         public static void OnPageOpened(UIPage page)
         {
             PageOpened?.Invoke(page, page.GetType());
+
+            if(page is IPopupWindow popup)
+            {
+                if (!uiController.popupWindows.Contains(popup))
+                {
+                    uiController.popupWindows.Add(popup);
+
+                    if (popup is IPausePopup pausePopup)
+                    {
+                        uiController.pausePopups.Add(pausePopup);
+
+                        if (uiController.usePausePopups)
+                            Time.timeScale = 0.0f;
+                    }
+
+                    PopupOpened?.Invoke(popup, true);
+                }
+            }
         }
 
+        [Obsolete("Use only OnPageOpened method")]
         public static void OnPopupWindowOpened(IPopupWindow popupWindow)
         {
-            if(!popupWindows.Contains(popupWindow))
-            {
-                popupWindows.Add(popupWindow);
-
-                PopupOpened?.Invoke(popupWindow, true);
-            }
+            // Will be removed in the next update
+            // All logic has been moved to the OnPageOpened method
         }
 
+        [Obsolete("Use only OnPageClosed method")]
         public static void OnPopupWindowClosed(IPopupWindow popupWindow)
         {
-            if (popupWindows.Contains(popupWindow))
-            {
-                popupWindows.Remove(popupWindow);
-
-                PopupClosed?.Invoke(popupWindow, false);
-            }
+            // Will be removed in the next update
+            // All logic has been moved to the OnPageClosed method
         }
 
         public static T GetPage<T>() where T : UIPage
         {
-            UIPage page;
+            if (uiController == null)
+            {
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
 
-            if (pagesLink.TryGetValue(typeof(T), out page))
-                return (T)page;
+                return null;
+            }
 
-            return null;
+            UIPage page = null;
+            Type pageType = typeof(T);
+
+            Dictionary<Type, UIPage> pagesLink = uiController.pagesLink;
+            List<UIPage> pages = uiController.pages;
+
+            if (!pagesLink.ContainsKey(pageType))
+            {
+                if (!uiController.cachedPages.HasPage(pageType))
+                {
+                    Debug.LogError($"[UIController]: Page {pageType} not found in the scene and not linked as a cached page. Ensure it’s instantiated or registered before showing.");
+
+                    return null;
+                }
+
+                page = uiController.cachedPages.InstantiateCachedPage(pageType);
+            }
+            else
+            {
+                page = pagesLink[pageType];
+            }
+
+            return (T)page;
+        }
+
+        public static bool HasPage<T>() where T : UIPage
+        {
+            if (uiController == null)
+            {
+                Debug.LogError("[UIController]: Controller is not initialized. Make sure the component exists in the scene and that the Init and InitPages methods have been called!");
+
+                return false;
+            }
+
+            Type pageType = typeof(T);
+
+            if (uiController.pagesLink.ContainsKey(pageType))
+                return true;
+
+            if (uiController.cachedPages.HasPage(pageType))
+                return true;
+
+            return false;
         }
 
         public static Vector3 FixUIElementToWorld(Transform target, Vector3 offset)
@@ -248,29 +508,40 @@ namespace Watermelon
             return RectTransformUtility.WorldToScreenPoint(mainCamera, targPos);
         }
 
+        public static TweenCase WaitForPopupsClose(SimpleCallback callback)
+        {
+            if (uiController.popupWindows.IsNullOrEmpty())
+            {
+                callback?.Invoke();
+
+                return null;
+            }
+
+            return Tween.DoWaitForCondition(waitTween =>
+            {
+                if (uiController.pausePopups.Count == 0)
+                    callback?.Invoke();
+            }, unscaledTime: true);
+        }
+
         private void OnDestroy()
         {
             FloatingCloud.Clear();
 
-            Overlay.Clear();
+            if(usePausePopups)
+                Time.timeScale = 1.0f;
+        }
+
+        private static void UnloadStatic()
+        {
+            PageOpened = null;
+            PageClosed = null;
+
+            PopupOpened = null;
+            PopupClosed = null;
         }
 
         public delegate void PageCallback(UIPage page, Type pageType);
         public delegate void PopupWindowCallback(IPopupWindow popupWindow, bool state);
     }
 }
-
-// -----------------
-// UI Controller v1.2.1
-// -----------------
-
-// Changelog
-// v 1.2.1
-// ï¿½ Added Editor script that automatically configure CanvasScaler
-// v 1.2
-// ï¿½ Added global overlay
-// v 1.1
-// ï¿½ Added popup callbacks and methods to handle when a custom window is opened
-// ï¿½ RectTransform can be added to NotchSaveArea using NotchSaveArea.RegisterRectTransform method
-// v 1.0
-// ï¿½ Basic logic

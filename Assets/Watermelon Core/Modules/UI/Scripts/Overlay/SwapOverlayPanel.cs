@@ -3,24 +3,19 @@ using UnityEngine.UI;
 
 namespace Watermelon
 {
-    [RequireComponent(typeof(Canvas))]
-    public class SwapOverlayPanel : MonoBehaviour, IOverlayPanel
+    public class SwapOverlayPanel : BaseOverlayPanel
     {
         [SerializeField] RawImage image;
         [SerializeField] Gradient gradient;
 
-        [Space]
-        [SerializeField] GameObject loadingObject;
-
         private Vector2 size;
         private Vector2 center;
 
-        private Canvas canvas;
         private CanvasScaler scaler;
 
         private TweenCase tweenCase;
 
-        public void Init()
+        public override void Init()
         {
             canvas = gameObject.GetComponent<Canvas>();
 
@@ -93,7 +88,7 @@ namespace Watermelon
             center = new Vector3(0, ((end + start) / 2 - 0.5f) * size.y);
         }
 
-        public void Show(float duration, SimpleCallback onCompleted)
+        public override void Show(float duration, SimpleCallback onCompleted)
         {
             tweenCase.KillActive();
 
@@ -101,7 +96,7 @@ namespace Watermelon
             tweenCase = image.DOAnchoredPosition(center, duration, unscaledTime: true).SetEasing(Ease.Type.Linear).OnComplete(onCompleted);
         }
 
-        public void Hide(float duration, SimpleCallback onCompleted)
+        public override void Hide(float duration, SimpleCallback onCompleted)
         {
             tweenCase.KillActive();
 
@@ -109,22 +104,9 @@ namespace Watermelon
             tweenCase = image.DOAnchoredPosition(new Vector2(0, -size.y), duration, unscaledTime: true).SetEasing(Ease.Type.Linear).OnComplete(onCompleted);
         }
 
-        public void Clear()
+        public override void Clear()
         {
             tweenCase.KillActive();
-        }
-
-        public void SetState(bool state)
-        {
-            canvas.enabled = state;
-        }
-
-        public void SetLoadingState(bool state)
-        {
-            if(loadingObject != null)
-            {
-                loadingObject.gameObject.SetActive(state);
-            }
         }
     }
 }

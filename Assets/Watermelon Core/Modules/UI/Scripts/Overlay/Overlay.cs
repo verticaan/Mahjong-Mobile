@@ -3,69 +3,58 @@ using UnityEngine.UI;
 
 namespace Watermelon
 {
-    public static class Overlay
+    [StaticUnload]
+    public class Overlay
     {
-        private static IOverlayPanel overlayPanel;
+        private static Overlay instance;
 
-        public static void Init(UIController uiController)
+        private IOverlayPanel panel;
+
+        private GameObject tempCanvasObject;
+        private GameObject parentObject;
+
+        public Overlay(GameObject parentObject)
         {
-            foreach (Transform child in uiController.transform)
-            {
-                Component component = child.GetComponent(typeof(IOverlayPanel));
+            this.parentObject = parentObject;
 
-                if (component != null)
-                {
-                    overlayPanel = (IOverlayPanel)component;
+            panel = FindOverlayPanel(parentObject.transform);
+            
+            if(panel == null)
+                panel = CreateDummyOverlay(parentObject.transform);
 
-                    break;
-                }
-            }
+            panel.Init();
 
-            if(overlayPanel == null)
-            {
-                // Create a custom canvas
-                GameObject canvasObject = new GameObject("[TEMP OVERLAY]");
-                canvasObject.transform.SetParent(uiController.transform);
-                canvasObject.transform.ResetLocal();
-                canvasObject.layer = LayerMask.NameToLayer("UI");
-
-                RectTransform canvasRectTransform = canvasObject.AddComponent<RectTransform>();
-                canvasRectTransform.anchorMin = new Vector2(0, 0);
-                canvasRectTransform.anchorMax = new Vector2(1.0f, 1.0f);
-                canvasRectTransform.sizeDelta = Vector2.zero;
-
-                Canvas overlayCanvas = canvasObject.AddComponent<Canvas>();
-                overlayCanvas.overrideSorting = true;
-                overlayCanvas.sortingOrder = 999;
-
-                canvasObject.AddComponent<GraphicRaycaster>();
-
-                DummyOverlayPanel dummyOverlayPanel = new DummyOverlayPanel();
-                dummyOverlayPanel.SetCanvas(overlayCanvas);
-
-                overlayPanel = dummyOverlayPanel;
-            }
-
-            overlayPanel.Init();
-            overlayPanel.SetState(false);
-            overlayPanel.SetLoadingState(false);
+            panel.SetState(false);
+            panel.SetLoadingState(false);
         }
 
         public static void Show(float duration, SimpleCallback onCompleted, bool showLoadingAnimation = false)
         {
-            overlayPanel.SetState(true);
-            overlayPanel.Show(duration, onCompleted);
+            if (instance == null) return;
+
+            IOverlayPanel panel = instance.panel;
+            if (panel == null) return;
+            if (panel.IsActive) return;
+
+            panel.SetState(true);
+            panel.Show(duration, onCompleted);
 
             if(showLoadingAnimation)
-                overlayPanel.SetLoadingState(true);
+                panel.SetLoadingState(true);
         }
 
         public static void Hide(float duration, SimpleCallback onCompleted = null)
         {
-            overlayPanel.Hide(duration, () =>
+            if (instance == null) return;
+
+            IOverlayPanel panel = instance.panel;
+            if (panel == null) return;
+            if (!panel.IsActive) return;
+
+            panel.Hide(duration, () =>
             {
-                overlayPanel.SetState(false);
-                overlayPanel.SetLoadingState(false);
+                panel.SetState(false);
+                panel.SetLoadingState(false);
 
                 onCompleted?.Invoke();
             });
@@ -73,11 +62,60 @@ namespace Watermelon
 
         public static void Clear()
         {
-            if(overlayPanel != null)
+            if (instance == null) return;
+
+            IOverlayPanel panel = instance.panel;
+            if (panel == null) return;
+
+            if (panel != null)
             {
-                overlayPanel.Clear();
-                overlayPanel = null;
+                panel.Clear();
+                panel = null;
             }
+        }
+
+        private static IOverlayPanel FindOverlayPanel(Transform parentTransform)
+        {
+            foreach (Transform child in parentTransform)
+            {
+                Component component = child.GetComponent(typeof(IOverlayPanel));
+                if (component != null)
+                    return (IOverlayPanel)component;
+            }
+
+            return null;
+        }
+
+        private IOverlayPanel CreateDummyOverlay(Transform parentTransform)
+        {
+            tempCanvasObject = new GameObject("[TEMP OVERLAY]");
+            tempCanvasObject.transform.SetParent(parentTransform);
+            tempCanvasObject.transform.ResetLocal();
+            tempCanvasObject.layer = LayerMask.NameToLayer("UI");
+
+            RectTransform rt = tempCanvasObject.AddComponent<RectTransform>();
+            rt.anchorMin = new Vector2(0, 0);
+            rt.anchorMax = new Vector2(1, 1);
+            rt.sizeDelta = Vector2.zero;
+
+            Canvas overlayCanvas = tempCanvasObject.AddComponent<Canvas>();
+            overlayCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            overlayCanvas.overrideSorting = true;
+            overlayCanvas.sortingOrder = 999;
+
+            tempCanvasObject.AddComponent<GraphicRaycaster>();
+
+            DummyOverlayPanel dummy = tempCanvasObject.AddComponent<DummyOverlayPanel>();
+
+            return dummy;
+        }
+
+        public static void Bind(Overlay overlay) => instance = overlay;
+        public static void Unbind() => instance = null;
+
+        private static void UnloadStatic()
+        {
+            instance = null;
         }
     }
 }

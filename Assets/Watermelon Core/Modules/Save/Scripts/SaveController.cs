@@ -68,7 +68,7 @@ namespace Watermelon
 
         public static T GetSaveObject<T>() where T : ISaveObject, new()
         {
-            return GetSaveObject<T>(typeof(T).GetHashCode());
+            return GetSaveObject<T>(typeof(T).ToString().GetHashCode());
         }
 
         public static T GetSaveObject<T>(string uniqueName) where T : ISaveObject, new()

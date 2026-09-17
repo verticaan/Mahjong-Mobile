@@ -6,41 +6,67 @@ namespace Watermelon
 {
     public class LoadingGraphics : MonoBehaviour
     {
-        [SerializeField] TextMeshProUGUI loadingText;
-        [SerializeField] Image backgroundImage;
-        [SerializeField] CanvasScaler canvasScaler;
         [SerializeField] Camera loadingCamera;
+        [SerializeField] CanvasScaler canvasScaler;
+        [SerializeField] CanvasGroup canvasGroup;
 
-        private void Awake()
+        [Space]
+        [SerializeField] Image backgroundImage;
+        [SerializeField] Image loadingImage;
+        [SerializeField] TextMeshProUGUI loadingMessageText;
+        [SerializeField] TextMeshProUGUI loadingPercentageText;
+        [SerializeField] GameObject loadingbarObject;
+        [SerializeField] Button retryButton;
+
+        private GameLoading loadingController;
+
+        public void Init(GameLoading loadingController)
         {
+            this.loadingController = loadingController;
+
             DontDestroyOnLoad(gameObject);
 
             canvasScaler.MatchSize();
 
-            OnLoading(0.0f, "Loading..");
+            retryButton.onClick.AddListener(OnRetryButtonClicked);
+            retryButton.gameObject.SetActive(false);
+
+            loadingbarObject.SetActive(true);
+
+            SetLoadingState(0.0f, "Loading..");
         }
 
-        private void OnEnable()
+        public void ShowErrorMessage(string message)
         {
-            GameLoading.OnLoading += OnLoading;
-            GameLoading.OnLoadingFinished += OnLoadingFinished;
+            loadingbarObject.SetActive(false);
+            retryButton.gameObject.SetActive(true);
+
+            loadingMessageText.text = message;
         }
 
-        private void OnDisable()
+        public void HideErrorMessage()
         {
-            GameLoading.OnLoading -= OnLoading;
-            GameLoading.OnLoadingFinished -= OnLoadingFinished;
+            loadingbarObject.SetActive(true);
+            retryButton.gameObject.SetActive(false);
+
+            loadingMessageText.text = "Loading..";
         }
 
-        private void OnLoading(float state, string message)
+        private void OnRetryButtonClicked()
         {
-            loadingText.text = message;
+            loadingController.RetryConnection();
         }
 
-        private void OnLoadingFinished()
+        public void SetLoadingState(float state, string message)
         {
-            loadingText.DOFade(0.0f, 0.6f, unscaledTime: true);
-            backgroundImage.DOFade(0.0f, 0.6f, unscaledTime: true).OnComplete(delegate
+            loadingImage.fillAmount = state;
+            loadingPercentageText.text = string.Format("{0}%", (state * 100).ToString("0"));
+            loadingMessageText.text = message;
+        }
+
+        public void OnLoadingFinished()
+        {
+            canvasGroup.DOFade(0.0f, 0.6f, unscaledTime: true).OnComplete(delegate
             {
                 Destroy(gameObject);
             });

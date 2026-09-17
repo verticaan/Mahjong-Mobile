@@ -2,6 +2,8 @@ namespace Watermelon
 {
     public interface IOverlayPanel
     {
+        public bool IsActive { get; }
+
         public void Init();
         public void Clear();
 

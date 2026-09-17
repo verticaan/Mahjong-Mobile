@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 5b9ed54ab3d49d64d83a2dc931d25cc3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Initializer/Scripts/Remote Config/RemoteConfigHandler.cs
+  uploadId: 868536

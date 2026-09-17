@@ -11,5 +11,18 @@ namespace Watermelon
         [Tooltip("In seconds")]
         [SerializeField] int oneLifeRestorationDuration = 1200;
         public int OneLifeRestorationDuration => oneLifeRestorationDuration;
+
+        [Header("Reward")]
+        [SerializeField] Sprite rewardPreviewSprite;
+        public Sprite RewardPreviewSprite => rewardPreviewSprite;
+
+        [SerializeField] GameObject rewardPreviewPrefab;
+        public GameObject RewardPreviewPrefab => rewardPreviewPrefab;
+
+        [SerializeField] GameObject rewardMaxLivesPreviewPrefab;
+        public GameObject RewardMaxLivesPreviewPrefab => rewardMaxLivesPreviewPrefab;
+
+        [SerializeField] GameObject rewardInfiniteModePreviewPrefab;
+        public GameObject RewardInfiniteModePreviewPrefab => rewardInfiniteModePreviewPrefab;
     }
 }

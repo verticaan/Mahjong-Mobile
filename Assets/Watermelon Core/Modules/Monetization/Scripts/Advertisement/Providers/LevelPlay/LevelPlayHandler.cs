@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 #if MODULE_LEVELPLAY
-using com.unity3d.mediation;
+using Unity.Services.LevelPlay;
 #endif
 
 namespace Watermelon
@@ -12,62 +12,58 @@ namespace Watermelon
 #if MODULE_LEVELPLAY
     public class LevelPlayHandler : AdProviderHandler
     {
-        private IronSourceListner eventsHolder;
-
         private LevelPlayBannerAd bannerAd;
         private LevelPlayInterstitialAd interstitialAd;
+        private LevelPlayRewardedAd rewardedVideoAd;
+
+        protected TaskCompletionSource<bool> loadingTask;
 
         public LevelPlayHandler(AdProvider moduleType) : base(moduleType) { }
 
         protected override async Task<bool> InitProviderAsync()
         {
             if (Monetization.VerboseLogging)
+            {
                 Debug.Log("[AdsManager]: LevelPlay is trying to initialize!", adsSettings);
 
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-
-            IronSource.Agent.setConsent(AdsManager.CanRequestAds());
-
-            eventsHolder = Initializer.GameObject.AddComponent<IronSourceListner>();
-            eventsHolder.Init(this);
-
-            if (adsSettings.RewardedVideoType == AdProvider.LevelPlay)
-            {
-                //Add AdInfo Rewarded Video Events
-                IronSourceRewardedVideoEvents.onAdOpenedEvent += RewardedVideoOnAdOpenedEvent;
-                IronSourceRewardedVideoEvents.onAdClosedEvent += RewardedVideoOnAdClosedEvent;
-                IronSourceRewardedVideoEvents.onAdShowFailedEvent += RewardedVideoOnAdShowFailedEvent;
-                IronSourceRewardedVideoEvents.onAdRewardedEvent += RewardedVideoOnAdRewardedEvent;
+                LevelPlay.ValidateIntegration();
             }
 
-            LevelPlay.OnInitSuccess += (configuration) =>
-            {
-                if (Monetization.VerboseLogging)
-                {
-                    Debug.Log("[AdsManager]: LevelPlay is initialized!");
+            loadingTask = new TaskCompletionSource<bool>();
 
-                    IronSource.Agent.validateIntegration();
-                }
+            LevelPlay.OnInitSuccess += OnInitSucces;
+            LevelPlay.OnInitFailed += OnInitFailed;
 
-                OnInitCompleted();
-
-                tcs.SetResult(true);
-            };
-
-            LevelPlay.OnInitFailed += (error) =>
-            {
-                Debug.LogError($"[AdsManager]: LevelPlay failed to initialized! Error: #{error.ErrorCode} {error.ErrorMessage}");
-
-                tcs.SetResult(false);
-            };
+            LevelPlay.SetConsent(ConsentData.IsConsentGiven);
 
             if (Monetization.DebugMode)
-                IronSource.Agent.setMetaData("is_test_suite", "enable");
+                LevelPlay.SetMetaData("is_test_suite", "enable");
 
-            LevelPlay.Init(GetAppKey(), adFormats: new[] { LevelPlayAdFormat.REWARDED });
+            LevelPlay.Init(GetAppKey());
 
-            return await tcs.Task;
+            return await loadingTask.Task;
         }
+
+        private void OnInitFailed(LevelPlayInitError error)
+        {
+            Debug.LogError($"[AdsManager]: LevelPlay failed to initialized! Error: #{error.ErrorCode} {error.ErrorMessage}");
+
+            loadingTask?.SetResult(false);
+        }
+
+        private void OnInitSucces(LevelPlayConfiguration configuration)
+        {
+            if (Monetization.VerboseLogging)
+                Debug.Log("[AdsManager]: LevelPlay is initialized!");
+
+            OnInitCompleted();
+
+            loadingTask?.SetResult(true);
+
+            LevelPlay.OnInitSuccess -= OnInitSucces;
+            LevelPlay.OnInitFailed -= OnInitFailed;
+        }
+
 
         private void OnInitCompleted()
         {
@@ -90,12 +86,11 @@ namespace Watermelon
             if (adsSettings.LevelPlayContainer.BannerPosition == BannerPosition.Top)
                 bannerPosition = LevelPlayBannerPosition.TopCenter;
 
-            bannerAd = new LevelPlayBannerAd(GetBannerID(), bannerSize, bannerPosition);
+            LevelPlayBannerAd.Config bannerConfig = new LevelPlayBannerAd.Config.Builder().SetPosition(bannerPosition).SetSize(bannerSize).Build();
+
+            bannerAd = new LevelPlayBannerAd(GetBannerID(), bannerConfig);
             bannerAd.OnAdLoaded += BannerOnAdLoadedEvent;
             bannerAd.OnAdDisplayed += BannerOnAdDisplayedEvent;
-
-            // Ad load
-            bannerAd.LoadAd();
 
             // Interstitial
             interstitialAd = new LevelPlayInterstitialAd(GetInterstitialID());
@@ -106,27 +101,40 @@ namespace Watermelon
             interstitialAd.OnAdDisplayed += InterstitialOnAdDisplayedEvent;
             interstitialAd.OnAdDisplayFailed += InterstitialOnAdDisplayFailedEvent;
             interstitialAd.OnAdClosed += InterstitialOnAdClosedEvent;
+
+            // Create Rewarded Video object
+            rewardedVideoAd = new LevelPlayRewardedAd(GetRewardedVideoID());
+
+            // Register to Rewarded Video events
+            rewardedVideoAd.OnAdDisplayed += RewardedVideoOnAdOpenedEvent;
+            rewardedVideoAd.OnAdDisplayFailed += RewardedVideoOnAdShowFailedEvent;
+            rewardedVideoAd.OnAdRewarded += RewardedVideoOnAdRewardedEvent;
+            rewardedVideoAd.OnAdClosed += RewardedVideoOnAdClosedEvent;
+
+            if (Monetization.DebugMode)
+                OpenTestSuite();
         }
 
         #region Rewarded Ad
         public override void RequestRewardedVideo()
         {
-            // Do nothing
+            if (rewardedVideoAd != null)
+                rewardedVideoAd.LoadAd();
         }
 
         public override void ShowRewardedVideo(AdvertisementCallback callback)
         {
-            IronSource.Agent.showRewardedVideo();
+            if (rewardedVideoAd != null)
+                rewardedVideoAd.ShowAd();
         }
-
 
         public override bool IsRewardedVideoLoaded()
         {
-            return IronSource.Agent.isRewardedVideoAvailable();
+            return rewardedVideoAd != null && rewardedVideoAd.IsAdReady();
         }
 
         // The Rewarded Video ad view has opened. Your activity will loose focus.
-        private void RewardedVideoOnAdOpenedEvent(IronSourceAdInfo adInfo)
+        private void RewardedVideoOnAdOpenedEvent(LevelPlayAdInfo adInfo)
         {
             AdsManager.CallEventInMainThread(delegate
             {
@@ -140,7 +148,7 @@ namespace Watermelon
         }
 
         // The Rewarded Video ad view is about to be closed. Your activity will regain its focus.
-        private void RewardedVideoOnAdClosedEvent(IronSourceAdInfo adInfo)
+        private void RewardedVideoOnAdClosedEvent(LevelPlayAdInfo info)
         {
             AdsManager.CallEventInMainThread(delegate
             {
@@ -156,7 +164,7 @@ namespace Watermelon
         // The user completed to watch the video, and should be rewarded.
         // The placement parameter will include the reward data.
         // When using server-to-server callbacks, you may ignore this event and wait for the ironSource server callback.
-        private void RewardedVideoOnAdRewardedEvent(IronSourcePlacement placement, IronSourceAdInfo adInfo)
+        private void RewardedVideoOnAdRewardedEvent(LevelPlayAdInfo info, LevelPlayReward reward)
         {
             AdsManager.CallEventInMainThread(delegate
             {
@@ -171,7 +179,7 @@ namespace Watermelon
         }
 
         // The rewarded video ad was failed to show.
-        private void RewardedVideoOnAdShowFailedEvent(IronSourceError error, IronSourceAdInfo adInfo)
+        private void RewardedVideoOnAdShowFailedEvent(LevelPlayAdInfo info, LevelPlayAdError error)
         {
             AdsManager.CallEventInMainThread(delegate
             {
@@ -180,8 +188,24 @@ namespace Watermelon
                 if (Monetization.VerboseLogging)
                     Debug.Log("[AdsManager]: RewardedVideoOnAdShowFailedEvent event received with message: " + error);
 
-                HandleAdLoadFailure(AdType.RewardedVideo, error.getDescription(), ref rewardedRetryAttempt, () => RequestRewardedVideo());
+                HandleAdLoadFailure(AdType.RewardedVideo, error.ErrorMessage, ref rewardedRetryAttempt, () => RequestRewardedVideo());
             });
+        }
+
+        /// <summary>
+        /// Retrieves the Rewarded Video ID based on the platform
+        /// </summary>
+        public string GetRewardedVideoID()
+        {
+#if UNITY_EDITOR
+            return "unused";
+#elif UNITY_ANDROID
+            return adsSettings.LevelPlayContainer.AndroidRVID;
+#elif UNITY_IOS
+            return adsSettings.LevelPlayContainer.IOSRVID;
+#else
+            return "unexpected_platform";
+#endif
         }
         #endregion
 
@@ -189,17 +213,13 @@ namespace Watermelon
         public override void RequestInterstitial()
         {
             if (interstitialAd != null)
-            {
                 interstitialAd.LoadAd();
-            }
         }
 
         public override void ShowInterstitial(AdvertisementCallback callback)
         {
             if(interstitialAd != null)
-            {
                 interstitialAd.ShowAd();
-            }
         }
 
         public override bool IsInterstitialLoaded()
@@ -225,14 +245,14 @@ namespace Watermelon
             });
         }
 
-        private void InterstitialOnAdDisplayFailedEvent(LevelPlayAdDisplayInfoError error)
+        private void InterstitialOnAdDisplayFailedEvent(LevelPlayAdInfo info, LevelPlayAdError error)
         {
             AdsManager.CallEventInMainThread(delegate
             {
                 if (Monetization.VerboseLogging)
-                    Debug.Log("[AdsManager]: Interstitial ad failed to load an ad with error: " + error.LevelPlayError.ErrorMessage);
+                    Debug.Log("[AdsManager]: Interstitial ad failed to load an ad with error: " + error.ErrorMessage);
 
-                HandleAdLoadFailure(AdType.Interstitial, error.LevelPlayError.ErrorMessage, ref interstitialRetryAttempt, () => RequestInterstitial());
+                HandleAdLoadFailure(AdType.Interstitial, error.ErrorMessage, ref interstitialRetryAttempt, () => RequestInterstitial());
             });
         }
 
@@ -357,7 +377,7 @@ namespace Watermelon
 
         public void OpenTestSuite()
         {
-            IronSource.Agent.launchTestSuite();
+            LevelPlay.LaunchTestSuite();
         }
 
         public string GetAppKey()
@@ -371,21 +391,6 @@ namespace Watermelon
 #else
             return "unexpected_platform";
 #endif
-        }
-
-        private class IronSourceListner : MonoBehaviour
-        {
-            private LevelPlayHandler ironSourceHandler;
-
-            public void Init(LevelPlayHandler ironSourceHandler)
-            {
-                this.ironSourceHandler = ironSourceHandler;
-            }
-
-            private void OnApplicationPause(bool isPaused)
-            {
-                IronSource.Agent.onApplicationPause(isPaused);
-            }
         }
     }
 #endif

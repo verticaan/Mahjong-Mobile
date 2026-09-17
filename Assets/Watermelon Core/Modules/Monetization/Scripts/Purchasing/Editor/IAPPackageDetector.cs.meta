@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a1c8a8f17600ef6498b3f14b74f19102
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Monetization/Scripts/Purchasing/Editor/IAPPackageDetector.cs
+  uploadId: 868536

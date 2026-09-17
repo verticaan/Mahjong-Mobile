@@ -18,7 +18,7 @@ namespace Watermelon
 
             if (elementType != null)
             {
-                if(elementType.IsSubclassOf(typeof(ScriptableObject)))
+                if(elementType.IsSubclassOf(typeof(ScriptableObject)) || elementType.IsSubclassOf(typeof(MonoBehaviour)))
                 {
                     containsUniqueID = false;
                 }

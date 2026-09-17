@@ -6,47 +6,48 @@ namespace Watermelon
 {
     public class DefineString
     {
-        private string defineLine;
-        private List<string> defineList;
+        private readonly string BaseDefineLine;
+
+        private List<string> definesList;
 
         public DefineString()
         {
-#if UNITY_6000
-            defineLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
+#if UNITY_6000_0_OR_NEWER
+            BaseDefineLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
-            defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
+            BaseDefineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
 #endif
 
-            defineList = new List<string>(defineLine.Split(';'));
+            definesList = new List<string>(BaseDefineLine.Split(';'));
         }
 
         public bool HasDefine(string define)
         {
-            return defineList.FindIndex(x => x == define) != -1;
+            return definesList.FindIndex(x => x == define) != -1;
         }
 
         public void RemoveDefine(string define)
         {
-            int defineIndex = defineList.FindIndex(x => x == define);
+            int defineIndex = definesList.FindIndex(x => x == define);
             if (defineIndex == -1)
                 return;
 
-            defineList.RemoveAt(defineIndex);
+            definesList.RemoveAt(defineIndex);
         }
 
         public void AddDefine(string define)
         {
-            int defineIndex = defineList.FindIndex(x => x == define);
+            int defineIndex = definesList.FindIndex(x => x == define);
             if (defineIndex != -1)
                 return;
 
-            defineList.Add(define);
+            definesList.Add(define);
         }
 
         public string GetDefineLine()
         {
             StringBuilder sb = new StringBuilder();
-            foreach (string define in defineList)
+            foreach (string define in definesList)
             {
                 sb.Append(define);
                 sb.Append(";");
@@ -57,16 +58,16 @@ namespace Watermelon
 
         public bool HasChanges()
         {
-            return defineLine != GetDefineLine();
+            return BaseDefineLine != GetDefineLine();
         }
 
         public void ApplyDefines()
         {
             string newDefineLine = GetDefineLine();
 
-            if (defineLine != newDefineLine)
+            if (BaseDefineLine != newDefineLine)
             {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
                 PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)), newDefineLine);
 #else
                 PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), newDefineLine);

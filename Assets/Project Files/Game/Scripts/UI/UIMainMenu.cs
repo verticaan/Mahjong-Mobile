@@ -275,7 +275,7 @@ namespace Watermelon
 
         private void NoAdButton()
         {
-            noAdsPopUp.Show();
+            UIController.ShowPage<UINoAdsPopUp>();
 
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
         }

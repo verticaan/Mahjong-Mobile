@@ -5,9 +5,9 @@ namespace Watermelon
     [StaticUnload]
     public static class Haptic
     {
-        public static readonly HapticData HAPTIC_LIGHT = new HapticData(0.05f, 0.0f);
-        public static readonly HapticData HAPTIC_MEDIUM = new HapticData(0.08f, 0.4f);
-        public static readonly HapticData HAPTIC_HARD = new HapticData(0.12f, 0.6f);
+        public static readonly HapticData HAPTIC_LIGHT = new HapticData(0.14f, 0.4f);
+        public static readonly HapticData HAPTIC_MEDIUM = new HapticData(0.14f, 0.6f);
+        public static readonly HapticData HAPTIC_HARD = new HapticData(0.14f, 0.8f);
 
         public static readonly HapticPattern PATTERN_LIGHT = new HapticPattern("light", new HapticEvent[] { new HapticEvent() { Duration = 0.3f, Intensity = 1.0f, Sharpness = 0.0f, StartTime = 0.0f } });
 

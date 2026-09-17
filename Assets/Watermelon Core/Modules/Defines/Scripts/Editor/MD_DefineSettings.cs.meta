@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e48de9814d09c124e961b1cfa3b3b5e2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: 
+  assetPath: Assets/Watermelon Core/Modules/Defines/Scripts/Editor/MD_DefineSettings.cs
+  uploadId: 0

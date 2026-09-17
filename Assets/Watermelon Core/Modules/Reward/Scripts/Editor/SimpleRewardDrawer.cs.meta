@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4d10d20fdc6f801488bbded4f7c2981f
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Reward/Scripts/Editor/SimpleRewardDrawer.cs
+  uploadId: 868536

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a9707375249d9ad45965f7acee1d387f
+guid: c60c0ac86afe85b45a822e248e8c2e8f
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -13,6 +13,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 282748
   packageName: Tile Match | Template + Editor
-  packageVersion: 1.2.6
+  packageVersion: v1.3.1
   assetPath: Assets/Project Files/Game/Scripts/Lives System/LivesInfiniteModeReward.cs
-  uploadId: 759177
+  uploadId: 868536

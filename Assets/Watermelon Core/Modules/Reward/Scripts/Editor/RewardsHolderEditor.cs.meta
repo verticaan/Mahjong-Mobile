@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7348166540358c840baabfaa806539d0
+guid: 1d8d98da6edfacf45bea76869d3acae1
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -13,6 +13,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 282748
   packageName: Tile Match | Template + Editor
-  packageVersion: 1.2.6
+  packageVersion: v1.3.1
   assetPath: Assets/Watermelon Core/Modules/Reward/Scripts/Editor/RewardsHolderEditor.cs
-  uploadId: 759177
+  uploadId: 868536

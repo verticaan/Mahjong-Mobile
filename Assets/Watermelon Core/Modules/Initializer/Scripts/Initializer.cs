@@ -1,5 +1,7 @@
 ﻿#pragma warning disable 0649
 
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -11,6 +13,9 @@ namespace Watermelon
         private static Initializer initializer;
 
         [SerializeField] ProjectInitSettings initSettings;
+        [SerializeField] SDKInitializer sdkInitializer;
+        [SerializeField] SystemMessage systemMessage;
+        [SerializeField] MusicSource globalMusicSource;
         [SerializeField] EventSystem eventSystem;
 
         public static GameObject GameObject { get; private set; }
@@ -18,15 +23,11 @@ namespace Watermelon
 
         public static ProjectInitSettings InitSettings { get; private set; }
 
-        private bool manualActivation;
-
-        public void Awake()
+        public void Init()
         {
             if (initializer != null) return;
 
             initializer = this;
-
-            manualActivation = false;
 
             InitSettings = initSettings;
 
@@ -39,32 +40,31 @@ namespace Watermelon
             eventSystem.gameObject.GetOrSetComponent<StandaloneInputModule>();
 #endif
 
+            systemMessage.Init();
+
+            Overlay.Bind(new Overlay(gameObject));
+
+            AnalyticsModules.Init();
+
             DontDestroyOnLoad(gameObject);
+        }
 
+        public void InitModules()
+        {
             initSettings.Init(this);
-        }
 
-        public void Start()
-        {
-            if (!manualActivation)
-                LoadGame(true);
-        }
+            StaticModules.InitStaticModules();
 
-        public void LoadGame(bool loadingScene)
-        {
-            if (loadingScene)
+            if (globalMusicSource != null)
             {
-                GameLoading.LoadGameScene();
-            }
-            else
-            {
-                GameLoading.SimpleLoad();
+                globalMusicSource.Init();
+                globalMusicSource.Activate();
             }
         }
 
-        public void EnableManualActivation()
+        public void InitSDKs()
         {
-            manualActivation = true;
+            sdkInitializer.Init();
         }
     }
 }

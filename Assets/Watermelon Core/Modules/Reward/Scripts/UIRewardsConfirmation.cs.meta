@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 4113d095b24c9b04887501caceecd66b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Reward/Scripts/UIRewardsConfirmation.cs
+  uploadId: 868536

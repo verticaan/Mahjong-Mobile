@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLivesCount: 5
   oneLifeRestorationDuration: 300
+  rewardPreviewSprite: {fileID: 21300000, guid: 21f7c94b7c736b24f8e7bc5d2fdc8a24,
+    type: 3}
+  rewardPreviewPrefab: {fileID: 0}
+  rewardMaxLivesPreviewPrefab: {fileID: 0}
+  rewardInfiniteModePreviewPrefab: {fileID: 0}

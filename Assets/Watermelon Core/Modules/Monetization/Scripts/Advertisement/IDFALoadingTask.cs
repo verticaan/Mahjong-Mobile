@@ -8,24 +8,17 @@ namespace Watermelon
 {
     public sealed class IDFALoadingTask : LoadingTask
     {
-        private MonetizationSettings settings;
         private TweenCase checkTweenCase;
+        private SDKInitializer initializer;
 
-        public IDFALoadingTask(MonetizationSettings settings) : base()
+        public IDFALoadingTask(SDKInitializer initializer) : base()
         {
-            this.settings = settings;
+            this.initializer = initializer;
         }
 
         public override void OnTaskActivated()
         {
-            if (!settings.AdsSettings.IsIDFAEnabled)
-            {
-                CompleteTask(CompleteStatus.Skipped);
-
-                return;
-            }
-
-#if UNITY_IOS && MODULE_IDFA
+#if UNITY_IOS && MODULE_IDFA && !UNITY_EDITOR
             if (AdsManager.IsIDFADetermined())
             {
                 CompleteTask(CompleteStatus.Completed);
@@ -44,7 +37,7 @@ namespace Watermelon
 
         private void CheckStatus()
         {
-#if UNITY_IOS && MODULE_IDFA
+#if UNITY_IOS && MODULE_IDFA && !UNITY_EDITOR
             checkTweenCase.KillActive();
 
             ATTrackingStatusBinding.AuthorizationTrackingStatus status = ATTrackingStatusBinding.GetAuthorizationTrackingStatus();
@@ -58,6 +51,8 @@ namespace Watermelon
             }
             else
             {
+                initializer.
+
                 CompleteTask(CompleteStatus.Completed);
             }
 #endif

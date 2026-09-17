@@ -81,6 +81,11 @@ namespace Watermelon
             return GetSaveObject<T>(uniqueName.GetHashCode());
         }
 
+        public T GetSaveObject<T>() where T : ISaveObject, new()
+        {
+            return GetSaveObject<T>(typeof(T).ToString().GetHashCode());
+        }
+
         public void Info()
         {
             foreach (var container in saveObjectsList)

@@ -271,7 +271,7 @@ namespace Watermelon
 
             GUILayout.Space(8);
 
-            EditorGUILayout.HelpBox("Tested with AdMob Plugin v9.6.0", MessageType.Info);
+            EditorGUILayout.HelpBox("Tested with AdMob Plugin v10.6.0", MessageType.Info);
         }
 
         protected override void SpecialButtons()

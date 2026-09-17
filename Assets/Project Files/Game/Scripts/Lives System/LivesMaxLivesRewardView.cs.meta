@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d0f24fd9fad434e4c9c2634d3f8af6cf
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Project Files/Game/Scripts/Lives System/LivesMaxLivesRewardView.cs
+  uploadId: 868536

@@ -4046,6 +4046,9 @@ MonoBehaviour:
     safePanels: []
     conformX: 0
     conformY: 1
+  cachedPages:
+    pages: []
+  usePausePopups: 1
 --- !u!114 &8095943557840496074
 MonoBehaviour:
   m_ObjectHideFlags: 0

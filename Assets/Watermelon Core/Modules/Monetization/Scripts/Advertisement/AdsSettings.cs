@@ -23,6 +23,10 @@ namespace Watermelon
         [SerializeField] bool loadAdsOnStart = true;
         public bool LoadAdsOnStart => loadAdsOnStart;
 
+        [BoxGroup("Reward", "Reward")]
+        [SerializeField] Sprite noAdsRewardSprite;
+        public Sprite NoAdsRewardSprite => noAdsRewardSprite;
+
         [Space]
         [BoxGroup("Settings/Interstitial")]
         [Tooltip("Delay in seconds before interstitial appearings on first game launch.")]
@@ -39,10 +43,6 @@ namespace Watermelon
         [SerializeField] float interstitialShowingDelay = 30f;
         public float InterstitialShowingDelay => interstitialShowingDelay;
 
-        [BoxGroup("Settings/Interstitial")]
-        [SerializeField] bool autoShowInterstitial;
-        public bool AutoShowInterstitial => autoShowInterstitial;
-
         [BoxGroup("Settings/Delay")]
         [SerializeField] float loadingAdDuration = 0f;
         public float LoadingAdDuration => loadingAdDuration;
@@ -51,48 +51,18 @@ namespace Watermelon
         [SerializeField] string loadingMessage = "Ad is loading..";
         public string LoadingMessage => loadingMessage;
 
-        [BoxGroup("UMP", "UMP")]
-        [SerializeField] bool isUMPEnabled = true;
-        public bool IsUMPEnabled => isUMPEnabled;
-
-        [BoxGroup("UMP")]
-        [ShowIf("isUMPEnabled")]
-        [Tooltip("Set TagForUnderAgeOfConsent (TFUA) to indicate whether a user is under the age of consent. Consent is not requested from the user when TFUA is set to true. Mixed audience apps should set this parameter for child users to ensure consent is not requested.")]
-        [SerializeField] bool umpTagForUnderAgeOfConsent = false;
-        public bool UMPTagForUnderAgeOfConsent => umpTagForUnderAgeOfConsent;
-
-        [Space]
-        [BoxGroup("UMP")]
-        [ShowIf("isUMPEnabled")]
-        [SerializeField] bool umpDebugMode = false;
-        public bool UMPDebugMode => umpDebugMode;
-
-        [BoxGroup("UMP")]
-        [ShowIf("isUMPEnabled")]
-        [SerializeField] DebugGeography umpDebugGeography;
-        public DebugGeography UMPDebugGeography => umpDebugGeography;
-
-        [BoxGroup("IDFA", "IDFA")]
-        [SerializeField] bool isIDFAEnabled = false;
-        public bool IsIDFAEnabled => isIDFAEnabled;
-
-        [BoxGroup("IDFA")]
-        [ShowIf("isIDFAEnabled")]
-        [SerializeField] string trackingDescription = "Your data will be used to deliver personalized ads to you.";
-        public string TrackingDescription => trackingDescription;
-
         // Providers
         [SerializeField, Hide] AdMobContainer adMobContainer;
         public AdMobContainer AdMobContainer => adMobContainer;
-
-        [SerializeField, Hide] UnityAdsLegacyContainer unityAdsContainer;
-        public UnityAdsLegacyContainer UnityAdsContainer => unityAdsContainer;
 
         [SerializeField, Hide] LevelPlayContainer levelPlayContainer;
         public LevelPlayContainer LevelPlayContainer => levelPlayContainer;
 
         [SerializeField, Hide] AdDummyContainer dummyContainer;
         public AdDummyContainer DummyContainer => dummyContainer;
+
+        [SerializeField, Hide] ApplovinContainer applovinContainer;
+        public ApplovinContainer ApplovinContainer => applovinContainer;
 
         public bool IsDummyEnabled()
         {
@@ -106,6 +76,16 @@ namespace Watermelon
                 return true;
 
             return false;
+        }
+
+        public void DisableBanner()
+        {
+            bannerType = AdProvider.Disable;
+        }
+
+        public void DisableInterstitial()
+        {
+            interstitialType = AdProvider.Disable;
         }
     }
 }

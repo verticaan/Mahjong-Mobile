@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e186e346129c8c94697d8ea4f1c01e47
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Initializer/Scripts/NetworkCheckInitModule.cs
+  uploadId: 868536

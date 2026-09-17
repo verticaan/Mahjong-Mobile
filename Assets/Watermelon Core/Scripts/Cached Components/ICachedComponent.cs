@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+namespace Watermelon
+{
     /// <summary>
     /// Interface for caching and applying component properties.
     /// This can be useful in various scenarios such as:
@@ -24,3 +26,4 @@
         /// <param name="component">The component from which the properties will be cached.</param>
         void Cache(T component);
     }
+}

@@ -28,6 +28,9 @@ namespace Watermelon
         [SerializeField] Image currencyImage;
         [SerializeField] CanvasGroup textAndIconCanvasGroup;
 
+        [Space]
+        [SerializeField] string analyticsSink;
+
         private int currentPrice;
         private Currency currency;
 
@@ -50,6 +53,11 @@ namespace Watermelon
             Init(price, currencyType);
         }
 
+        public void Init(CurrencyAmount currencyAmount)
+        {
+            Init(currencyAmount.Amount, currencyAmount.CurrencyType);
+        }
+
         public void Init(int price, CurrencyType currencyType)
         {
             this.currencyType = currencyType;
@@ -60,7 +68,7 @@ namespace Watermelon
             currentPrice = price;
 
             currencyImage.sprite = currency.Icon;
-            buttonText.text = currency.AmountFormatted;
+            buttonText.text = CurrencyHelper.Format(currentPrice);
 
             Subscribe();
 
@@ -133,14 +141,14 @@ namespace Watermelon
         private void OnButtonClicked()
         {
 #if MODULE_HAPTIC
-            Haptic.Play(Haptic.HAPTIC_LIGHT);
+            Haptic.Play(Haptic.HAPTIC_HARD);
 #endif
 
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
 
             if (CurrencyController.HasAmount(currencyType, currentPrice))
             {
-                CurrencyController.Substract(currencyType, currentPrice);
+                CurrencyController.Substract(currencyType, currentPrice, analyticsSink);
 
                 Purchased?.Invoke();
             }

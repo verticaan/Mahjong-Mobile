@@ -10,8 +10,8 @@ namespace Watermelon
         {
             new EditorDummyContainer("Dummy", "dummyContainer"),
             new EditorAdMobContainer("AdMob", "adMobContainer"),
-            new EditorUnityAdsContainer("Unity Ads Legacy", "unityAdsContainer"),
             new EditorLevelPlayContainer("LevelPlay", "levelPlayContainer"),
+            new EditorApplovinContainer("AppLovin", "applovinContainer"),
         };
 
         protected override void OnEnable()

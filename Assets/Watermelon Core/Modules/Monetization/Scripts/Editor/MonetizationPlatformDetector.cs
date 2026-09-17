@@ -10,6 +10,13 @@ namespace Watermelon
         private const string PREFS_KEY = "MonetizationModuleInitialized";
         private const string PREFS_TIMER_KEY = "MonetizationModuleTimer";
 
+        private static readonly BuildTarget[] SUPPORTED_BUILT_TARGETS = new BuildTarget[]
+        {
+            BuildTarget.Android,
+            BuildTarget.iOS,
+            BuildTarget.WebGL
+        };
+
         static MonetizationPlatformDetector()
         {
             Init();
@@ -19,7 +26,9 @@ namespace Watermelon
         {
             if (Application.isBatchMode) return;
 
-            if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android || EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS) return;
+            BuildTarget activeBuildTarget = EditorUserBuildSettings.activeBuildTarget;
+            foreach (BuildTarget target in SUPPORTED_BUILT_TARGETS)
+                if (activeBuildTarget == target) return;
 
             MonetizationSettings monetizationSettings = EditorUtils.GetAsset<MonetizationSettings>();
             if (monetizationSettings == null || !monetizationSettings.IsModuleActive) return;

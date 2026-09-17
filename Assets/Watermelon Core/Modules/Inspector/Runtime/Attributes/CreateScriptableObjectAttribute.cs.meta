@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: be662af26dfcb2a40bc4c573850b558b
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Inspector/Runtime/Attributes/CreateScriptableObjectAttribute.cs
+  uploadId: 868536

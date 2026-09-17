@@ -6,6 +6,12 @@ namespace Watermelon
     {
         [SerializeField, UniqueID] string id;
         public string ID => id;
+
+        [SkinPreview]
+        [SerializeField] 
+        protected Sprite previewSprite;
+        public Sprite PreviewSprite => previewSprite;
+
         public int Hash { get; private set; }
 
         public AbstractSkinDatabase SkinsProvider { get; private set; }

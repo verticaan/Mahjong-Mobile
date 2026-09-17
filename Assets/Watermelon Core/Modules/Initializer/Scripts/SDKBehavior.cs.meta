@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a22a7c122e2af7c4fa56a7171284b43d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Initializer/Scripts/SDKBehavior.cs
+  uploadId: 868536

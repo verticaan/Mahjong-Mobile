@@ -138,8 +138,14 @@ namespace Watermelon
             [SerializeField] AudioClip appearAudioClip;
             public AudioClip AppearAudioClip => appearAudioClip;
 
+            [SerializeField] AudioClipHandler appearClipHandler;
+            public AudioClipHandler AppearClipHandler => appearClipHandler;
+
             [SerializeField] AudioClip collectAudioClip;
             public AudioClip CollectAudioClip => collectAudioClip;
+
+            [SerializeField] AudioClipHandler collectClipHandler;
+            public AudioClipHandler CollectClipHandler => collectClipHandler;
 
             [Space]
             [SerializeField] float cloudRadius;
@@ -157,6 +163,9 @@ namespace Watermelon
 
                 appearAudioClip = settings.AppearAudioClip;
                 collectAudioClip = settings.CollectAudioClip;
+
+                appearClipHandler = new AudioClipHandler(AudioType.Sound, 1.0f);
+                collectClipHandler = new AudioClipHandler(AudioType.Sound, 1.0f);
             }
 
             public void Init()
@@ -210,14 +219,13 @@ namespace Watermelon
 
                 // Play appear sound
                 if (floatingCloudData.AppearAudioClip != null)
-                    AudioController.PlaySound(floatingCloudData.AppearAudioClip);
+                    floatingCloudData.AppearClipHandler.Play(floatingCloudData.AppearAudioClip);
 
                 float cloudRadius = floatingCloudData.CloudRadius;
                 Vector3 centerPoint = rectTransform.position;
 
                 int finishedElementsAmount = 0;
 
-                float defaultPitch = 0.9f;
                 bool currencyHittedTarget = false;
                 for (int i = 0; i < elementsAmount; i++)
                 {
@@ -272,9 +280,7 @@ namespace Watermelon
                                 {
                                     // Play collect sound
                                     if (floatingCloudData.CollectAudioClip != null)
-                                        AudioController.PlaySound(floatingCloudData.CollectAudioClip, pitch: defaultPitch);
-
-                                    defaultPitch += 0.01f;
+                                        floatingCloudData.CollectClipHandler.Play(floatingCloudData.CollectAudioClip);
 
                                     currencyTweenCase = targetRectTransform.DOScale(1.2f, 0.15f, unscaledTime: true).OnComplete(delegate
                                     {

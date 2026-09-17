@@ -161,22 +161,26 @@ namespace Watermelon
                 }
                 else
                 {
-                    // Or retrieve results as binary data
-                    byte[] results = www.downloadHandler.data;
+                    try
+                    {
+                        // Or retrieve results as binary data
+                        byte[] results = www.downloadHandler.data;
 
-                    // For that you will need to add reference to System.Runtime.Serialization
-                    var jsonReader = JsonReaderWriterFactory.CreateJsonReader(results, new System.Xml.XmlDictionaryReaderQuotas());
+                        // For that you will need to add reference to System.Runtime.Serialization
+                        var jsonReader = JsonReaderWriterFactory.CreateJsonReader(results, new System.Xml.XmlDictionaryReaderQuotas());
 
-                    // For that you will need to add reference to System.Xml and System.Xml.Linq
-                    var root = XElement.Load(jsonReader);
+                        // For that you will need to add reference to System.Xml and System.Xml.Linq
+                        var root = XElement.Load(jsonReader);
 
-                    Name = root.XPathSelectElement("name").Value;
-                    Url = root.XPathSelectElement("link").Value;
-                    MD5 = root.XPathSelectElement("md5").Value;
+                        Name = root.XPathSelectElement("name").Value;
+                        Url = root.XPathSelectElement("link").Value;
+                        MD5 = root.XPathSelectElement("md5").Value;
 
-                    imageURL = root.XPathSelectElement("url").Value;
+                        imageURL = root.XPathSelectElement("url").Value;
 
-                    completeCallback?.Invoke();
+                        completeCallback?.Invoke();
+                    }
+                    catch { }
                 }
             }
 

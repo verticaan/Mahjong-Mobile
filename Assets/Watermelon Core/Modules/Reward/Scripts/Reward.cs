@@ -1,12 +1,18 @@
-using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 namespace Watermelon
 {
-    public abstract class Reward : MonoBehaviour
+    [Serializable]
+    public abstract class Reward
     {
-        public virtual void Init() { }
-
         public abstract void ApplyReward();
+        public virtual void RestoreReward() { }
+
+        public virtual List<IRewardPreview> GetRewardPreviews()
+        {
+            return null;
+        }
 
         /// <summary>
         /// Return true if you want to disable offer object.

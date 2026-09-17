@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Watermelon.IAPStore
+namespace Watermelon
 {
     public sealed class TimerRewardsHolder : RewardsHolder
     {
@@ -26,25 +26,13 @@ namespace Watermelon.IAPStore
 
         private StringBuilder sb;
 
-        private void Awake()
+        private void Start()
         {
             InitializeComponents();
 
             save = SaveController.GetSaveObject<SimpleLongSave>($"TimerProduct_{saveID}");
 
             timerStartTime = DateTime.FromBinary(save.Value);
-
-            // Check if rewards needs to be disabled
-            for (int i = 0; i < rewards.Length; i++)
-            {
-                if (rewards[i].CheckDisableState())
-                {
-                    // Disable holder game object
-                    gameObject.SetActive(false);
-
-                    return;
-                }
-            }
 
             sb = new StringBuilder();
 
@@ -104,7 +92,7 @@ namespace Watermelon.IAPStore
         private void OnButtonClicked()
         {
 #if MODULE_HAPTIC
-            Haptic.Play(Haptic.HAPTIC_LIGHT);
+            Haptic.Play(Haptic.HAPTIC_HARD);
 #endif
 
             AudioController.PlaySound(AudioController.AudioClips.buttonSound);
@@ -112,7 +100,7 @@ namespace Watermelon.IAPStore
             save.Value = DateTime.Now.ToBinary();
             timerStartTime = DateTime.Now;
 
-            ApplyRewards();
+            rewardSet.ApplyReward();
 
             SaveController.MarkAsSaveIsRequired();
         }

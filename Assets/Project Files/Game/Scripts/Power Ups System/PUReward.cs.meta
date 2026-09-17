@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bf4502800d4396642896bf83045dbb2b
+guid: 96dc7fecc1a790046a108d344cffed7b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -13,6 +13,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 282748
   packageName: Tile Match | Template + Editor
-  packageVersion: 1.2.6
+  packageVersion: v1.3.1
   assetPath: Assets/Project Files/Game/Scripts/Power Ups System/PUReward.cs
-  uploadId: 759177
+  uploadId: 868536

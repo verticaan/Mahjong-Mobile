@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 95ba849b9b2f9254e83a6b7a69d08536
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Analytics/BaseAnalyticsModule.cs
+  uploadId: 868536

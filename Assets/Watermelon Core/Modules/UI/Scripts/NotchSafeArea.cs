@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Watermelon
 {
+    [StaticUnload]
     [System.Serializable]
     public class NotchSaveArea
     {
@@ -19,13 +20,19 @@ namespace Watermelon
         private static Rect lastSafeArea = new Rect(0, 0, 0, 0);
         private static Vector2Int lastScreenSize = new Vector2Int(0, 0);
 
+        private static Vector2 virtualResolution;
+
         private static ScreenOrientation lastOrientation = ScreenOrientation.AutoRotation;
 
-        public void Init()
+        public static float TopOffset { get; private set; } = 0;
+
+        public void Init(Vector2 virtualResolution)
         {
             notchSaveArea = this;
 
-            if(!safePanels.IsNullOrEmpty())
+            NotchSaveArea.virtualResolution = virtualResolution;
+
+            if (!safePanels.IsNullOrEmpty())
             {
                 registeredTransforms.AddRange(safePanels);
             }
@@ -43,6 +50,8 @@ namespace Watermelon
 
         public static void Refresh(bool forceRefresh = false)
         {
+            if (notchSaveArea == null) return;
+
             Rect safeArea = Screen.safeArea;
 
             if (safeArea != lastSafeArea || Screen.width != lastScreenSize.x || Screen.height != lastScreenSize.y || Screen.orientation != lastOrientation || forceRefresh)
@@ -57,6 +66,9 @@ namespace Watermelon
 
         private static void ApplySafeArea(Rect rect)
         {
+            if (notchSaveArea == null)
+                return;
+
             lastSafeArea = rect;
 
             // Ignore x-axis?
@@ -74,10 +86,13 @@ namespace Watermelon
             }
 
 #if MODULE_MONETIZATION
-            if (AdsManager.Settings != null && AdsManager.Settings.BannerType != AdProvider.Disable && AdsManager.IsForcedAdEnabled())
+            float bannerHeight = AdsManager.GetBannerHeight();
+            if(bannerHeight > 0)
             {
-                rect.y += 90;
-                rect.height -= 90;
+                bannerHeight += 10; // Extra offset;
+
+                rect.y += bannerHeight;
+                rect.height -= bannerHeight;
             }
 #endif
 
@@ -92,6 +107,8 @@ namespace Watermelon
                 anchorMin.y /= Screen.height;
                 anchorMax.x /= Screen.width;
                 anchorMax.y /= Screen.height;
+
+                TopOffset = virtualResolution.y * (1.0f - anchorMax.y);
 
                 // Fix for some Samsung devices (e.g. Note 10+, A71, S20) where Refresh gets called twice and the first time returns NaN anchor coordinates
                 if (anchorMin.x >= 0 && anchorMin.y >= 0 && anchorMax.x >= 0 && anchorMax.y >= 0)
@@ -112,6 +129,19 @@ namespace Watermelon
                     }
                 }
             }
+        }
+
+        private static void UnloadStatic()
+        {
+            TopOffset = 0;
+
+            lastSafeArea = new Rect(0, 0, 0, 0);
+            lastScreenSize = new Vector2Int(0, 0);
+
+            virtualResolution = Vector2.zero;
+            lastOrientation = ScreenOrientation.AutoRotation;
+
+            registeredTransforms?.Clear();
         }
     }
 }

@@ -21,23 +21,47 @@ namespace Watermelon
         public static bool InfiniteMode { get => Status.InfiniteMode; }
 
         public static bool IsFull { get => Lives >= MaxLivesCount; }
+        public static bool IsLocked { get => save.LifeLocked; }
 
         public static TimeSpan OneLifeSpan { get; private set; }
 
+        public static LivesRemoteConfigData RemoteConfigData { get; private set; }
+
         private static Coroutine infiniteModeCoroutine;
         private static Coroutine newLifeCoroutine;
+
+        public static LivesData Data { get; private set; }
 
         public static event StatusChangedDelegate StatusChanged;
 
         public static void Init(LivesData livesData)
         {
-            MaxLivesCount = livesData.MaxLivesCount;
-            OneLifeSpan = TimeSpan.FromSeconds(livesData.OneLifeRestorationDuration);
+            Data = livesData;
+
+            RemoteConfigData = RemoteConfigController.TryGetConfig<LivesRemoteConfigData>("lives");
+
+            int oneLifeRestorationDuration = livesData.OneLifeRestorationDuration;
+            if(RemoteConfigData != null)
+                oneLifeRestorationDuration = RemoteConfigData.resetTime;
+
+            OneLifeSpan = TimeSpan.FromSeconds(oneLifeRestorationDuration);
 
             Status = new LivesStatus();
 
             save = SaveController.GetSaveObject<LivesSave>("Lives");
             save.Init(Status);
+
+            if(save.MaxLivesCount == -1)
+            {
+                int maxLivesCount = livesData.MaxLivesCount;
+
+                if(RemoteConfigData != null)
+                    maxLivesCount = RemoteConfigData.maxCount;
+
+                save.MaxLivesCount = maxLivesCount;
+            }
+
+            MaxLivesCount = save.MaxLivesCount;
 
             // Prepare save
             if (save.LivesCount == -1)
@@ -155,6 +179,15 @@ namespace Watermelon
             UpdateNewLife();
         }
 
+        public static void RefillLifes()
+        {
+            Lives = MaxLivesCount;
+
+            SaveController.MarkAsSaveIsRequired();
+
+            UpdateNewLife();
+        }
+
         public static void LockLife()
         {
             save.LifeLocked = true;
@@ -208,6 +241,8 @@ namespace Watermelon
 
         public static void TakeLife(int amount = 1)
         {
+            if (InfiniteMode) return;
+
             Lives -= amount;
 
             if (Lives < 0)
@@ -218,19 +253,42 @@ namespace Watermelon
             UpdateNewLife();
         }
 
+        public static void OverrideMaxLivesCount(int livesCount, bool refillCurrentLives = false)
+        {
+            save.MaxLivesCount = livesCount;
+            MaxLivesCount = livesCount;
+
+            if(refillCurrentLives)
+            {
+                Lives = MaxLivesCount;
+            }
+
+            Status.RequestUpdate();
+
+            UpdateStatus();
+        }
+
         public static void EnableInfiniteMode(double seconds)
         {
-            if (InfiniteMode) return;
+            if (InfiniteMode)
+            {
+                TimeSpan time = TimeSpan.FromSeconds(seconds) + Status.InfiniteModeTime;
 
-            TimeSpan time = TimeSpan.FromSeconds(seconds);
+                Status.SetInfiniteModeTime(time);
+                Status.SetInfiniteModeDate(DateTime.Now + time);
+            }
+            else
+            {
+                TimeSpan time = TimeSpan.FromSeconds(seconds);
 
-            Status.SetInfiniteModeState(true);
-            Status.SetInfiniteModeTime(time);
-            Status.SetInfiniteModeDate(DateTime.Now + time);
+                Status.SetInfiniteModeState(true);
+                Status.SetInfiniteModeTime(time);
+                Status.SetInfiniteModeDate(DateTime.Now + time);
 
-            Status.SetNewLifeTimerState(false);
+                Status.SetNewLifeTimerState(false);
 
-            infiniteModeCoroutine = Tween.InvokeCoroutine(InfiniteLivesCoroutine());
+                infiniteModeCoroutine = Tween.InvokeCoroutine(InfiniteLivesCoroutine());
+            }
         }
 
         public static void DisableInfiniteMode()
@@ -279,7 +337,7 @@ namespace Watermelon
 
         private static IEnumerator LivesCoroutine()
         {
-            WaitForSeconds wait = new WaitForSeconds(0.25f);
+            WaitForSecondsRealtime wait = new WaitForSecondsRealtime(0.25f);
 
             while (Lives < MaxLivesCount)
             {

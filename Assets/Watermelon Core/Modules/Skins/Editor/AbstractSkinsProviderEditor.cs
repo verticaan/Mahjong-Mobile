@@ -17,7 +17,7 @@ namespace Watermelon
 
             EditorSkinsProvider.AddDatabase(database);
 
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             skinsController = GameObject.FindFirstObjectByType<SkinController>();
 #else
             skinsController = GameObject.FindObjectOfType<SkinController>();

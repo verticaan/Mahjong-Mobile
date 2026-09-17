@@ -22,15 +22,6 @@ namespace Watermelon
         [BoxGroup("Log")]
         [SerializeField] Text logText;
 
-        [BoxGroup("UMP")]
-        [SerializeField] GameObject umpPanelObject;
-        [BoxGroup("UMP")]
-        [SerializeField] Button umpResetButton;
-        [BoxGroup("UMP")]
-        [SerializeField] Button umpStatusButton;
-        [BoxGroup("UMP")]
-        [SerializeField] Button umpRequirementButton;
-
         [BoxGroup("LevelPlay")]
         [SerializeField] GameObject levelPlayObject;
         [BoxGroup("LevelPlay")]
@@ -55,16 +46,11 @@ namespace Watermelon
 
         private void Awake()
         {
-            saveArea.Init();
+            saveArea.Init(new Vector2(1080, 1920));
 
             // Prepare components
             logOpenButton.onClick.AddListener(() => OnLogOpenButtonClicked());
             logCloseButton.onClick.AddListener(() => OnLogCloseButtonClicked());
-
-            // UMP
-            umpResetButton.onClick.AddListener(() => OnUMPResetButtonClicked());
-            umpStatusButton.onClick.AddListener(() => OnUMPStatusButtonClicked());
-            umpRequirementButton.onClick.AddListener(() => OnUMPRequirementButtonClicked());
 
             if(AdsManager.IsModuleActive(AdProvider.LevelPlay))
             {
@@ -193,7 +179,7 @@ namespace Watermelon
             AdsManager.ShowInterstitial( (isDisplayed) =>
             {
                 Debug.Log("[AdsManager]: Interstitial " + (isDisplayed ? "is" : "isn't") + " displayed!");
-            }, true);
+            }, "Default", true);
         }
 
         public void RewardedVideoStatusButton()
@@ -223,31 +209,6 @@ namespace Watermelon
                     Log("[AdsManager]: Reward isn't received");
                 }
             });
-        }
-        #endregion
-
-        #region UMP
-        public void OnUMPResetButtonClicked()
-        {
-            AdsManager.ResetConsentState();
-        }
-
-        public void OnUMPStatusButtonClicked()
-        {
-            ConsentRequirementStatus status = AdsManager.GetConsentStatus();
-
-            Debug.Log($"UMP Status: {status}");
-
-            SystemMessage.ShowMessage(status.ToString(), 5.0f);
-        }
-
-        public void OnUMPRequirementButtonClicked()
-        {
-            bool requestState = AdsManager.CanRequestAds();
-
-            Debug.Log($"UMP Requirement: {requestState}");
-
-            SystemMessage.ShowMessage(requestState ? "Personalized" : "Non-personalized", 5.0f);
         }
         #endregion
     }

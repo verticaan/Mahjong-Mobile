@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using System;
 
-
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
 using Unity.Services.Core;
@@ -17,14 +16,16 @@ namespace Watermelon
     /// Wrapper class for Unity IAP functionality.
     /// </summary>
     public class UnityIAPWrapper : IAPWrapper
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
         , IDetailedStoreListener
 #endif
     {
 
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
         public static IStoreController Controller { get; private set; }
         public static IExtensionProvider Extensions { get; private set; }
+        
+        private List<PurchaseCallback> purchaseCallbacks = new List<PurchaseCallback>();
 #endif
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace Watermelon
         /// <param name="settings">The IAP settings to use for initialization.</param>
         public override async Task Init(IAPSettings settings)
         {
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
             try
             {
                 var options = new InitializationOptions().SetEnvironmentName("production");
@@ -75,7 +76,7 @@ namespace Watermelon
 #endif
         }
 
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
         /// <summary>
         /// Called when Unity IAP is successfully initialized.
         /// </summary>
@@ -117,18 +118,38 @@ namespace Watermelon
         /// <returns>The result of the purchase processing.</returns>
         public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs e)
         {
-            if (Monetization.VerboseLogging)
-                Debug.Log($"[IAPManager]: Purchasing - {e.purchasedProduct.definition.id} is completed!");
+            Product product = e.purchasedProduct;
 
-            IAPItem item = IAPManager.GetIAPItem(e.purchasedProduct.definition.id);
+            if (Monetization.VerboseLogging)
+                Debug.Log($"[IAPManager]: Purchasing - {product.definition.id} is completed!");
+
+            IAPItem item = IAPManager.GetIAPItem(product.definition.id);
             if (item != null)
             {
-                IAPManager.OnPurchaseCompleted(item.ProductKeyType);
+                int callbackIndex = purchaseCallbacks.FindIndex(x => x.ProductKeyType == item.ProductKeyType);
+                if (callbackIndex != -1)
+                {
+                    PurchaseCallback callback = purchaseCallbacks[callbackIndex];
+
+                    callback.Callback?.Invoke(new AnalyticsIAPData()
+                    {
+                        Item = item,
+
+                        Receipt = product.receipt,
+                        StoreSpecificId = product.definition.storeSpecificId,
+                        IsoCurrencyCode = product.metadata.isoCurrencyCode,
+                        LocalizedPrice = (float)product.metadata.localizedPrice,
+                    });
+
+                    purchaseCallbacks.RemoveAt(callbackIndex);
+                }
+
+                IAPManager.OnPurchaseCompleted(item);
             }
             else
             {
                 if (Monetization.VerboseLogging)
-                    Debug.Log($"[IAPManager]: Product - {e.purchasedProduct.definition.id} can't be found!");
+                    Debug.Log($"[IAPManager]: Product - {product.definition.id} can't be found!");
             }
 
             SystemMessage.ChangeLoadingMessage("Payment complete!");
@@ -152,7 +173,15 @@ namespace Watermelon
             IAPItem item = IAPManager.GetIAPItem(product.definition.id);
             if (item != null)
             {
-                IAPManager.OnPurchaseFailed(item.ProductKeyType, (Watermelon.PurchaseFailureReason)failureReason);
+                int callbackIndex = purchaseCallbacks.FindIndex(x => x.ProductKeyType == item.ProductKeyType);
+                if (callbackIndex != -1)
+                    purchaseCallbacks.RemoveAt(callbackIndex);
+
+                Watermelon.PurchaseFailureReason purchaseFailureReason = (Watermelon.PurchaseFailureReason)failureReason;
+
+                AnalyticsController.OnIAPFailed(item, purchaseFailureReason);
+
+                IAPManager.OnPurchaseFailed(item.ProductKeyType, purchaseFailureReason);
             }
             else
             {
@@ -179,7 +208,15 @@ namespace Watermelon
             IAPItem item = IAPManager.GetIAPItem(product.definition.id);
             if (item != null)
             {
-                IAPManager.OnPurchaseFailed(item.ProductKeyType, (Watermelon.PurchaseFailureReason)failureDescription.reason);
+                int callbackIndex = purchaseCallbacks.FindIndex(x => x.ProductKeyType == item.ProductKeyType);
+                if (callbackIndex != -1)
+                    purchaseCallbacks.RemoveAt(callbackIndex);
+
+                Watermelon.PurchaseFailureReason purchaseFailureReason = (Watermelon.PurchaseFailureReason)failureDescription.reason;
+
+                AnalyticsController.OnIAPFailed(item, purchaseFailureReason);
+
+                IAPManager.OnPurchaseFailed(item.ProductKeyType, purchaseFailureReason);
             }
             else
             {
@@ -197,7 +234,7 @@ namespace Watermelon
         /// </summary>
         public override void RestorePurchases()
         {
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
             if (!IAPManager.IsInitialized)
             {
                 SystemMessage.ShowMessage("Network error. Please try again later");
@@ -213,20 +250,32 @@ namespace Watermelon
             Extensions.GetExtension<IAppleExtensions>().RestoreTransactions(OnRestored);
 #endif
 #endif
+
+#if UNITY_EDITOR
+            OnRestored(true, "");
+#endif
         }
 
         private void OnRestored(bool result, string error)
         {
-            if (result)
+#if MODULE_IAP && !UNITY_IAP_NEW
+            Tween.DelayedCall(0.5f, () =>
             {
-                SystemMessage.ChangeLoadingMessage("Restoration completed!");
-            }
-            else
-            {
-                SystemMessage.ChangeLoadingMessage($"Restoration failed with error: {error}!");
-            }
+                if (result)
+                {
+                    SystemMessage.ChangeLoadingMessage("Restoration completed!");
+                }
+                else
+                {
+                    SystemMessage.ChangeLoadingMessage($"Restoration failed with error: {error}!");
+                }
 
-            SystemMessage.HideLoadingPanel();
+                Tween.DelayedCall(0.5f, () =>
+                {
+                    SystemMessage.HideLoadingPanel();
+                }, unscaledTime: true);
+            }, unscaledTime: true);
+#endif
         }
 
         /// <summary>
@@ -235,7 +284,7 @@ namespace Watermelon
         /// <param name="productKeyType">The key type of the product to purchase.</param>
         public override void BuyProduct(ProductKeyType productKeyType)
         {
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
             if (!IAPManager.IsInitialized)
             {
                 SystemMessage.ShowMessage("Network error. Please try again later");
@@ -248,6 +297,21 @@ namespace Watermelon
             IAPItem item = IAPManager.GetIAPItem(productKeyType);
             if (item != null)
             {
+                AnalyticsController.OnIAPClicked(item); 
+                
+                for (int i = purchaseCallbacks.Count - 1; i >= 0; i--)
+                {
+                    if (purchaseCallbacks[i].ProductKeyType == productKeyType)
+                    {
+                        purchaseCallbacks.RemoveAt(i);
+                    }
+                }
+
+                purchaseCallbacks.Add(new PurchaseCallback(productKeyType, (iapData) =>
+                {
+                    AnalyticsController.OnIAPPurchased(iapData);
+                }));
+
                 Controller.InitiatePurchase(item.ID);
             }
 #else
@@ -265,7 +329,7 @@ namespace Watermelon
             if (!IAPManager.IsInitialized)
                 return null;
 
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
             IAPItem item = IAPManager.GetIAPItem(productKeyType);
             if (item != null)
             {
@@ -283,7 +347,7 @@ namespace Watermelon
         /// <returns>True if the product is subscribed, otherwise false.</returns>
         public override bool IsSubscribed(ProductKeyType productKeyType)
         {
-#if MODULE_IAP
+#if MODULE_IAP && !UNITY_IAP_NEW
             IAPItem item = IAPManager.GetIAPItem(productKeyType);
             if (item != null)
             {
@@ -303,5 +367,38 @@ namespace Watermelon
 
             return false;
         }
+
+        public override bool IsPurchased(string id)
+        {
+#if MODULE_IAP && !UNITY_IAP_NEW
+            IAPItem item = IAPManager.GetIAPItem(id);
+            if (item != null)
+            {
+                Product product = Controller.products.WithID(item.ID);
+                if (product != null)
+                {
+                    return product.hasReceipt;
+                }
+            }
+#endif
+
+            return false;
+        }
+
+#if MODULE_IAP && !UNITY_IAP_NEW
+        private class PurchaseCallback
+        {
+            public ProductKeyType ProductKeyType { get; private set; }
+            public PurchaseCallbackDelegate Callback { get; private set; }
+
+            public PurchaseCallback(ProductKeyType productKeyType, PurchaseCallbackDelegate callback)
+            {
+                ProductKeyType = productKeyType;
+                Callback = callback;
+            }
+
+            public delegate void PurchaseCallbackDelegate(AnalyticsIAPData iapData);
+        }
+#endif
     }
 }

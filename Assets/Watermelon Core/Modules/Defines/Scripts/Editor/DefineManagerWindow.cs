@@ -30,49 +30,11 @@ namespace Watermelon
 
             CacheVariables();
         }
-                
-        private string[] GetActiveStaticDefines()
-        {
-#if UNITY_6000
-            string definesLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
-#else
-            string definesLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
-#endif
-
-            if (!string.IsNullOrEmpty(definesLine))
-            {
-                List<string> activeDefines = new List<string>();
-
-                string[] defines = definesLine.Split(';');
-
-                for (int i = 0; i < DefineSettings.STATIC_DEFINES.Length; i++)
-                {
-                    if (Array.FindIndex(defines, x => x.Equals(DefineSettings.STATIC_DEFINES[i])) != -1)
-                    {
-                        activeDefines.Add(DefineSettings.STATIC_DEFINES[i]);
-                    }
-                }
-
-                return activeDefines.ToArray();
-            }
-
-            return null;
-        }
 
         private void CacheVariables()
         {
             // Get project defines
             List<Define> defines = new List<Define>();
-
-            // Get static defines
-            string[] activeStaticDefines = GetActiveStaticDefines();
-            if (!activeStaticDefines.IsNullOrEmpty())
-            {
-                for (int i = 0; i < activeStaticDefines.Length; i++)
-                {
-                    defines.Add(new Define(activeStaticDefines[i], Define.Type.Static, true));
-                }
-            }
 
             //Get assembly
             List<Type> gameTypes = new List<Type>();
@@ -115,9 +77,9 @@ namespace Watermelon
                 }
             }
 
-            List<RegisteredDefine> registeredDefines = DefineSettings.GetDynamicDefines();
+            List<RegisteredDefine> registeredDefines = DefineManager.GetDynamicDefines();
 
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             string defineLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
             string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -146,7 +108,7 @@ namespace Watermelon
 
         private void LoadActiveDefines()
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             string defineLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
             string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -185,7 +147,7 @@ namespace Watermelon
 
         private void SaveDefines(string definesLine)
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             PlayerSettings.SetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)), definesLine);
 #else
             PlayerSettings.SetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget), definesLine);
@@ -194,7 +156,7 @@ namespace Watermelon
 
         private bool CompareDefines()
         {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
             string defineLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
             string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -243,17 +205,6 @@ namespace Watermelon
                             EditorGUILayout.LabelField(projectDefines[i].define + " (Auto)");
 
                             break;
-                        case Define.Type.Static:
-
-                            EditorGUI.BeginDisabledGroup(true);
-                            EditorGUILayout.Toggle(true, GUILayout.Width(20));
-                            EditorGUILayout.LabelField(projectDefines[i].define);
-
-                            GUILayout.Space(22);
-
-                            EditorGUI.EndDisabledGroup();
-
-                            break;
                         case Define.Type.Project:
                             projectDefines[i].isEnabled = EditorGUILayout.Toggle(projectDefines[i].isEnabled, GUILayout.Width(20));
                             EditorGUILayout.LabelField(projectDefines[i].define);
@@ -272,7 +223,7 @@ namespace Watermelon
                             {
                                 if (EditorUtility.DisplayDialog("Remove define", "Are you sure you want to remove define?", "Remove", "Cancel"))
                                 {
-#if UNITY_6000
+#if UNITY_6000_0_OR_NEWER
                                     string defineLine = PlayerSettings.GetScriptingDefineSymbols(UnityEditor.Build.NamedBuildTarget.FromBuildTargetGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget)));
 #else
                                     string defineLine = PlayerSettings.GetScriptingDefineSymbolsForGroup(BuildPipeline.GetBuildTargetGroup(EditorUserBuildSettings.activeBuildTarget));
@@ -358,7 +309,6 @@ namespace Watermelon
 
             public enum Type
             {
-                Static = 0,
                 Project = 1,
                 ThirdParty = 2,
                 Auto = 3

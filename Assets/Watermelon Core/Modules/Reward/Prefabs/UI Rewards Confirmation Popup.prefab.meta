@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ea7fb028bec334c4481224d083af1605
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 282748
+  packageName: Tile Match | Template + Editor
+  packageVersion: v1.3.1
+  assetPath: Assets/Watermelon Core/Modules/Reward/Prefabs/UI Rewards Confirmation
+    Popup.prefab
+  uploadId: 868536

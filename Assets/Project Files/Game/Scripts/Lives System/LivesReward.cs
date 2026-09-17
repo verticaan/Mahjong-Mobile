@@ -1,26 +1,35 @@
-﻿using TMPro;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Watermelon
 {
-    public class LivesReward : Reward
+    [Serializable]
+    [RegisterReward(typeof(LivesRewardView))]
+    public sealed class LivesReward : Reward
     {
+        private const int PREVIEW_SORTING_ORDER = 0;
+
         [SerializeField] int livesAmount = 1;
+        public int LivesAmount => livesAmount;
 
-        [Space]
-        [SerializeField] TextMeshProUGUI amountText;
-
-        public override void Init()
+        public LivesReward() { }
+        public LivesReward(int livesAmount)
         {
-            if (amountText != null)
-            {
-                amountText.text = livesAmount.ToString();
-            }
+            this.livesAmount = livesAmount;
         }
 
         public override void ApplyReward()
         {
             LivesSystem.AddLife(livesAmount, true);
+        }
+
+        public override List<IRewardPreview> GetRewardPreviews()
+        {
+            return new List<IRewardPreview>()
+            {
+                new RewardPreview(LivesSystem.Data.RewardPreviewSprite, $"+{livesAmount}", PREVIEW_SORTING_ORDER, LivesSystem.Data.RewardPreviewPrefab)
+            };
         }
     }
 }

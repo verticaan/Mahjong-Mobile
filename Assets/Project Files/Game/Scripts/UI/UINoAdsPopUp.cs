@@ -3,14 +3,17 @@ using UnityEngine.UI;
 
 namespace Watermelon
 {
-    public class UINoAdsPopUp : MonoBehaviour, IPopupWindow
+    public class UINoAdsPopUp : UIPage, IPopupWindow
     {
+        [SerializeField] Image backgroundImage;
         [SerializeField] UIScaleAnimation panelScalable;
-        [SerializeField] Button bigCloseButton;
+
+        [Space]
+        [SerializeField] Button backgroundCloseButton;
         [SerializeField] Button smallCloseButton;
         [SerializeField] IAPButton removeAdsButton;
 
-        public bool IsOpened => gameObject.activeSelf;
+        public bool IsOpened => canvas.enabled;
 
         private UIFadeAnimation backFade;
 
@@ -24,12 +27,25 @@ namespace Watermelon
             IAPManager.PurchaseCompleted -= OnPurchaseCompleted;
         }
 
-        public void Init()
+        private void OnPurchaseCompleted(ProductKeyType productKeyType)
+        {
+            if(productKeyType == ProductKeyType.NoAds)
+            {
+                AdsManager.DisableForcedAdForever();
+
+                UIController.HidePage(this);
+            }
+        }
+
+        public override void Init()
         {
             backFade = new UIFadeAnimation(gameObject);
 
-            bigCloseButton.onClick.AddListener(ClosePanel);
-            smallCloseButton.onClick.AddListener(ClosePanel);
+            if (backgroundCloseButton != null)
+                backgroundCloseButton.onClick.AddListener(OnBackgroundClicked);
+
+            if(smallCloseButton != null)
+                smallCloseButton.onClick.AddListener(OnCloseButtonClicked);
 
             IAPManager.SubscribeOnPurchaseModuleInitted(OnPurchaseModuleInitted);
 
@@ -39,47 +55,39 @@ namespace Watermelon
 
         private void OnPurchaseModuleInitted()
         {
-            removeAdsButton.Init(ProductKeyType.NoAds);
+            if (removeAdsButton != null)
+                removeAdsButton.Init(ProductKeyType.NoAds);
         }
 
-        private void OnPurchaseCompleted(ProductKeyType productKeyType)
+        public override void PlayShowAnimation()
         {
-            if(productKeyType == ProductKeyType.NoAds)
-            {
-                AdsManager.DisableForcedAd();
-
-                gameObject.SetActive(false);
-
-                UIController.OnPopupWindowClosed(this);
-            }
-        }
-
-        public void Show()
-        {
-            bigCloseButton.interactable = true;
-            smallCloseButton.interactable = true;
-
-            gameObject.SetActive(true);
             backFade.Show(0.2f, onCompleted: () =>
             {
                 panelScalable.Show(immediately: false, duration: 0.3f);
             });
 
-            UIController.OnPopupWindowOpened(this);
+            UIController.OnPageOpened(this);
         }
 
-        private void ClosePanel()
+        public override void PlayHideAnimation()
         {
-            bigCloseButton.interactable = false;
-            smallCloseButton.interactable = false;
-            
             backFade.Hide(0.2f);
             panelScalable.Hide(immediately: false, duration: 0.4f, onCompleted: () =>
             {
-                gameObject.SetActive(false);
+                UIController.OnPageClosed(this);
             });
+        }
 
-            UIController.OnPopupWindowClosed(this);
+        private void OnCloseButtonClicked()
+        {
+            AudioController.PlaySound(AudioController.AudioClips.buttonSound);
+
+            UIController.HidePage<UINoAdsPopUp>();
+        }
+
+        private void OnBackgroundClicked()
+        {
+            UIController.HidePage<UINoAdsPopUp>();
         }
     }
 }

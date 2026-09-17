@@ -6,108 +6,115 @@ using System;
 
 namespace Watermelon
 {
-    public static class GameLoading
+    [StaticUnload]
+    public class GameLoading : MonoBehaviour
     {
         private const float MINIMUM_LOADING_TIME = 2.0f;
+
+        private static GameLoading gameLoading;
+
+        [SerializeField] Initializer initializer;
+        [SerializeField] LoadingGraphics loadingGraphics;
+
+        [Space]
+        [Tooltip("If manual mode is enabled, the loading screen will be active until GameLoading.MarkAsReadyToHide method has been called.")]
+        [SerializeField] bool useManualControl;
+        [SerializeField] bool checkNetworkConnection = true;
+
+        private RemoteConfigHandler remoteConfigHandler;
 
         private static AsyncOperation loadingOperation;
 
         private static bool isReadyToHide;
-        private static bool manualControlMode;
 
         private static string loadingMessage;
         private static List<LoadingTask> loadingTasks = new List<LoadingTask>();
 
-        public static event LoadingCallback OnLoading;
-        public static event Action OnLoadingFinished;
+        private Coroutine initCoroutine;
 
-        public static void SetLoadingMessage(string message)
+        public static int LoadingSceneBuildIndex = -1;
+
+        private void Awake()
         {
-            loadingMessage = message;
+            gameLoading = this;
 
-            float progress = 0.0f;
-            if (loadingOperation != null)
-                progress = loadingOperation.progress;
+            DontDestroyOnLoad(gameObject);
 
-            OnLoading?.Invoke(progress, message);
+            remoteConfigHandler = initializer.GetComponent<RemoteConfigHandler>();
+
+            loadingGraphics.Init(this);
+
+            initCoroutine = StartCoroutine(BootstrapCoroutine());
         }
 
-        public static void AddTask(LoadingTask loadingTask)
+        private IEnumerator BootstrapCoroutine()
         {
-            loadingTasks.Add(loadingTask);
-        }
-
-        private static IEnumerator LoadSceneCoroutine(SimpleCallback onSceneLoaded = null)
-        {
-            isReadyToHide = false;
-
-            float realtimeSinceStartup = Time.realtimeSinceStartup;
-
-            int taskIndex = 0;
-            while(taskIndex < loadingTasks.Count)
-            {
-                if(!loadingTasks[taskIndex].IsActive)
-                    loadingTasks[taskIndex].Activate();
-
-                if (loadingTasks[taskIndex].IsFinished)
-                {
-                    taskIndex++;
-                }
-
-                yield return null;
-            }
-
-            int sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-            if (SceneManager.sceneCount < sceneIndex)
-                Debug.LogError("[Loading]: First scene is missing!");
-
-            float minimumFinishTime = realtimeSinceStartup + MINIMUM_LOADING_TIME;
-
-            loadingOperation = SceneManager.LoadSceneAsync(sceneIndex);
-            loadingOperation.allowSceneActivation = false;
-
-            while (!loadingOperation.isDone || realtimeSinceStartup < minimumFinishTime)
-            {
-                yield return null;
-
-                realtimeSinceStartup = Time.realtimeSinceStartup;
-
-                OnLoading?.Invoke(1.0f, loadingMessage);
-
-                if (loadingOperation.progress >= 0.9f)
-                {
-                    loadingOperation.allowSceneActivation = true;
-                }
-            }
-
-            if(manualControlMode)
-            {
-                // Debug check if MarkAsReadyToHide is implemented
-                Tween.DelayedCall(10, () =>
-                {
-                    if (!isReadyToHide)
-                        Debug.LogError("[Loading]: Seems like you forget to call MarkAsReadyToHide method to finish the loading process.");
-                });
-
-                while (!isReadyToHide)
-                {
-                    yield return null;
-                }
-            }
-
-            OnLoading?.Invoke(1.0f, "Done");
-
             yield return null;
+            yield return new WaitForEndOfFrame();
 
-            if (onSceneLoaded != null)
-                onSceneLoaded.Invoke();
+            initializer.Init();
 
-            OnLoadingFinished?.Invoke();
+            yield return ConnectionCheckCoroutine();
         }
 
-        private static IEnumerator SimpleLoadCoroutine(SimpleCallback onSceneLoaded = null)
+        public void RetryConnection()
         {
-            float realtimeSinceStartup = Time.realtimeSinceStartup;
+            if(initCoroutine == null)
+            {
+                initCoroutine = StartCoroutine(ConnectionCheckCoroutine());
+            }
+        }
+
+        private IEnumerator ConnectionCheckCoroutine()
+        {
+            loadingGraphics.HideErrorMessage();
+            loadingGraphics.SetLoadingState(0.0f, "Checking connection..");
+
+            if(checkNetworkConnection)
+            {
+                bool isConnected = false;
+
+                NetworkConnection networkConnection = new NetworkConnection("https://google.com/");
+                IEnumerator connectionCheck = networkConnection.CheckConnection((state) => isConnected = state);
+
+                yield return connectionCheck;
+
+                if (!isConnected)
+                {
+                    loadingGraphics.ShowErrorMessage("Connection error");
+
+                    initCoroutine = null;
+
+                    yield break;
+                }
+            }
+
+            if(remoteConfigHandler != null)
+            {
+                bool isConfigLoaded = false;
+
+                loadingGraphics.SetLoadingState(0.1f, "Loading Data..");
+
+                IEnumerator configLoad = remoteConfigHandler.LoadConfig((state) => isConfigLoaded = state);
+
+                yield return configLoad; 
+                
+                if (!isConfigLoaded)
+                {
+                    loadingGraphics.ShowErrorMessage("Failed to load data");
+
+                    initCoroutine = null;
+
+                    yield break;
+                }
+            }
+            else
+            {
+                loadingGraphics.SetLoadingState(0.1f, "Loading..");
+            }
+
+            initializer.InitModules();
+            initializer.InitSDKs();
 
             int taskIndex = 0;
             while (taskIndex < loadingTasks.Count)
@@ -123,10 +130,71 @@ namespace Watermelon
                 yield return null;
             }
 
-            if (onSceneLoaded != null)
-                onSceneLoaded.Invoke();
+            yield return null;
+            yield return null;
+            yield return null;
 
-            OnLoadingFinished?.Invoke();
+            float realtimeSinceStartup = Time.realtimeSinceStartup;
+
+            int sceneIndex = LoadingSceneBuildIndex;
+            if(sceneIndex == -1)
+            {
+                sceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+                if (SceneManager.sceneCount < sceneIndex)
+                    Debug.LogError("[Loading]: First scene is missing!");
+            }
+
+            float minimumFinishTime = realtimeSinceStartup + MINIMUM_LOADING_TIME;
+
+            loadingOperation = SceneManager.LoadSceneAsync(sceneIndex);
+
+            yield return null;
+
+            loadingMessage = "Loading..";
+
+            while (!loadingOperation.isDone || realtimeSinceStartup < minimumFinishTime)
+            {
+                yield return null;
+
+                realtimeSinceStartup = Time.realtimeSinceStartup;
+
+                loadingGraphics.SetLoadingState(Mathf.Lerp(0.2f, 0.9f, loadingOperation.progress), loadingMessage);
+            }
+
+            loadingGraphics.SetLoadingState(1.0f, "Completed");
+
+            if (useManualControl)
+            {
+                // Debug check if MarkAsReadyToHide is implemented
+                Tween.DelayedCall(10, () =>
+                {
+                    if (!isReadyToHide)
+                        Debug.LogError("[Loading]: Seems like you forget to call MarkAsReadyToHide method to finish the loading process.");
+                });
+
+                while (!isReadyToHide)
+                {
+                    yield return null;
+                }
+            }
+
+            loadingGraphics.OnLoadingFinished();
+
+            Destroy(gameObject);
+        }
+
+        public static void SetLoadingMessage(string message)
+        {
+            loadingMessage = message;
+
+            float progress = 0.0f;
+            if (loadingOperation != null)
+                progress = loadingOperation.progress;
+        }
+
+        public static void AddTask(LoadingTask loadingTask)
+        {
+            loadingTasks.Add(loadingTask);
         }
 
         public static void MarkAsReadyToHide()
@@ -134,21 +202,10 @@ namespace Watermelon
             isReadyToHide = true;
         }
 
-        public static void EnableManualControlMode()
+        private static void UnloadStatic()
         {
-            manualControlMode = true;
-        }
-
-        public static void LoadGameScene(SimpleCallback onSceneLoaded = null)
-        {
-            SetLoadingMessage("Loading..");
-
-            Tween.InvokeCoroutine(LoadSceneCoroutine(onSceneLoaded));
-        }
-
-        public static void SimpleLoad(SimpleCallback onSceneLoaded = null)
-        {
-            Tween.InvokeCoroutine(SimpleLoadCoroutine(onSceneLoaded));
+            isReadyToHide = false;
+            loadingTasks.Clear();
         }
 
         public delegate void LoadingCallback(float state, string message);

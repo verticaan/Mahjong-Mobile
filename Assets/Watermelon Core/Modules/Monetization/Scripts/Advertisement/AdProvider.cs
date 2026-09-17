@@ -5,7 +5,7 @@
         Disable = 0,
         Dummy = 1,
         AdMob = 2,
-        UnityAdsLegacy = 3,
-        LevelPlay = 4
+        LevelPlay = 4,
+        Applovin = 5
     }
 }
