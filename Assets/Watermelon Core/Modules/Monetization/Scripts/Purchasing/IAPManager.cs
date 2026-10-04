@@ -265,7 +265,10 @@ namespace Watermelon
         {
             public bool FirstPurchase = false;
 
-            public void OnBeforeSave() { }
+            public void Flush()
+            {
+
+            }
         }
     }
 }

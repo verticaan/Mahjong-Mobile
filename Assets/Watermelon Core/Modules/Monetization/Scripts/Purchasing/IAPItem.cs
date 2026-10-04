@@ -70,7 +70,7 @@ namespace Watermelon
 
             public bool IsPurchased => TimesPurchased > 0;
 
-            public void OnBeforeSave()
+            public void Flush()
             {
 
             }
