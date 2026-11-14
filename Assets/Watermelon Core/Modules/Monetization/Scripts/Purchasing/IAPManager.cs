@@ -17,6 +17,7 @@ namespace Watermelon
         private static IAPWrapper wrapper;
 
         public static event SimpleCallback Initialized;
+        public static event SimpleCallback ProductDataUpdated;
         public static event ProductCallback PurchaseCompleted;
         public static event ProductFailCallback PurchaseFailed;
 
@@ -61,7 +62,7 @@ namespace Watermelon
 
         public static IAPItem GetIAPItem(string productID)
         {
-            if (string.IsNullOrEmpty(productID)) return null;
+            if (string.IsNullOrEmpty(productID) || productsTypeToProductLink == null) return null;
 
             foreach (IAPItem item in productsTypeToProductLink.Values)
             {
@@ -74,6 +75,9 @@ namespace Watermelon
 
         public static IAPItem GetIAPItem(ProductKeyType productKeyType)
         {
+            if (productsTypeToProductLink == null)
+                return null;
+
             productsTypeToProductLink.TryGetValue(productKeyType, out IAPItem item);
 
             return item;
@@ -82,10 +86,22 @@ namespace Watermelon
 #if MODULE_IAP
         public static Product GetProduct(ProductKeyType productKeyType)
         {
-            var iapItem = GetIAPItem(productKeyType);
-            return iapItem != null ? UnityIAPWrapper.Controller.products.WithID(iapItem.ID) : null;
+            return GetProductData(productKeyType)?.Product;
         }
 #endif
+
+        public static bool IsPurchased(ProductKeyType productKeyType)
+        {
+#if MODULE_IAP
+            if (!Monetization.IsActive || !IsInitialized || wrapper == null)
+                return false;
+
+            IAPItem iapItem = GetIAPItem(productKeyType);
+            return iapItem != null && wrapper.IsPurchased(iapItem.ID);
+#else
+            return false;
+#endif
+        }
 
         public static void RestorePurchases()
         {
@@ -159,6 +175,9 @@ namespace Watermelon
 
         public static void OnModuleInitialized()
         {
+            if (IsInitialized)
+                return;
+
             IsInitialized = true;
 
             Initialized?.Invoke();
@@ -172,15 +191,57 @@ namespace Watermelon
             PurchaseCompleted?.Invoke(productKey);
         }
 
+        public static void OnPurchaseCompleted(IAPItem item)
+        {
+            if (item != null)
+                OnPurchaseCompleted(item.ProductKeyType);
+        }
+
+        /// <summary>
+        /// Grants a pending store order once, persists the rewards and transaction ID, then lets
+        /// the wrapper confirm the order with Unity IAP.
+        /// </summary>
+        public static void ProcessPendingPurchase(IAPItem item, string transactionID)
+        {
+            if (item == null)
+                return;
+
+            PurchaseTransactionSave save = SaveController.GetSaveObject<PurchaseTransactionSave>("iap_processed_transactions");
+            string transactionKey = string.IsNullOrEmpty(transactionID) ? null : $"{transactionID}|{item.ID}";
+
+            if (save != null && save.ProcessedTransactions == null)
+                save.ProcessedTransactions = new List<string>();
+
+            if (save != null && !string.IsNullOrEmpty(transactionKey) && save.ProcessedTransactions.Contains(transactionKey))
+                return;
+
+            OnPurchaseCompleted(item);
+
+            if (save != null && !string.IsNullOrEmpty(transactionKey))
+                save.ProcessedTransactions.Add(transactionKey);
+
+            SaveController.MarkAsSaveIsRequired();
+            SaveController.Save(true, false);
+        }
+
         public static void OnPurchaseFailed(ProductKeyType productKey, Watermelon.PurchaseFailureReason failureReason)
         {
             PurchaseFailed?.Invoke(productKey, failureReason);
         }
 
+        public static void OnProductDataUpdated()
+        {
+            ProductDataUpdated?.Invoke();
+        }
+
         private static IAPWrapper GetPlatformWrapper()
         {
 #if MODULE_IAP
+#if UNITY_IAP_NEW
+            return new UnityIAP5Wrapper();
+#else
             return new UnityIAPWrapper();
+#endif
 #else
             return new DummyIAPWrapper();
 #endif
@@ -195,11 +256,24 @@ namespace Watermelon
             settings = null;
 
             Initialized = null;
+            ProductDataUpdated = null;
             PurchaseCompleted = null;
             PurchaseFailed = null;
         }
 
         public delegate void ProductCallback(ProductKeyType productKeyType);
         public delegate void ProductFailCallback(ProductKeyType productKeyType, Watermelon.PurchaseFailureReason failureReason);
+
+        [System.Serializable]
+        public class PurchaseTransactionSave : ISaveObject
+        {
+            public List<string> ProcessedTransactions = new List<string>();
+
+            public void Flush()
+            {
+                if (ProcessedTransactions == null)
+                    ProcessedTransactions = new List<string>();
+            }
+        }
     }
 }

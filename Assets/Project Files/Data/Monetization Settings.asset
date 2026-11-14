@@ -104,23 +104,29 @@ MonoBehaviour:
     iOSID: com.example.game.noads
     productKeyType: 0
     productType: 1
+    defaultUSDPrice: 0.99
   - androidID: com.example.game.pack
     iOSID: com.example.game.pack
     productKeyType: 1
     productType: 1
+    defaultUSDPrice: 0.99
   - androidID: com.example.game.gold.small
     iOSID: com.example.game.gold.small
     productKeyType: 2
     productType: 0
+    defaultUSDPrice: 0.99
   - androidID: com.example.game.gold.medium
     iOSID: com.example.game.gold.medium
     productKeyType: 3
     productType: 0
+    defaultUSDPrice: 0.99
   - androidID: com.example.game.gold.big
     iOSID: com.example.game.gold.big
     productKeyType: 4
     productType: 0
+    defaultUSDPrice: 0.99
   - androidID: com.example.game.pu
     iOSID: com.example.game.pu
     productKeyType: 5
     productType: 0
+    defaultUSDPrice: 0.99

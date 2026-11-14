@@ -303,5 +303,18 @@ namespace Watermelon
 
             return false;
         }
+
+        public override bool IsPurchased(string id)
+        {
+#if MODULE_IAP && !UNITY_IAP_NEW
+            if (Controller != null && Controller.products != null)
+            {
+                Product product = Controller.products.WithID(id);
+                return product != null && product.hasReceipt;
+            }
+#endif
+
+            return false;
+        }
     }
 }

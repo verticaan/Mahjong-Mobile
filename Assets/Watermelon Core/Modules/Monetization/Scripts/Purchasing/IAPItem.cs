@@ -9,6 +9,7 @@ namespace Watermelon
         [SerializeField] string iOSID;
         [SerializeField] ProductKeyType productKeyType;
         [SerializeField] ProductType productType;
+        [SerializeField] float defaultUSDPrice = 0.99f;
 
         public string ID
         {
@@ -26,6 +27,7 @@ namespace Watermelon
 
         public ProductType ProductType { get => productType; set => productType = value; }
         public ProductKeyType ProductKeyType { get => productKeyType; set => productKeyType = value; }
+        public float DefaultUSDPrice => defaultUSDPrice;
 
         public IAPItem()
         {
