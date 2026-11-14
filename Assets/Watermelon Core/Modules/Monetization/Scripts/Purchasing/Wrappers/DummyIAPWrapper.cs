@@ -7,13 +7,12 @@ namespace Watermelon
     {
         public override async Task Init(IAPSettings settings)
         {
-            await Task.Run(() =>
-            {
-                if (Monetization.VerboseLogging)
-                    Debug.LogWarning("[IAP Manager]: Dummy mode is activated. Configure the module before uploading the game to stores!");
+            await Task.Yield();
 
-                IAPManager.OnModuleInitialized();
-            });
+            if (Monetization.VerboseLogging)
+                Debug.LogWarning("[IAP Manager]: Dummy mode is activated. Configure the module before uploading the game to stores!");
+
+            IAPManager.OnModuleInitialized();
         }
 
         public override void BuyProduct(ProductKeyType productKeyType)
@@ -52,6 +51,11 @@ namespace Watermelon
         }
 
         public override bool IsSubscribed(ProductKeyType productKeyType)
+        {
+            return false;
+        }
+
+        public override bool IsPurchased(string id)
         {
             return false;
         }

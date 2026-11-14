@@ -19,7 +19,8 @@ namespace Watermelon
 
         private void Awake()
         {
-            button.onClick.AddListener(OnButtonClicked);
+            if (button != null)
+                button.onClick.AddListener(OnButtonClicked);
         }
 
         public void Init(ProductKeyType key)
@@ -36,6 +37,12 @@ namespace Watermelon
 
         public void UpdateState(ProductData product)
         {
+            if (loadingObject == null || priceText == null || backImage == null)
+            {
+                Debug.LogWarning($"[IAPButton] UI references are not assigned. Skipping UpdateState. Key: {key}");
+                return;
+            }
+
             if (product != null)
             {
                 loadingObject.SetActive(false);
@@ -43,7 +50,15 @@ namespace Watermelon
 
                 backImage.sprite = activeBackSprite;
 
-                priceText.text = product.GetLocalPrice();
+                if (product.Price > 0m)
+                {
+                    priceText.text = product.GetLocalPrice();
+                }
+                else
+                {
+                    IAPItem item = IAPManager.GetIAPItem(key);
+                    priceText.text = item != null ? $"USD {item.DefaultUSDPrice:0.##}" : product.GetLocalPrice();
+                }
             }
             else
             {
@@ -53,10 +68,14 @@ namespace Watermelon
 
         private void SetDisabledState()
         {
-            loadingObject.SetActive(true);
-            priceText.gameObject.SetActive(false);
+            if (loadingObject != null)
+                loadingObject.SetActive(!IAPManager.IsInitialized);
 
-            backImage.sprite = unactiveBackSprite;
+            if (priceText != null)
+                priceText.gameObject.SetActive(false);
+
+            if (backImage != null)
+                backImage.sprite = unactiveBackSprite;
         }
 
         private void OnButtonClicked()

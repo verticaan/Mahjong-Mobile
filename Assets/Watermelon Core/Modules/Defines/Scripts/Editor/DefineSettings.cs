@@ -27,6 +27,7 @@ namespace Watermelon
             // Core
             new RegisteredDefine("MODULE_MONETIZATION", "Watermelon.Monetization"),
             new RegisteredDefine("MODULE_IAP", "UnityEngine.Purchasing.UnityPurchasing"),
+            new RegisteredDefine("UNITY_IAP_NEW", "UnityEngine.Purchasing.UnityIAPServices"),
             new RegisteredDefine("MODULE_POWERUPS", "Watermelon.PUController"),
             new RegisteredDefine("MODULE_HAPTIC", "Watermelon.Haptic"),
             new RegisteredDefine("MODULE_CURVE", "Watermelon.CurvatureManager"),

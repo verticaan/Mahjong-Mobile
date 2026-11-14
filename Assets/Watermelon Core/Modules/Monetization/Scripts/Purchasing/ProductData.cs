@@ -54,8 +54,8 @@ namespace Watermelon
 
             IsPurchased = product.hasReceipt;
 
-            Price = product.metadata.localizedPrice;
-            ISOCurrencyCode = product.metadata.isoCurrencyCode;
+            Price = product.metadata != null ? product.metadata.localizedPrice : 0.00m;
+            ISOCurrencyCode = product.metadata != null ? product.metadata.isoCurrencyCode : "USD";
         }
 #endif
     }

@@ -69,6 +69,7 @@ namespace Watermelon
                     SerializedProperty iOSIDProperty = tempSerializedProperty.FindPropertyRelative("iOSID");
                     SerializedProperty productKeyTypeProperty = tempSerializedProperty.FindPropertyRelative("productKeyType");
                     SerializedProperty productTypeProperty = tempSerializedProperty.FindPropertyRelative("productType");
+                    SerializedProperty defaultUSDPriceProperty = tempSerializedProperty.FindPropertyRelative("defaultUSDPrice");
 
                     ProductKeyType productKeyType = (ProductKeyType)productKeyTypeProperty.intValue;
                     ProductType productType = (ProductType)productTypeProperty.intValue;
@@ -126,7 +127,8 @@ namespace Watermelon
                             OpenTypesWindow();
                         }
                         EditorGUILayout.EndHorizontal();
-                        EditorGUILayout.PropertyField(tempSerializedProperty.FindPropertyRelative("productType"));
+                        EditorGUILayout.PropertyField(productTypeProperty);
+                        EditorGUILayout.PropertyField(defaultUSDPriceProperty, new GUIContent("Default USD Price"));
 
                         serializedObject.ApplyModifiedProperties();
 
@@ -208,6 +210,7 @@ namespace Watermelon
             newSerializedProperty.FindPropertyRelative("androidID").stringValue = "";
             newSerializedProperty.FindPropertyRelative("iOSID").stringValue = "";
             newSerializedProperty.FindPropertyRelative("productType").enumValueIndex = 0;
+            newSerializedProperty.FindPropertyRelative("defaultUSDPrice").floatValue = 0.99f;
 
             serializedObject.ApplyModifiedProperties();
 
