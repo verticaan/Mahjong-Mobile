@@ -198,30 +198,51 @@ namespace Watermelon
         }
 
         /// <summary>
-        /// Grants a pending store order once, persists the rewards and transaction ID, then lets
-        /// the wrapper confirm the order with Unity IAP.
+        /// Grants a pending store order once and persists the transaction ID. Returns false when
+        /// no active reward holder can safely grant it, so the store wrapper can leave it pending.
         /// </summary>
-        public static void ProcessPendingPurchase(IAPItem item, string transactionID)
+        public static bool ProcessPendingPurchase(IAPItem item, string transactionID)
         {
-            if (item == null)
-                return;
+            if (item == null || string.IsNullOrEmpty(transactionID))
+                return false;
 
             PurchaseTransactionSave save = SaveController.GetSaveObject<PurchaseTransactionSave>("iap_processed_transactions");
-            string transactionKey = string.IsNullOrEmpty(transactionID) ? null : $"{transactionID}|{item.ID}";
+            if (save == null)
+                return false;
 
-            if (save != null && save.ProcessedTransactions == null)
+            string transactionKey = $"{transactionID}|{item.ID}";
+
+            if (save.ProcessedTransactions == null)
                 save.ProcessedTransactions = new List<string>();
 
-            if (save != null && !string.IsNullOrEmpty(transactionKey) && save.ProcessedTransactions.Contains(transactionKey))
-                return;
+            if (save.ProcessedTransactions.Contains(transactionKey))
+                return true;
 
-            OnPurchaseCompleted(item);
+            // A non-consumable that was already granted on this install does not need its holder
+            // to be active again. Consumables always require an active holder to deliver rewards.
+            bool rewardAlreadyGranted = false;
+            if (item.ProductType == ProductType.NonConsumable)
+            {
+                SimpleBoolSave productSave = SaveController.GetSaveObject<SimpleBoolSave>($"IAPProduct_{item.ProductKeyType}");
+                rewardAlreadyGranted = productSave != null && productSave.Value;
+            }
 
-            if (save != null && !string.IsNullOrEmpty(transactionKey))
-                save.ProcessedTransactions.Add(transactionKey);
+            if (!rewardAlreadyGranted && !IAPRewardsHolder.TryApplyPendingPurchase(item))
+                return false;
+
+            save.ProcessedTransactions.Add(transactionKey);
 
             SaveController.MarkAsSaveIsRequired();
             SaveController.Save(true, false);
+            return true;
+        }
+
+        /// <summary>
+        /// Retries store orders that were deferred because their reward holder was not active.
+        /// </summary>
+        public static void NotifyRewardHolderAvailable(ProductKeyType productKeyType)
+        {
+            wrapper?.NotifyRewardHolderAvailable(productKeyType);
         }
 
         public static void OnPurchaseFailed(ProductKeyType productKey, Watermelon.PurchaseFailureReason failureReason)

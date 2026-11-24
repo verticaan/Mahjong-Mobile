@@ -22,6 +22,7 @@ namespace Watermelon
         private IAPSettings storeSettings;
         private readonly HashSet<string> ownedNonConsumableProductIds = new HashSet<string>();
         private readonly HashSet<string> activeSubscriptionProductIds = new HashSet<string>();
+        private readonly List<PendingOrder> deferredPendingOrders = new List<PendingOrder>();
         private bool hasRequestedProducts;
         private bool hasCompletedInitialization;
 
@@ -239,8 +240,130 @@ namespace Watermelon
                 return;
             }
 
-            // Grant and persist before confirming. Unity can redeliver an unconfirmed order after a
-            // restart, so the manager deduplicates it using the store transaction ID.
+            if (!TryProcessPendingOrder(order))
+            {
+                QueueDeferredOrder(order);
+                Debug.LogWarning("[IAP Manager]: The purchase is still pending because its products could not all be granted. Check that each product has a matching active IAPRewardsHolder; the order will be retried when a holder becomes active.");
+                SystemMessage.ChangeLoadingMessage("Purchase is pending. Open the store to complete delivery.");
+                SystemMessage.HideLoadingPanel();
+                return;
+            }
+
+            if (!TryConfirmPurchase(order))
+                QueueDeferredOrder(order);
+        }
+
+        private bool TryProcessPendingOrder(PendingOrder order)
+        {
+            if (order?.CartOrdered == null)
+                return false;
+
+            string transactionID = GetTransactionIdentifier(order);
+            if (string.IsNullOrEmpty(transactionID))
+            {
+                Debug.LogWarning("[IAP Manager]: The store did not provide a transaction ID or receipt. The purchase will remain pending so it cannot be granted more than once.");
+                return false;
+            }
+
+            bool foundConfiguredItem = false;
+            bool allItemsProcessed = true;
+
+            foreach (CartItem cartItem in order.CartOrdered.Items())
+            {
+                Product product = cartItem.Product;
+                if (product?.definition == null)
+                {
+                    allItemsProcessed = false;
+                    continue;
+                }
+
+                IAPItem item = IAPManager.GetIAPItem(product.definition.id);
+                if (item == null)
+                {
+                    Debug.LogWarning($"[IAP Manager]: Product '{product.definition.id}' is not configured in Monetization Settings. The order will remain pending.");
+                    allItemsProcessed = false;
+                    continue;
+                }
+
+                foundConfiguredItem = true;
+                if (!IAPManager.ProcessPendingPurchase(item, transactionID))
+                    allItemsProcessed = false;
+            }
+
+            return foundConfiguredItem && allItemsProcessed;
+        }
+
+        private string GetTransactionIdentifier(PendingOrder order)
+        {
+            string transactionID = order?.Info?.TransactionID;
+            if (!string.IsNullOrEmpty(transactionID))
+                return transactionID;
+
+            string receipt = order?.Info?.Receipt;
+            if (string.IsNullOrEmpty(receipt))
+                return null;
+
+            using (System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                byte[] receiptHash = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(receipt));
+                return "receipt:" + BitConverter.ToString(receiptHash).Replace("-", string.Empty);
+            }
+        }
+
+        private bool TryConfirmPurchase(PendingOrder order)
+        {
+            try
+            {
+                storeController.ConfirmPurchase(order);
+                return true;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"[IAP Manager]: Could not confirm the processed purchase yet: {exception.Message}");
+                return false;
+            }
+        }
+
+        private void QueueDeferredOrder(PendingOrder order)
+        {
+            if (order == null)
+                return;
+
+            string transactionID = GetTransactionIdentifier(order);
+            for (int i = 0; i < deferredPendingOrders.Count; i++)
+            {
+                PendingOrder queuedOrder = deferredPendingOrders[i];
+                if (object.ReferenceEquals(queuedOrder, order))
+                    return;
+
+                string queuedTransactionID = GetTransactionIdentifier(queuedOrder);
+                if (!string.IsNullOrEmpty(transactionID) && transactionID == queuedTransactionID)
+                    return;
+            }
+
+            deferredPendingOrders.Add(order);
+        }
+
+        public override void NotifyRewardHolderAvailable(ProductKeyType productKeyType)
+        {
+#if MODULE_IAP && UNITY_IAP_NEW
+            for (int i = deferredPendingOrders.Count - 1; i >= 0; i--)
+            {
+                PendingOrder order = deferredPendingOrders[i];
+                if (!OrderContainsProduct(order, productKeyType) || !TryProcessPendingOrder(order))
+                    continue;
+
+                if (TryConfirmPurchase(order))
+                    deferredPendingOrders.RemoveAt(i);
+            }
+#endif
+        }
+
+        private bool OrderContainsProduct(PendingOrder order, ProductKeyType productKeyType)
+        {
+            if (order?.CartOrdered == null)
+                return false;
+
             foreach (CartItem cartItem in order.CartOrdered.Items())
             {
                 Product product = cartItem.Product;
@@ -248,11 +371,11 @@ namespace Watermelon
                     continue;
 
                 IAPItem item = IAPManager.GetIAPItem(product.definition.id);
-                if (item != null)
-                    IAPManager.ProcessPendingPurchase(item, order.Info?.TransactionID);
+                if (item != null && item.ProductKeyType == productKeyType)
+                    return true;
             }
 
-            storeController.ConfirmPurchase(order);
+            return false;
         }
 
         private void OnPurchaseConfirmed(Order order)

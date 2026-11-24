@@ -77,6 +77,15 @@
       "source": "builtin",
       "dependencies": {}
     },
+    "com.unity.external-dependency-manager": {
+      "version": "2.1.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.ide.rider": {
       "version": "3.0.38",
       "depth": 0,
@@ -233,7 +242,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.services.levelplay": {
-      "version": "9.2.0",
+      "version": "9.6.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
