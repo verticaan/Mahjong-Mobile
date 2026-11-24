@@ -19,8 +19,8 @@ MonoBehaviour:
   debugMode: 0
   testDevices:
   - 91687A6357C9E0169C1471C98D0237EB
-  privacyLink: https://mywebsite.com/privacy
-  termsOfUseLink: https://mywebsite.com/terms
+  privacyLink: https://www.indiecorestudios.com/privacy-policy
+  termsOfUseLink: https://www.indiecorestudios.com/jazz-hands/terms-of-use
 --- !u!114 &1338303973460554233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33,9 +33,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15ddb41bf72d53a48a6bdc593d706f94, type: 3}
   m_Name: Ads Settings
   m_EditorClassIdentifier: 
-  bannerType: 1
-  interstitialType: 1
-  rewardedVideoType: 1
+  bannerType: 2
+  interstitialType: 2
+  rewardedVideoType: 2
   loadAdsOnStart: 1
   interstitialFirstStartDelay: 40
   interstitialStartDelay: 40
@@ -97,36 +97,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f28faf74e3de2b4bb5f8724582e5ceb, type: 3}
   m_Name: IAP Settings
   m_EditorClassIdentifier: 
-  useFakeStore: 1
-  fakeStoreMode: 0
+  useFakeStore: 0
+  fakeStoreMode: 1
   storeItems:
-  - androidID: com.example.game.noads
+  - androidID: com.jazzhands.noads
     iOSID: com.example.game.noads
     productKeyType: 0
     productType: 1
-    defaultUSDPrice: 0.99
-  - androidID: com.example.game.pack
+    defaultUSDPrice: 12.99
+  - androidID: com.jazhands.starterpack
     iOSID: com.example.game.pack
     productKeyType: 1
     productType: 1
-    defaultUSDPrice: 0.99
-  - androidID: com.example.game.gold.small
+    defaultUSDPrice: 29.99
+  - androidID: com.jazzhands.gold.small
     iOSID: com.example.game.gold.small
     productKeyType: 2
     productType: 0
     defaultUSDPrice: 0.99
-  - androidID: com.example.game.gold.medium
+  - androidID: com.jazzhands.gold.medium
     iOSID: com.example.game.gold.medium
     productKeyType: 3
     productType: 0
-    defaultUSDPrice: 0.99
-  - androidID: com.example.game.gold.big
+    defaultUSDPrice: 4.99
+  - androidID: com.jazzhands.gold.big
     iOSID: com.example.game.gold.big
     productKeyType: 4
     productType: 0
-    defaultUSDPrice: 0.99
-  - androidID: com.example.game.pu
+    defaultUSDPrice: 9.99
+  - androidID: power_up_pack
     iOSID: com.example.game.pu
     productKeyType: 5
     productType: 0
-    defaultUSDPrice: 0.99
+    defaultUSDPrice: 12.99

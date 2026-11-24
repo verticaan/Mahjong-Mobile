@@ -10,5 +10,9 @@ namespace Watermelon
         public abstract ProductData GetProductData(ProductKeyType productKeyType);
         public abstract bool IsSubscribed(ProductKeyType productKeyType);
         public abstract bool IsPurchased(string id);
+
+        public virtual void NotifyRewardHolderAvailable(ProductKeyType productKeyType)
+        {
+        }
     }
 }

@@ -123,28 +123,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Combo_Sheet_1_Effects_0
-      rect:
-        serializedVersion: 2
-        x: 66
-        y: 1107
-        width: 164
-        height: 155
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b4e16203c183b243ac6c94fef45e9b7
-      internalID: -729475110
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Combo_Sheet_1_Effects_1
       rect:
         serializedVersion: 2
@@ -214,10 +192,10 @@ TextureImporter:
       name: Combo_Sheet_1_Effects_4
       rect:
         serializedVersion: 2
-        x: 733
-        y: 760
-        width: 219
-        height: 224
+        x: 756
+        y: 784
+        width: 182
+        height: 175
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -236,10 +214,10 @@ TextureImporter:
       name: Combo_Sheet_1_Effects_6
       rect:
         serializedVersion: 2
-        x: 392
-        y: 768
-        width: 216
-        height: 208
+        x: 410
+        y: 783
+        width: 177
+        height: 173
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -298,6 +276,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Combo_Sheet_1_Effects_5
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 1128
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b79d7bc62fd3d24893f30bbe53011a1
+      internalID: -2124321707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -315,6 +315,7 @@ TextureImporter:
       Combo_Sheet_1_Effects_0: -729475110
       Combo_Sheet_1_Effects_1: -1031542504
       Combo_Sheet_1_Effects_10: 2117643865
+      Combo_Sheet_1_Effects_11: 1007017187
       Combo_Sheet_1_Effects_2: -1953326535
       Combo_Sheet_1_Effects_3: -763497968
       Combo_Sheet_1_Effects_4: -1986915765
